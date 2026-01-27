@@ -10,19 +10,30 @@ h1 {
 
 header {
   margin-top: 20px;
-  text-align: center;
+  margin-left: 20px;
+  display: flex;
+  text-align: left;
+  flex-direction: row;
+  justify-content: flex-start;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  width: 100%;
 }
 body {
   margin: 0;
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
-  background: url(./Icon/Background3.jpg) center/cover;
+  background: url() center/cover;
+}
+#login {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 main {
   margin-top: 50px;
+  margin: auto;
   padding: 30px;
   display: flex;
   flex-direction: column;
@@ -48,7 +59,7 @@ input[type="password"] {
 input[type="submit"] {
   width: 100%;
   padding: 10px;
-  background-color: #007bff;
+  background-color: gold;
   color: white;
   border: none;
   border-radius: 5px;
@@ -58,9 +69,9 @@ input[type="submit"] {
 }
 
 input[type="submit"]:hover {
-  background-color: rgb(0, 70, 161);
+  background-color: goldenrod;
 }
-.links {
+.link {
   margin-top: 15px;
   font-size: 0.9rem;
   display: flex;
@@ -68,12 +79,12 @@ input[type="submit"]:hover {
   gap: 5px;
   text-align: center;
 }
-.links a {
+.link a {
   text-decoration: none;
   color: rgb(70, 70, 70);
 }
-.links a:hover {
-  color: blue;
+.link a:hover {
+  color: goldenrod;
 }
 footer {
   margin-top: auto;
@@ -88,7 +99,7 @@ footer:hover {
   width: 100%;
 }
 footer a:hover {
-  color: blue;
+  color: gold;
 }
 footer a {
   color: rgb(70, 70, 70);
