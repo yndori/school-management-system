@@ -8,7 +8,7 @@
 
 <ol>
     <li>Logo and favicon ,create header(yoann)</li>
-    <li>Create mail , mailto and form (yoann)</li>
+    <li>Create mail , mailto (contact)(yoann)</li>
     <li>Title to welcome (Yvan)</li>
 </ol>
 
