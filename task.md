@@ -1,11 +1,35 @@
-1 - Logo and favicon , create header(yoann)
+<h1>Tasks</h1>
 
-2 - Create mail , mailto and form (yoann)
+<h2>Login Tasks</h2>
 
-3 - Title to welcome (Yvan)
+<p>Team : Yoann & Yvan</p>
 
-task css
+<h3>task html</h3>
 
-1 - flexbox (yvan)
+<ol>
+    <li>Logo and favicon ,create header(yoann)</li>
+    <li>Create mail , mailto and form (yoann)</li>
+    <li>Title to welcome (Yvan)</li>
+</ol>
 
-2 - mobile responsive(yvan)
+<h3>task css</h3>
+
+<ol>
+    <li>Responsive(yvan)</li>
+</ol>
+
+<h2>Home Page Tasks</h2>
+
+<p>Team : Diakhou , Fatou binetou , Awa , Madjiguene , Hawa</p>
+
+<ol>
+    <li>Header</li>
+    <li>main page</li>
+    <li>Insert favicons</li>
+</ol>
+
+<h3>task css</h3>
+
+<ol>
+    <li>Responsive</li>
+</ol>
