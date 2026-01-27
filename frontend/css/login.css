@@ -1,0 +1,96 @@
+* {
+  font-family: sans-serif;
+  box-sizing: border-box;
+}
+h1 {
+  margin: 0;
+  letter-spacing: 2px;
+  font-size: 2rem;
+}
+
+header {
+  margin-top: 20px;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: url(./Icon/Background3.jpg) center/cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+main {
+  margin-top: 50px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-radius: 20px;
+  box-shadow: 0 0 10px 2px;
+  background-color: rgba(255, 255, 255, 0.9);
+  width: 350px;
+  max-width: 90%;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+input[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+input[type="submit"]:hover {
+  background-color: rgb(0, 70, 161);
+}
+.links {
+  margin-top: 15px;
+  font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  text-align: center;
+}
+.links a {
+  text-decoration: none;
+  color: rgb(70, 70, 70);
+}
+.links a:hover {
+  color: blue;
+}
+footer {
+  margin-top: auto;
+
+  padding: 20px;
+  color: white;
+  background-color: rgba(255, 255, 255, 0.6);
+  width: 100%;
+}
+footer:hover {
+  background-color: white;
+  width: 100%;
+}
+footer a:hover {
+  color: blue;
+}
+footer a {
+  color: rgb(70, 70, 70);
+  text-decoration: none;
+}
