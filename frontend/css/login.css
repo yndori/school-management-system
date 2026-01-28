@@ -25,6 +25,7 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
+  justify-content: center;
 }
 
 .container {
@@ -79,9 +80,12 @@ button:hover {
   text-align: right;
 }
 .link a {
+.link a {
   text-decoration: none;
   color: rgb(70, 70, 70);
 }
+.link a:hover {
+  color: goldenrod;
 .link a:hover {
   color: goldenrod;
 }
