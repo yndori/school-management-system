@@ -1,65 +1,63 @@
 * {
   font-family: sans-serif;
-  box-sizing: border-box;
 }
-h1 {
+
+body {
   margin: 0;
-  letter-spacing: 2px;
-  font-size: 2rem;
+  background-color: #d4af37;
 }
 
 header {
-  margin-top: 20px;
-  margin-left: 20px;
   display: flex;
-  text-align: left;
-  flex-direction: row;
-  justify-content: flex-start;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  width: 100%;
-}
-body {
+  background-color: white;
   margin: 0;
+  padding: 0;
   display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background: url() center/cover;
-}
-#login {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
 }
+
+header img {
+  width: 80px;
+  height: 80px;
+}
+
 main {
-  margin-top: 50px;
-  margin: auto;
-  padding: 30px;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
+}
+
+.container {
+  margin-top: 50px;
+  padding: 10px;
+  display: flex;
   justify-content: center;
   border-style: solid;
   border-radius: 20px;
-  box-shadow: 0 0 10px 2px;
+  box-shadow: 10px 8px;
   background-color: rgba(255, 255, 255, 0.9);
-  width: 350px;
-  max-width: 90%;
+  width: 300px;
 }
 
-input[type="text"],
-input[type="password"] {
-  width: 100%;
+.container h1 {
+  color: goldenrod;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.container input {
+  width: 90%;
   padding: 10px;
-  margin: 10px 0;
+  margin-top: 10px;
+  margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
 }
 
-input[type="submit"] {
-  width: 100%;
+.container button {
+  width: 95%;
   padding: 10px;
-  background-color: gold;
+  background-color: #d4af37;
   color: white;
   border: none;
   border-radius: 5px;
@@ -68,16 +66,17 @@ input[type="submit"] {
   margin-top: 10px;
 }
 
-input[type="submit"]:hover {
+button:hover {
   background-color: goldenrod;
 }
+
 .link {
   margin-top: 15px;
   font-size: 0.9rem;
   display: flex;
   flex-direction: column;
   gap: 5px;
-  text-align: center;
+  text-align: right;
 }
 .link a {
   text-decoration: none;
@@ -86,20 +85,19 @@ input[type="submit"]:hover {
 .link a:hover {
   color: goldenrod;
 }
-footer {
-  margin-top: auto;
 
+footer {
   padding: 20px;
   color: white;
-  background-color: rgba(255, 255, 255, 0.6);
+  background-color: black;
+  position: fixed;
+  bottom: 0;
+  margin: 0;
   width: 100%;
 }
-footer:hover {
-  background-color: white;
-  width: 100%;
-}
+
 footer a:hover {
-  color: gold;
+  color: goldenrod;
 }
 footer a {
   color: rgb(70, 70, 70);
