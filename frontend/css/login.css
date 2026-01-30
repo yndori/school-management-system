@@ -25,6 +25,7 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
+  justify-content: center;
 }
 
 .container {
@@ -67,7 +68,7 @@ main {
 }
 
 button:hover {
-  background-color: goldenrod;
+  background-color: rgb(180, 135, 21);
 }
 
 .link {
