@@ -4,3 +4,67 @@
   box-sizing: border-box;
   font-family: sans-serif;
 }
+
+body {
+  background-color: #d4af37;
+}
+
+/* header */
+
+header {
+  display: flex;
+  background-color: white;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+header img {
+  width: 80px;
+  height: 80px;
+}
+
+/* main */
+
+/* aside */
+
+aside {
+  background-color: grey;
+}
+
+.menu {
+  color: white;
+  text-align: center;
+}
+
+.menu li a {
+  color: white;
+  text-decoration: none;
+}
+
+menu li a:checked {
+  color: goldenrod;
+}
+
+/* section */
+
+/* footer */
+
+footer {
+  padding: 20px;
+  color: white;
+  background-color: black;
+  position: fixed;
+  bottom: 0;
+  margin: 0;
+  width: 100%;
+}
+
+footer a:hover {
+  color: goldenrod;
+}
+footer a {
+  color: rgb(70, 70, 70);
+  text-decoration: none;
+}
