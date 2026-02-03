@@ -22,32 +22,64 @@ header {
 
 header img {
   width: 80px;
-  height: 80px;
+  height: 60px;
+}
+
+#account {
+  display: flex;
+  align-items: center;
 }
 
 /* main */
 
+main {
+  display: flex;
+  /* Justiified for readability will change after finishing the aside */
+  justify-content: space-between;
+}
+
 /* aside */
 
 aside {
-  background-color: grey;
+  /* Chose violet to differentiate the header , main and section Will change after finishing */
+  background-color: violet;
 }
 
-.menu {
+#menu {
   color: white;
-  text-align: center;
+  height: 83vh;
 }
 
-.menu li a {
+.nav-bar {
+  list-style: none;
+}
+
+.nav-bar li {
+  padding: 10px;
+  border-bottom: 5px solid white;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.nav-bar li a {
   color: white;
   text-decoration: none;
 }
 
-menu li a:checked {
-  color: goldenrod;
+.nav-bar li:hover {
+  background-color: blue;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.nav-bar li a:visited {
+  color: white;
 }
 
 /* section */
+section {
+  background-color: red;
+}
 
 /* footer */
 

@@ -26,13 +26,22 @@
       rel="manifest"
       href="../frontend/public/images/favicon/site.webmanifest"
     />
+    <!-- <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    /> -->
   </head>
   <body>
     <header>
       <div id="logo">
         <img src="../public/images/logo-bg-removed.png" alt="logo" />
       </div>
-      <div id="account"></div>
+      <div id="account">
+        <!-- Not very sure if this will be the final version -->
+        <!-- Will show either "Admin" either the student name -->
+        <summary>Jhon Doe</summary>
+        <details><a href="#" id="signout-link">Sign out</a></details>
+      </div>
     </header>
     <main>
       <aside>
@@ -42,15 +51,15 @@
               <a href="../pages/student-dashboard.html">Dashboard</a>
             </li>
             <li>
-              <a href="../pages/courses.html"> Courses</a>
+              <a href="../pages/courses.html">Courses</a>
             </li>
             <li>
-              <a href="../pages/transcript.html"> Transcript</a>
+              <a href="../pages/transcript.html">Transcript</a>
             </li>
           </ul>
         </nav>
       </aside>
-      <!-- <section>
+      <section>
         <h1>Welcome</h1>
         <div id="widgets-container">
           <ul class="widgets">
@@ -70,7 +79,7 @@
             <span class="widget2">Announcements</span>
           </h2>
         </div>
-      </section> -->
+      </section>
     </main>
     <footer>
       <a

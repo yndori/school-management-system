@@ -1,46 +1,89 @@
-<h1>Tasks</h1>
+<h1>Project Tasks</h1>
 
-<h2>Login Tasks</h2>
+<!-- ================= LOGIN BRANCH ================= -->
 
-<p>Team : Yoann & Yvan</p>
+<h2>Login Branch</h2>
 
-<h3>task html (DONE)</h3>
+<p><strong>Team:</strong> Yoann & Yvan</p>
+
+<h3>HTML</h3>
 
 <ol>
-    <li>Logo and favicon ,create header(yoann)</li>
-    <li>Create mail , mailto (contact)(yoann)</li>
-    <li>Title to welcome (Yvan)</li>
+    <li>[x] Login page structure</li>
+    <li>[x] Logo, favicon, and header</li>
+    <li>[x] Contact email (mailto)</li>
 </ol>
 
-<h3>task css (DONE)</h3>
+<h3>CSS</h3>
 
 <ol>
-    <li>Responsive(yvan)</li>
+    <li>[x] Responsive design</li>
 </ol>
 
-<h3>task JS</h3>
+<h3>JavaScript</h3>
 
 <ol>
-    <li>Setup ExpressJR (yoann)</li>
-    <li>Setup database (yoann)</li>
-    <li>Login(yvan)</li>
-    <li>forgotten password HTML(yoann)</li>
-    <li>Forgotten password CSS(yoann)</li>
-    <li>Forgotten password JS(yvan)</li>
+    <li>[] Implement login system</li>
+    <li>[] Implement forgot password system</li>
 </ol>
 
-<h2>Home Page Tasks</h2>
+<hr>
 
-<p>Team : Diakhou , Fatou binetou , Awa , Madjiguene , Hawa</p>
+<!-- ================= INDEX BRANCH ================= -->
+
+<h2>Index Branch</h2>
+
+<p><strong>Team:</strong> Everyone</p>
+
+<!-- ===== index.html ===== -->
+
+<h3>index.html</h3>
+
+<h4>HTML</h4>
 
 <ol>
-    <li>Header</li>
-    <li>main page</li>
-    <li>Insert favicons</li>
+    <li>[] Create the home page (girl team)</li>
+    <li>[] Insert header and footer HTML from login (girl team)</li>
+    <li>[] Edit the main section structure (girl team)</li>
 </ol>
 
-<h3>task css</h3>
+<h4>CSS</h4>
 
 <ol>
-    <li>Responsive</li>
+    <li>[] Reuse header and footer CSS from login (girl team)</li>
+    <li>[] Link to main CSS file or create <code>index.css</code> (girl team)</li>
+</ol>
+
+<h4>JavaScript</h4>
+
+<ol>
+    <!-- No JavaScript tasks for index.html yet -->
+</ol>
+
+<hr>
+
+<!-- ===== dashboard ===== -->
+
+<h3>Dashboard</h3>
+
+<h4>HTML</h4>
+
+<ol>
+    <li>[] Edit the header: replace "Details" with the student name and show "Sign out" on hover (boys team)</li>
+    <li>[] Edit the main section: add divs for layout structure (boys team)</li>
+</ol>
+
+<h4>CSS</h4>
+
+<ol>
+    <li>[] Use CSS Grid for dashboard layout (boys team)</li>
+    <li>[] Change dashboard colors for a better design (girl team)</li>
+    <li>[]Edit the border for the aside navbar (girl team)</li>
+    <li>[] Add animations where possible on all pages (girl team)</li>
+</ol>
+
+<h4>JavaScript</h4>
+
+<ol>
+    <!-- JavaScript tasks will be added later -->
 </ol>
