@@ -27,7 +27,26 @@ header img {
 
 #account {
   display: flex;
+  justify-items: center;
   align-items: center;
+  margin-right: 10px;
+  font-size: smaller;
+}
+
+#account details:hover {
+  cursor: pointer;
+}
+
+#account details a {
+  display: flex;
+  justify-content: space-around;
+  text-decoration: none;
+  color: black;
+  font-size: smaller;
+}
+
+#account details a:hover {
+  color: red;
 }
 
 /* main */

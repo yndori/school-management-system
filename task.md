@@ -69,8 +69,8 @@
 <h4>HTML</h4>
 
 <ol>
-    <li>[] Edit the header: replace "Details" with the student name and show "Sign out" on hover (boys team)</li>
-    <li>[] Edit the main section: add divs for layout structure (boys team)</li>
+    <li>[x] Edit the header: replace "Details" with the student name and show "Sign out" on hover (boys team)</li>
+    <li>[] Edit the main section: add divs for layout structure remove the space between aside and main (boys team)</li>
 </ol>
 
 <h4>CSS</h4>
