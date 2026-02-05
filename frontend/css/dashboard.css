@@ -53,8 +53,6 @@ header img {
 
 main {
   display: flex;
-  /* Justiified for readability will change after finishing the aside */
-  justify-content: space-between;
 }
 
 /* aside */
@@ -97,7 +95,32 @@ aside {
 
 /* section */
 section {
-  background-color: red;
+  background-color: green;
+  width: 100%;
+}
+
+/* Just for testing the grid anything except the grid will be removed */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 20px;
+  padding: 10px;
+  margin: 10px;
+}
+
+.card {
+  background-color: white;
+}
+
+/* Just for testing the grid anything except the grid will be removed */
+.summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 20px;
+  padding: 10px;
+  margin: 10px;
 }
 
 /* footer */
