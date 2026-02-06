@@ -113,6 +113,11 @@ section {
   background-color: white;
 }
 
+.card-title {
+  display: flex;
+  margin-right: 10px;
+}
+
 /* Just for testing the grid anything except the grid will be removed */
 .summary {
   display: grid;

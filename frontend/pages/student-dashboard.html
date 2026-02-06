@@ -26,10 +26,10 @@
       rel="manifest"
       href="../frontend/public/images/favicon/site.webmanifest"
     />
-    <!-- <link
+    <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
-    /> -->
+    />
   </head>
   <body>
     <header>
@@ -62,9 +62,32 @@
       </aside>
       <section class="dashboard">
         <div class="stats">
-          <div class="card">Courses</div>
-          <div class="card">Schedule</div>
-          <div class="card">Transcript</div>
+          <div class="card">
+            <div class="card-title">
+              <span class="material-symbols-outlined">menu_book</span>
+              <h1>Courses</h1>
+            </div>
+            <span id="enrolled-courses">5</span>
+            <p>courses</p>
+          </div>
+          <div class="card">
+            <div class="card-title">
+              <span class="material-symbols-outlined">analytics</span>
+              <h1>Schedule</h1>
+            </div>
+            <!-- remaining classes in the week -->
+            <span id="ongoing-classes">3</span>
+            <p>Upcoming classes</p>
+          </div>
+          <div class="card">
+            <div class="card-title">
+              <!-- Need to change the icon -->
+              <span class="material-symbols-outlined">analytics</span>
+              <h1>Transcript</h1>
+            </div>
+            <p><span id="gpa">0.0</span> GPA</p>
+            <p>Current GPA</p>
+          </div>
         </div>
 
         <div class="summary">
