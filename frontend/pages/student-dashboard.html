@@ -57,6 +57,9 @@
             <li>
               <a href="../pages/transcript.html">Transcript</a>
             </li>
+            <li>
+              <a href="../pages/schedule.html">Schedule</a>
+            </li>
           </ul>
         </nav>
       </aside>
@@ -91,9 +94,48 @@
         </div>
 
         <div class="summary">
-          <div class="upcoming">Upcoming classes</div>
-          <div class="grades">Recent grades</div>
-          <div class="Announcements">Announcements</div>
+          <div class="upcoming">
+            <h1>Upcoming classes</h1>
+            <div class="upcoming-container">
+              <article class="upcoming-container-card">
+                <!-- Generated card by js -->
+              </article>
+
+              <!-- card-link is the class of generated card by js -->
+              <a href="../pages/schedule.html" class="view-schedule card-link"
+                >view schedule</a
+              >
+            </div>
+          </div>
+          <div class="grades">
+            <h1>Recent grades</h1>
+            <div class="grades-container">
+              <article class="grades-container-card">
+                <!-- Generated card by js -->
+              </article>
+
+              <!-- card-link is the class of generated card by js -->
+              <a href="../pages/courses.html" class="view-schedule card-link"
+                >view transcript</a
+              >
+            </div>
+          </div>
+          <div class="Announcement">
+            <div class="announcement-container">
+              <div class="announcement-header">
+                <span class="material-symbols-outlined">announcement</span>
+                <h1>Announcement</h1>
+              </div>
+              <div class="announcement-content">
+                <h2 id="announcement-title">Announcement title</h2>
+                <p id="announcement-summary">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit...
+                </p>
+                <!-- Will pop up when clicked on view details -->
+                <a href="#" class="view-details">view details</a>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </main>
