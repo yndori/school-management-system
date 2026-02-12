@@ -100,23 +100,42 @@ section {
   width: 100%;
 }
 
-/* Just for testing the grid anything except the grid will be removed */
-.stats {
+/* Just for testing the grid anything except the grid(syle) will be removed/changed */
+.greeting {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-columns: 1fr;
   gap: 20px;
   padding: 10px;
   margin: 10px;
 }
 
-.card {
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  padding: 10px;
+  margin: 10px;
   background-color: white;
+}
+
+.card {
+  background-color: #d4af37;
+  color: white;
 }
 
 .card-title {
   display: flex;
-  margin-right: 10px;
+  gap: 10px;
+}
+
+#enrolled-courses,
+#ongoing-classes,
+#gpa {
+  font-size: 50px;
+}
+
+.card-title p {
+  font-size: 50px;
 }
 
 /* Just for testing the grid anything except the grid will be removed */

@@ -57,7 +57,7 @@
 <h4>JavaScript</h4>
 
 <ol>
-    <!-- No JavaScript tasks for index.html yet -->
+    <li>[]Add logic for announcement to take the full page with opacity(yvan and yoann)</li>
 </ol>
 
 <hr>
