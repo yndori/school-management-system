@@ -52,6 +52,7 @@
 <ol>
     <li>[] Reuse header and footer CSS from login (girl team)</li>
     <li>[] Link to main CSS file or create <code>index.css</code> (girl team)</li>
+    <li>[x] Add animations (hover for cards in the main section , etc...) (girl team)</li>
 </ol>
 
 <h4>JavaScript</h4>
@@ -80,6 +81,7 @@
     <li>[] Change dashboard colors for a better design (girl team)</li>
     <li>[]Edit the border for the aside navbar (girl team)</li>
     <li>[] Add animations where possible on all pages (girl team)</li>
+    <li>[] Change the font of the dashboard (girl team)</li>
 </ol>
 
 <h4>JavaScript</h4>

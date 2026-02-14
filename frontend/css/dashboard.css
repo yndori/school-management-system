@@ -65,7 +65,7 @@ aside {
 
 #menu {
   color: white;
-  height: 83vh;
+  height: 90vh;
 }
 
 .nav-bar {
@@ -100,18 +100,22 @@ section {
   width: 100%;
 }
 
-/* Just for testing the grid anything except the grid(syle) will be removed/changed */
 .greeting {
   display: grid;
   grid-template-columns: 1fr;
   gap: 20px;
   padding: 10px;
   margin: 10px;
+  background-image: url(../public/images/greeting-banner.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: right;
+  height: 100px;
 }
 
 .stats {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 0.15fr);
   gap: 20px;
   padding: 10px;
   margin: 10px;
@@ -119,8 +123,12 @@ section {
 }
 
 .card {
+  display: flex;
+  flex-direction: column;
   background-color: #d4af37;
   color: white;
+  padding: 10px;
+  border-radius: 10px;
 }
 
 .card-title {
@@ -128,42 +136,42 @@ section {
   gap: 10px;
 }
 
+.card-title h1 {
+  align-content: center;
+}
+
 #enrolled-courses,
 #ongoing-classes,
 #gpa {
-  font-size: 50px;
+  font-size: 30px;
 }
 
-.card-title p {
-  font-size: 50px;
+.card h1,
+.card p {
+  font-size: 10px;
 }
 
 /* Just for testing the grid anything except the grid will be removed */
 .summary {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, 1fr);
   gap: 20px;
   padding: 10px;
   margin: 10px;
 }
 
-/* footer */
-
-footer {
-  padding: 20px;
-  color: white;
-  background-color: black;
-  position: fixed;
-  bottom: 0;
-  margin: 0;
-  width: 100%;
+.upcoming,
+.grades,
+.Announcement {
+  display: grid;
 }
 
-footer a:hover {
-  color: goldenrod;
+.upcoming,
+.grades {
+  grid-template-rows: repeat(2, 1fr);
 }
-footer a {
-  color: rgb(70, 70, 70);
-  text-decoration: none;
+
+.announcement-header {
+  display: flex;
+  gap: 10px;
 }
