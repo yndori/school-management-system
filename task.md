@@ -58,7 +58,7 @@
 <h4>JavaScript</h4>
 
 <ol>
-    <li>[]Add logic for announcement to take the full page with opacity(yvan and yoann)</li>
+    <li></li>
 </ol>
 
 <hr>
@@ -71,21 +71,47 @@
 
 <ol>
     <li>[x] Edit the header: replace "Details" with the student name and show "Sign out" on hover (boys team)</li>
-    <li>[] Edit the main section: add divs for layout structure remove the space between aside and main (boys team)</li>
+    <li>[x] Edit the main section: add divs for layout structure remove the space between aside and main (boys team)</li>
+    <li>[] Add </li>
 </ol>
 
 <h4>CSS</h4>
 
 <ol>
-    <li>[] Use CSS Grid for dashboard layout (boys team)</li>
+    <li> [x] Use CSS Grid for dashboard layout (boys team)</li>
     <li>[] Change dashboard colors for a better design (girl team)</li>
     <li>[]Edit the border for the aside navbar (girl team)</li>
     <li>[] Add animations where possible on all pages (girl team)</li>
     <li>[] Change the font of the dashboard (girl team)</li>
+    <li>[] Add padding and margin where you can to make the dashboard look better (girl team)</li>
 </ol>
 
 <h4>JavaScript</h4>
 
 <ol>
-    <!-- JavaScript tasks will be added later -->
+    <li>[]Add logic for announcement to take the full page with transparent background when clicked on view details (yvan and yoann)</li>
+</ol>
+
+<hr>
+
+<!-- ===== dashboard ===== -->
+
+<h3>Transcript</h3>
+
+<h4>HTML</h4>
+
+<ol>
+    <li>[] Need to add the section main to write the contentent(boys team)</li>
+</ol>
+
+<h4>CSS</h4>
+
+<ol>
+    <li> [] Need to add the css for main , aside menu (boys team)</li>
+</ol>
+
+<h4>JavaScript</h4>
+
+<ol>
+    <!-- <li>[]Add logic for announcement to take the full page with transparent background when clicked on view details (yvan and yoann)</li> -->
 </ol>

@@ -162,8 +162,14 @@ section {
 
 .upcoming,
 .grades,
-.Announcement {
+.announcement {
   display: grid;
+}
+
+.upcoming-container,
+.grades-container,
+.announcement-container {
+  background-color: white;
 }
 
 .upcoming,
@@ -173,5 +179,30 @@ section {
 
 .announcement-header {
   display: flex;
+  align-items: center;
   gap: 10px;
+  background-color: #d4af37;
+  padding: 10px;
+}
+
+.announcement-container {
+  padding: 10px;
+}
+
+.announcement-header {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.announcement-container {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+#announcement-title {
+  margin-bottom: 5px;
+}
+
+#announcement-summary {
+  margin-bottom: 20px;
 }
