@@ -78,7 +78,7 @@
           </div>
           <div class="card">
             <div class="card-title">
-              <span class="material-symbols-outlined">analytics</span>
+              <span><span class="material-symbols-outlined">event</span></span>
               <h1>Schedule</h1>
             </div>
             <!-- remaining classes in the week -->
@@ -87,7 +87,6 @@
           </div>
           <div class="card">
             <div class="card-title">
-              <!-- Need to change the icon -->
               <span class="material-symbols-outlined">analytics</span>
               <h1>Transcript</h1>
             </div>
@@ -106,30 +105,39 @@
                 <!-- Generated card by js -->
               </article>
 
-              <!-- card-link is the class of generated card by js -->
-              <p>
-                <a href="schedule.html" class="view-schedule card-link"
-                  >View Schedule ></a
+              <article class="upcoming-container-link">
+                <span
+                  ><span class="material-symbols-outlined">event</span></span
                 >
-              </p>
+                <p>
+                  <a href="schedule.html" class="view-schedule card-link"
+                    >View Schedule ></a
+                  >
+                </p>
+              </article>
             </div>
           </div>
-          <!-- May move H1 to a div for better responsiveness -->
           <div class="grades">
             <div class="grades-title">
-              <h1>Grades</h1>
+              <h1>Recent Grades</h1>
             </div>
             <div class="grades-container">
               <article class="grades-container-card">
                 <!-- Generated card by js -->
               </article>
 
-              <!-- card-link is the class of generated card by js -->
-              <p>
-                <a href="transcript.html" class="view-schedule card-link"
-                  >View Transcript ></a
+              <article class="grades-container-link">
+                <span
+                  ><span class="material-symbols-outlined"
+                    >analytics</span
+                  ></span
                 >
-              </p>
+                <p>
+                  <a href="transcript.html" class="view-schedule card-link"
+                    >View Transcript ></a
+                  >
+                </p>
+              </article>
             </div>
           </div>
           <div class="announcement">
@@ -141,10 +149,13 @@
             <div class="announcement-container">
               <h2 id="announcement-title">Announcement title</h2>
               <p id="announcement-summary">
+                <!-- 55 characters max + "..." -->
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit...
               </p>
               <!-- Will pop up when clicked on view details and set blurred background , need to add a close button -->
-              <p><a href="#" class="view-details">View Details ></a></p>
+              <p class="details">
+                <a href="#" class="view-details card-link">View Details ></a>
+              </p>
             </div>
           </div>
         </div>

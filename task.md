@@ -81,7 +81,7 @@
     <li> [x] Use CSS Grid for dashboard layout (boys team)</li>
     <li>[] Change dashboard colors for a better design (girl team)</li>
     <li>[]Edit the border for the aside navbar (girl team)</li>
-    <li>[] Add animations where possible on all pages (girl team)</li>
+    <li>[] Add animations , transitions , shadows , hover when it's possible on all pages (girl team)</li>
     <li>[] Change the font of the dashboard (girl team)</li>
     <li>[] Add padding and margin where you can to make the dashboard look better (girl team)</li>
 </ol>
@@ -90,24 +90,26 @@
 
 <ol>
     <li>[]Add logic for announcement to take the full page with transparent background when clicked on view details (yvan and yoann)</li>
+    <li>[]Add logic for logout (yvan and yoann)</li>
+    <li>[]Change Jhon doe based on the connected user (yvan and yoann)</li>
 </ol>
 
 <hr>
 
-<!-- ===== dashboard ===== -->
+<!-- ================= TRANSCRIPT BRANCH ================= -->
 
-<h3>Transcript</h3>
+<h2>Transcript</h2>
 
 <h4>HTML</h4>
 
 <ol>
-    <li>[] Need to add the section main to write the contentent(boys team)</li>
+    <li>[] Need to add the , header , main and menu to write the contentent(boys team)</li>
 </ol>
 
 <h4>CSS</h4>
 
 <ol>
-    <li> [] Need to add the css for main , aside menu (boys team)</li>
+    <li> [] Need to add the css for main , aside and menu (boys team)</li>
 </ol>
 
 <h4>JavaScript</h4>

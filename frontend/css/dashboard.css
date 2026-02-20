@@ -22,8 +22,8 @@ header {
 }
 
 header img {
-  width: 80px;
-  height: 60px;
+  width: 70px;
+  height: 50px;
 }
 
 #account {
@@ -60,12 +60,12 @@ main {
 
 aside {
   /* Chose violet to differentiate the header , main and section Will change after finishing */
-  background-color: violet;
+  background-color: black;
 }
 
 #menu {
   color: white;
-  height: 90vh;
+  height: 90.2vh;
 }
 
 .nav-bar {
@@ -85,7 +85,7 @@ aside {
 }
 
 .nav-bar li:hover {
-  background-color: blue;
+  background-color: #d4af37;
   cursor: pointer;
   transition: 0.5s;
 }
@@ -96,7 +96,7 @@ aside {
 
 /* section */
 section {
-  background-color: green;
+  background-color: lightgrey;
   width: 100%;
 }
 
@@ -111,6 +111,7 @@ section {
   background-repeat: no-repeat;
   background-position: right;
   height: 100px;
+  color: white;
 }
 
 .stats {
@@ -119,7 +120,7 @@ section {
   gap: 20px;
   padding: 10px;
   margin: 10px;
-  background-color: white;
+  background-color: black;
 }
 
 .card {
@@ -151,7 +152,8 @@ section {
   font-size: 10px;
 }
 
-/* Just for testing the grid anything except the grid will be removed */
+/* summary */
+
 .summary {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -166,27 +168,55 @@ section {
   display: grid;
 }
 
+.card-link:link,
+.card-link:visited,
+.card-link:hover,
+.card-link:active {
+  text-decoration: none;
+  color: black;
+}
+
 .upcoming-container,
 .grades-container,
 .announcement-container {
   background-color: white;
 }
 
+/* Upcoming and grades */
+
+.upcoming-title,
+.grades-title {
+  display: flex;
+  font-size: 10px;
+}
+
 .upcoming,
 .grades {
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-rows: 0.4fr 1fr;
+  height: fit-content;
 }
+
+.grades-container-link,
+.upcoming-container-link {
+  border: solid 1px black;
+  padding: 10px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+/* announcement card */
 
 .announcement-header {
   display: flex;
   align-items: center;
   gap: 10px;
   background-color: #d4af37;
-  padding: 10px;
+  padding: 5px;
 }
 
 .announcement-container {
-  padding: 10px;
+  padding: 5px;
 }
 
 .announcement-header {
@@ -204,5 +234,5 @@ section {
 }
 
 #announcement-summary {
-  margin-bottom: 20px;
+  margin-bottom: 50px;
 }
