@@ -103,13 +103,14 @@
 <h4>HTML</h4>
 
 <ol>
-    <li>[] Need to add the , header , main and menu to write the contentent(boys team)</li>
+    <li>[x] Need to add the , header , main and menu to write the contentent(boys team)</li>
+     <li>[x] Need to Work on the section</li>
 </ol>
 
 <h4>CSS</h4>
 
 <ol>
-    <li> [] Need to add the css for main , aside and menu (boys team)</li>
+    <li> [x] Need to add the css for main , aside and menu (boys team)</li>
 </ol>
 
 <h4>JavaScript</h4>

@@ -1,0 +1,101 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+body {
+  /* Delete the background color after everything is done */
+  background-color: #d4af37;
+}
+
+/* header */
+
+header {
+  display: flex;
+  background-color: white;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+header img {
+  width: 70px;
+  height: 50px;
+}
+
+#account {
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  margin-right: 10px;
+  font-size: smaller;
+}
+
+#account details:hover {
+  cursor: pointer;
+}
+
+#account details a {
+  display: flex;
+  justify-content: space-around;
+  text-decoration: none;
+  color: black;
+  font-size: smaller;
+}
+
+#account details a:hover {
+  color: red;
+}
+
+/* main */
+
+main {
+  display: flex;
+}
+
+/* aside */
+
+aside {
+  /* Chose violet to differentiate the header , main and section Will change after finishing */
+  background-color: black;
+}
+
+#menu {
+  color: white;
+  height: 90.2vh;
+}
+
+.nav-bar {
+  list-style: none;
+}
+
+.nav-bar li {
+  padding: 10px;
+  border-bottom: 5px solid white;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.nav-bar li a {
+  color: white;
+  text-decoration: none;
+}
+
+.nav-bar li:hover {
+  background-color: #d4af37;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.nav-bar li a:visited {
+  color: white;
+}
+
+/* section */
+section {
+  background-color: lightgrey;
+  width: 100%;
+}
