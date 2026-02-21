@@ -1,62 +1,108 @@
 body{
 margin:0;
-font-family: Arial, sans-serif;
-background:#0f0f0f;
+font-family: 'Segoe UI', sans-serif;
+background: linear-gradient(135deg,#0f0f0f,#1c1c1c);
 color:white;
 }
 
-/* Navbar */
+/* NAVBAR */
 .navbar{
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:20px 50px;
-background:#f5c400;
-color:black;
-box-shadow:0 0 15px rgba(0,0,0,0.5);
+padding:20px 60px;
+background:black;
+border-bottom:3px solid #f5c400;
 }
 
-/* Hero Section */
-.hero{
-height:85vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-text-align:center;
-animation: fadeIn 1.5s ease-in-out;
+.navbar h2{
+color:#f5c400;
+letter-spacing:2px;
 }
 
-/* Title */
-.hero h1{
-font-size:45px;
+.nav-links a{
+color:white;
+text-decoration:none;
+margin-left:25px;
+transition:0.3s;
+font-weight:500;
+}
+
+.nav-links a:hover{
 color:#f5c400;
 }
 
-/* Button */
+/* HERO */
+.hero{
+text-align:center;
+padding:80px 20px 40px 20px;
+animation:fadeIn 1s ease-in-out;
+}
+
+.hero h1{
+font-size:45px;
+color:#f5c400;
+margin-bottom:15px;
+}
+
+.hero p{
+font-size:18px;
+opacity:0.8;
+margin-bottom:25px;
+}
+
+/* BUTTON */
 .btn{
-padding:14px 30px;
+padding:12px 30px;
+border-radius:25px;
 border:none;
-border-radius:10px;
 background:#f5c400;
 color:black;
 font-weight:bold;
 cursor:pointer;
-transition:0.4s;
-box-shadow:0 0 10px rgba(245,196,0,0.6);
+transition:0.3s;
 }
 
 .btn:hover{
 transform:scale(1.08);
-background:black;
+background:white;
+}
+
+/* STATS CARDS */
+.stats{
+display:flex;
+justify-content:center;
+gap:30px;
+flex-wrap:wrap;
+padding:40px 20px;
+}
+
+.card{
+background:#1e1e1e;
+padding:30px;
+border-radius:15px;
+width:220px;
+text-align:center;
+transition:0.4s;
+border:1px solid rgba(245,196,0,0.2);
+}
+
+.card:hover{
+transform:translateY(-8px);
+box-shadow:0 0 25px rgba(245,196,0,0.5);
+border:1px solid #f5c400;
+}
+
+.card h3{
 color:#f5c400;
+margin-bottom:10px;
 }
 
 /* Animation */
 @keyframes fadeIn{
 from{
 opacity:0;
-transform:translateY(30px);
+transform:translateY(20px);
 }
 to{
 opacity:1;
