@@ -1,22 +1,24 @@
 body{
 margin:0;
-font-family: 'Segoe UI', sans-serif;
-background: linear-gradient(135deg,#0f0f0f,#1c1c1c);
+font-family: "Segoe UI", sans-serif;
+background: linear-gradient(135deg,#020b1f,#04142f);
 color:white;
 }
 
-/* NAVBAR */
+/* Navbar */
+
 .navbar{
 display:flex;
 justify-content:space-between;
 align-items:center;
 padding:20px 60px;
-background:black;
-border-bottom:3px solid #f5c400;
+background:rgba(0,0,0,0.5);
+backdrop-filter: blur(10px);
+border-bottom:2px solid #00e5ff;
 }
 
 .navbar h2{
-color:#f5c400;
+color:#00e5ff;
 letter-spacing:2px;
 }
 
@@ -25,87 +27,111 @@ color:white;
 text-decoration:none;
 margin-left:25px;
 transition:0.3s;
-font-weight:500;
 }
 
 .nav-links a:hover{
-color:#f5c400;
+color:#00e5ff;
 }
 
-/* HERO */
+/* Hero Section */
+
 .hero{
+min-height:85vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
 text-align:center;
-padding:80px 20px 40px 20px;
-animation:fadeIn 1s ease-in-out;
+animation:fadeIn 1.2s ease-in-out;
 }
 
 .hero h1{
-font-size:45px;
-color:#f5c400;
-margin-bottom:15px;
+font-size:55px;
+color:#00e5ff;
+text-shadow:0 0 20px rgba(0,229,255,0.6);
 }
 
+/* Dashboard subtitle text */
 .hero p{
 font-size:18px;
-opacity:0.8;
-margin-bottom:25px;
+opacity:0.85;
+max-width:600px;
+margin:0 auto;
 }
 
-/* BUTTON */
+/* Card text styling */
+.card p{
+font-size:15px;
+opacity:0.85;
+line-height:1.5;
+}
+
+/* Button */
+
 .btn{
-padding:12px 30px;
-border-radius:25px;
+margin-top:25px;
+padding:14px 36px;
+border-radius:30px;
 border:none;
-background:#f5c400;
+background:#00e5ff;
 color:black;
 font-weight:bold;
 cursor:pointer;
-transition:0.3s;
+transition:0.35s;
 }
 
 .btn:hover{
-transform:scale(1.08);
+transform:translateY(-6px) scale(1.08);
 background:white;
 }
 
-/* STATS CARDS */
+
+
+
 .stats{
 display:flex;
 justify-content:center;
-gap:30px;
-flex-wrap:wrap;
-padding:40px 20px;
+gap:25px;
+padding:60px 20px;
+flex-wrap:nowrap;
 }
-
 .card{
-background:#1e1e1e;
+width:230px;
 padding:30px;
-border-radius:15px;
-width:220px;
-text-align:center;
+border-radius:20px;
+background:rgba(255,255,255,0.05);
+backdrop-filter: blur(10px);
+border:1px solid rgba(0,229,255,0.2);
 transition:0.4s;
-border:1px solid rgba(245,196,0,0.2);
 }
 
 .card:hover{
-transform:translateY(-8px);
-box-shadow:0 0 25px rgba(245,196,0,0.5);
-border:1px solid #f5c400;
+transform:translateY(-12px);
+border-color:#00e5ff;
+box-shadow:0 0 30px rgba(0,229,255,0.3);
 }
 
 .card h3{
-color:#f5c400;
-margin-bottom:10px;
+color:#00e5ff;
 }
 
 /* Animation */
+
 @keyframes fadeIn{
 from{
 opacity:0;
-transform:translateY(20px);
+transform:translateY(40px);
 }
 to{
 opacity:1;
 transform:translateY(0);
 }
+}
+/* Reduce space between button and cards */
+.hero{
+padding-bottom:30px;
+}
+
+.stats{
+margin-top:20px;
 }
