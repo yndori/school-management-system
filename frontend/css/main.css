@@ -1,7 +1,7 @@
 body{
 margin:0;
-font-family: "Segoe UI", sans-serif;
-background: linear-gradient(135deg,#020b1f,#04142f);
+font-family:Segoe UI, sans-serif;
+background:#0f0f0f;
 color:white;
 }
 
@@ -12,13 +12,12 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 padding:20px 60px;
-background:rgba(0,0,0,0.5);
-backdrop-filter: blur(10px);
-border-bottom:2px solid #00e5ff;
+background:black;
+border-bottom:3px solid #f5c400;
 }
 
 .navbar h2{
-color:#00e5ff;
+color:#f5c400;
 letter-spacing:2px;
 }
 
@@ -30,63 +29,46 @@ transition:0.3s;
 }
 
 .nav-links a:hover{
-color:#00e5ff;
+color:#f5c400;
 }
 
-/* Hero Section */
+/* Hero */
 
 .hero{
-min-height:85vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
 text-align:center;
-animation:fadeIn 1.2s ease-in-out;
+padding:80px 20px 40px;
+animation:fadeIn 1s ease-in-out;
 }
 
 .hero h1{
-font-size:55px;
-color:#00e5ff;
-text-shadow:0 0 20px rgba(0,229,255,0.6);
+font-size:50px;
+color:#f5c400;
 }
 
-/* Dashboard subtitle text */
 .hero p{
-font-size:18px;
 opacity:0.85;
-max-width:600px;
-margin:0 auto;
-}
-
-/* Card text styling */
-.card p{
-font-size:15px;
-opacity:0.85;
-line-height:1.5;
+margin-bottom:25px;
 }
 
 /* Button */
 
 .btn{
-margin-top:25px;
-padding:14px 36px;
-border-radius:30px;
+padding:14px 35px;
 border:none;
-background:#00e5ff;
+border-radius:30px;
+background:#f5c400;
 color:black;
 font-weight:bold;
 cursor:pointer;
-transition:0.35s;
+transition:0.4s;
 }
 
 .btn:hover{
-transform:translateY(-6px) scale(1.08);
+transform:scale(1.08);
 background:white;
 }
 
-
-
+/* Cards */
 
 .stats{
 display:flex;
@@ -95,24 +77,25 @@ gap:25px;
 padding:60px 20px;
 flex-wrap:nowrap;
 }
+
 .card{
-width:230px;
+width:220px;
 padding:30px;
 border-radius:20px;
-background:rgba(255,255,255,0.05);
-backdrop-filter: blur(10px);
-border:1px solid rgba(0,229,255,0.2);
+background:#1e1e1e;
+text-align:center;
 transition:0.4s;
+border:1px solid rgba(245,196,0,0.3);
 }
 
 .card:hover{
 transform:translateY(-12px);
-border-color:#00e5ff;
-box-shadow:0 0 30px rgba(0,229,255,0.3);
+box-shadow:0 0 30px rgba(245,196,0,0.4);
+border-color:#f5c400;
 }
 
 .card h3{
-color:#00e5ff;
+color:#f5c400;
 }
 
 /* Animation */
@@ -120,18 +103,10 @@ color:#00e5ff;
 @keyframes fadeIn{
 from{
 opacity:0;
-transform:translateY(40px);
+transform:translateY(30px);
 }
 to{
 opacity:1;
 transform:translateY(0);
 }
-}
-/* Reduce space between button and cards */
-.hero{
-padding-bottom:30px;
-}
-
-.stats{
-margin-top:20px;
 }
