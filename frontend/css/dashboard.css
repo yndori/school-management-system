@@ -1,0 +1,238 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+body {
+  /* Delete the background color after everything is done */
+  background-color: #d4af37;
+}
+
+/* header */
+
+header {
+  display: flex;
+  background-color: white;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+header img {
+  width: 70px;
+  height: 50px;
+}
+
+#account {
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  margin-right: 10px;
+  font-size: smaller;
+}
+
+#account details:hover {
+  cursor: pointer;
+}
+
+#account details a {
+  display: flex;
+  justify-content: space-around;
+  text-decoration: none;
+  color: black;
+  font-size: smaller;
+}
+
+#account details a:hover {
+  color: red;
+}
+
+/* main */
+
+main {
+  display: flex;
+}
+
+/* aside */
+
+aside {
+  /* Chose violet to differentiate the header , main and section Will change after finishing */
+  background-color: black;
+}
+
+#menu {
+  color: white;
+  height: 90.2vh;
+}
+
+.nav-bar {
+  list-style: none;
+}
+
+.nav-bar li {
+  padding: 10px;
+  border-bottom: 5px solid white;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.nav-bar li a {
+  color: white;
+  text-decoration: none;
+}
+
+.nav-bar li:hover {
+  background-color: #d4af37;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.nav-bar li a:visited {
+  color: white;
+}
+
+/* section */
+section {
+  background-color: lightgrey;
+  width: 100%;
+}
+
+.greeting {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  padding: 10px;
+  margin: 10px;
+  background-image: url(../public/images/greeting-banner.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: right;
+  height: 100px;
+  color: white;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 0.15fr);
+  gap: 20px;
+  padding: 10px;
+  margin: 10px;
+  background-color: black;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background-color: #d4af37;
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.card-title {
+  display: flex;
+  gap: 10px;
+}
+
+.card-title h1 {
+  align-content: center;
+}
+
+#enrolled-courses,
+#ongoing-classes,
+#gpa {
+  font-size: 30px;
+}
+
+.card h1,
+.card p {
+  font-size: 10px;
+}
+
+/* summary */
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  padding: 10px;
+  margin: 10px;
+}
+
+.upcoming,
+.grades,
+.announcement {
+  display: grid;
+}
+
+.card-link:link,
+.card-link:visited,
+.card-link:hover,
+.card-link:active {
+  text-decoration: none;
+  color: black;
+}
+
+.upcoming-container,
+.grades-container,
+.announcement-container {
+  background-color: white;
+}
+
+/* Upcoming and grades */
+
+.upcoming-title,
+.grades-title {
+  display: flex;
+  font-size: 10px;
+}
+
+.upcoming,
+.grades {
+  grid-template-rows: 0.4fr 1fr;
+  height: fit-content;
+}
+
+.grades-container-link,
+.upcoming-container-link {
+  border: solid 1px black;
+  padding: 10px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+/* announcement card */
+
+.announcement-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #d4af37;
+  padding: 5px;
+}
+
+.announcement-container {
+  padding: 5px;
+}
+
+.announcement-header {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.announcement-container {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+#announcement-title {
+  margin-bottom: 5px;
+}
+
+#announcement-summary {
+  margin-bottom: 50px;
+}
