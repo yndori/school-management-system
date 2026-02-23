@@ -1,16 +1,9 @@
-/* Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    transition: all 0.3s ease-in-out;
-}
-
+/* Global Styles */
 body {
+    margin: 0;
     font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #111, rgb(212,175,55));
+    background: #111;
     color: white;
-    min-height: 100vh;
 }
 
 /* Navbar */
@@ -18,10 +11,9 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background: black;
     padding: 15px 40px;
-    backdrop-filter: blur(10px);
-    background: rgba(0, 0, 0, 0.6);
-    border-bottom: 2px solid rgba(212,175,55,0.5);
+    border-bottom: 3px solid #f1c40f;
 }
 
 .logo-container {
@@ -32,68 +24,58 @@ body {
 
 .logo {
     width: 50px;
+    height: 50px;
 }
 
 .logo-container h2 {
-    color: rgb(212,175,55);
+    color: #f1c40f;
 }
 
+/* Navigation Links */
 .nav-links a {
     color: white;
     text-decoration: none;
-    margin: 0 12px;
+    margin: 0 15px;
     font-weight: bold;
+    transition: 0.3s;
 }
 
 .nav-links a:hover {
-    color: rgb(212,175,55);
-    transform: translateY(-3px);
+    color: #f1c40f;
 }
 
-.login-link {
-    background: rgb(212,175,55);
-    color: black !important;
-    padding: 8px 15px;
-    border-radius: 6px;
-}
-
-/* Hero Section (Glass Effect) */
+/* Hero Section */
 .hero {
     text-align: center;
     padding: 80px 20px;
-    margin: 40px;
-    border-radius: 20px;
-    backdrop-filter: blur(15px);
-    background: rgba(255,255,255,0.08);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-    animation: fadeUp 1s ease;
 }
 
 .hero h1 {
-    color: rgb(212,175,55);
+    color: #f1c40f;
     font-size: 45px;
 }
 
 .hero p {
-    margin: 15px 0;
+    color: #ddd;
+    font-size: 18px;
 }
 
 .btn {
-    background: rgb(212,175,55);
+    background: #f1c40f;
     color: black;
     border: none;
     padding: 12px 25px;
     font-size: 18px;
-    border-radius: 8px;
     cursor: pointer;
+    border-radius: 8px;
     font-weight: bold;
+    transition: 0.3s;
 }
 
 .btn:hover {
     background: black;
-    color: rgb(212,175,55);
-    border: 1px solid rgb(212,175,55);
-    transform: scale(1.05);
+    color: #f1c40f;
+    border: 1px solid #f1c40f;
 }
 
 /* Stats Section */
@@ -104,83 +86,19 @@ body {
     padding: 40px;
 }
 
-/* Glass Cards */
 .card {
+    background: #1c1c1c;
+    padding: 25px;
+    border-radius: 15px;
     text-align: center;
-    padding: 30px;
-    border-radius: 20px;
-    backdrop-filter: blur(15px);
-    background: rgba(255,255,255,0.08);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.5);
-    animation: fadeUp 1s ease;
+    border-top: 4px solid #f1c40f;
+    transition: 0.3s;
 }
 
-.icon {
-    font-size: 35px;
-    margin-bottom: 15px;
-    color: rgb(212,175,55);
-}
-
-/* Hover Effect */
 .card:hover {
-    transform: translateY(-10px) scale(1.05);
-    background: rgb(212,175,55);
-    color: black;
+    transform: translateY(-8px);
 }
 
-/* Announcement Section */
-.announcement {
-    margin: 40px;
-    padding: 30px;
-    border-radius: 20px;
-    backdrop-filter: blur(15px);
-    background: rgba(255,255,255,0.08);
-    border: 2px solid rgba(212,175,55,0.6);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-    animation: fadeUp 1.2s ease;
-}
-
-.announcement h2 {
-    color: rgb(212,175,55);
-    margin-bottom: 15px;
-}
-
-.view-details {
-    display: inline-block;
-    margin-top: 15px;
-    text-decoration: none;
-    font-weight: bold;
-    color: white;
-}
-
-.view-details:hover {
-    color: rgb(212,175,55);
-}
-
-/* Animations */
-@keyframes fadeUp {
-    from {
-        opacity: 0;
-        transform: translateY(40px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .navbar {
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    .stats {
-        grid-template-columns: 1fr;
-    }
-
-    .hero h1 {
-        font-size: 28px;
-    }
+.card h3 {
+    color: #f1c40f;
 }
