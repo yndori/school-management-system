@@ -1,62 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Schoolink Dashboard</title>
-<link rel="stylesheet" href="css/main.css">
+    <meta charset="UTF-8">
+    <title>Schoolink Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Icons -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <link rel="stylesheet" href="css/main.css">
 </head>
 
 <body>
 
-<nav class="navbar">
+<div class="dashboard">
 
-<div class="logo-container">
-<img src="./public/images/logo.png" alt="Schoolink Logo" class="logo">
-<h2>Schoolink</h2>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo-area">
+            <img src="./public/images/logo.png" class="logo">
+            <h2>Schoolink</h2>
+        </div>
+
+        <nav>
+            <a href="#"><i class="fas fa-chart-line"></i> Dashboard</a>
+            <a href="#"><i class="fas fa-user-graduate"></i> Students</a>
+            <a href="#"><i class="fas fa-chalkboard-teacher"></i> Teachers</a>
+            <a href="#"><i class="fas fa-calendar-alt"></i> Schedule</a>
+            <a href="#"><i class="fas fa-book-open"></i> Grades</a>
+        </nav>
+
+        <button id="themeToggle" class="toggle-btn">
+            <i class="fas fa-moon"></i> Toggle Mode
+        </button>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <section class="welcome glass glow">
+            <h1>Welcome Back 👋</h1>
+            <p>Here is your academic overview.</p>
+        </section>
+
+        <section class="cards">
+
+            <div class="card glass glow">
+                <i class="fas fa-user-graduate icon"></i>
+                <h3>Students</h3>
+                <p>1250 Enrolled</p>
+            </div>
+
+            <div class="card glass glow">
+                <i class="fas fa-chalkboard-teacher icon"></i>
+                <h3>Teachers</h3>
+                <p>85 Active</p>
+            </div>
+
+            <div class="card glass glow">
+                <i class="fas fa-calendar-alt icon"></i>
+                <h3>Schedule</h3>
+                <p>View Timetable</p>
+            </div>
+
+            <div class="card glass glow">
+                <i class="fas fa-book-open icon"></i>
+                <h3>Grades</h3>
+                <p>Check Results</p>
+            </div>
+
+        </section>
+
+        <section class="announcement glass glow">
+            <h2><i class="fas fa-bullhorn"></i> Announcements</h2>
+            <p>Midterm exams start next week. Check your updated schedule.</p>
+            <a href="#" class="view-details">View Details</a>
+        </section>
+
+    </main>
+
 </div>
 
-<div class="nav-links">
-    <a href="#">Dashboard</a>
-    <a href="#">Students</a>
-    <a href="#">Teachers</a>
-    <a href="#">Classes</a>
-    <a href="#">Reports</a>
-    <a href="#" class="login-link">Login</a>
-</div>
-
-</nav>
-
-<section class="hero">
-<h1>School Management Dashboard</h1>
-<p>Manage students, courses, and academic records efficiently.</p>
-
-<button class="btn">Get Started</button>
-</section>
-
-<section class="stats">
-
-<div class="card">
-<h3>Students</h3>
-<p>1250 Enrolled</p>
-</div>
-
-<div class="card">
-<h3>Teachers</h3>
-<p>85 Active</p>
-</div>
-
-<div class="card">
-<h3>Classes</h3>
-<p>42 Running</p>
-</div>
-
-<div class="card">
-<h3>Reports</h3>
-<p>Generate Transcripts</p>
-</div>
-
-</section>
+<script>
+document.getElementById("themeToggle").onclick = function () {
+    document.body.classList.toggle("light-mode");
+}
+</script>
 
 </body>
 </html>
