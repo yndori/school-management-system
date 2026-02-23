@@ -102,3 +102,9 @@ body {
 .card h3 {
     color: #f1c40f;
 }
+.login-link {
+    background: #f1c40f;
+    color: black !important;
+    padding: 8px 15px;
+    border-radius: 6px;
+}
