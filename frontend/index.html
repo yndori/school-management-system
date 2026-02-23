@@ -6,88 +6,73 @@
     <title>Schoolink Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Icons -->
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <link rel="stylesheet" href="css/main.css">
 </head>
 
 <body>
 
-<div class="dashboard">
-
-    <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="logo-area">
-            <img src="./public/images/logo.png" class="logo">
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo-container">
+            <img src="./public/images/logo.png" alt="Schoolink Logo" class="logo">
             <h2>Schoolink</h2>
         </div>
 
-        <nav>
+        <div class="nav-links">
             <a href="#"><i class="fas fa-chart-line"></i> Dashboard</a>
             <a href="#"><i class="fas fa-user-graduate"></i> Students</a>
             <a href="#"><i class="fas fa-chalkboard-teacher"></i> Teachers</a>
-            <a href="#"><i class="fas fa-calendar-alt"></i> Schedule</a>
-            <a href="#"><i class="fas fa-book-open"></i> Grades</a>
-        </nav>
+            <a href="#"><i class="fas fa-school"></i> Classes</a>
+            <a href="#"><i class="fas fa-file-alt"></i> Reports</a>
+            <a href="#" class="login-link">Login</a>
+        </div>
+    </nav>
 
-        <button id="themeToggle" class="toggle-btn">
-            <i class="fas fa-moon"></i> Toggle Mode
-        </button>
-    </aside>
+    <!-- Welcome Section -->
+    <section class="hero">
+        <h1>School Management Dashboard</h1>
+        <p>Manage students, courses, and academic records efficiently.</p>
+        <button class="btn">Get Started</button>
+    </section>
 
-    <!-- Main Content -->
-    <main class="main-content">
+    <!-- Stats Section -->
+    <section class="stats">
 
-        <section class="welcome glass glow">
-            <h1>Welcome Back 👋</h1>
-            <p>Here is your academic overview.</p>
-        </section>
+        <div class="card">
+            <i class="fas fa-user-graduate icon"></i>
+            <h3>Students</h3>
+            <p>1250 Enrolled</p>
+        </div>
 
-        <section class="cards">
+        <div class="card">
+            <i class="fas fa-chalkboard-teacher icon"></i>
+            <h3>Teachers</h3>
+            <p>85 Active</p>
+        </div>
 
-            <div class="card glass glow">
-                <i class="fas fa-user-graduate icon"></i>
-                <h3>Students</h3>
-                <p>1250 Enrolled</p>
-            </div>
+        <div class="card">
+            <i class="fas fa-calendar-alt icon"></i>
+            <h3>Schedule</h3>
+            <p>View Weekly Timetable</p>
+        </div>
 
-            <div class="card glass glow">
-                <i class="fas fa-chalkboard-teacher icon"></i>
-                <h3>Teachers</h3>
-                <p>85 Active</p>
-            </div>
+        <div class="card">
+            <i class="fas fa-book-open icon"></i>
+            <h3>Grades</h3>
+            <p>Check Academic Results</p>
+        </div>
 
-            <div class="card glass glow">
-                <i class="fas fa-calendar-alt icon"></i>
-                <h3>Schedule</h3>
-                <p>View Timetable</p>
-            </div>
+    </section>
 
-            <div class="card glass glow">
-                <i class="fas fa-book-open icon"></i>
-                <h3>Grades</h3>
-                <p>Check Results</p>
-            </div>
-
-        </section>
-
-        <section class="announcement glass glow">
-            <h2><i class="fas fa-bullhorn"></i> Announcements</h2>
-            <p>Midterm exams start next week. Check your updated schedule.</p>
-            <a href="#" class="view-details">View Details</a>
-        </section>
-
-    </main>
-
-</div>
-
-<script>
-document.getElementById("themeToggle").onclick = function () {
-    document.body.classList.toggle("light-mode");
-}
-</script>
+    <!-- Announcement Section -->
+    <section class="announcement">
+        <h2><i class="fas fa-bullhorn"></i> Announcements</h2>
+        <p>Midterm exams will start next week. Please check your schedule.</p>
+        <a href="#" class="view-details">View Details</a>
+    </section>
 
 </body>
 </html>
