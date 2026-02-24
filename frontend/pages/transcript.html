@@ -1,44 +1,48 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Transcript</title>
-    <link rel="stylesheet" href="../css/transcript.css" />
-  </head>
-  <body>
-    <header>
-      <div id="logo">
-        <img src="../public/images/logo-bg-removed.png" alt="logo" />
-      </div>
-      <div id="account">
-        <!-- Will show either "Admin" either the student name -->
-        <details>
-          <summary><class id="student-name">John Doe</class></summary>
-          <a href="#" id="signout-link">Sign out</a>
-        </details>
-      </div>
-    </header>
-    <main>
-      <aside>
-        <nav id="menu">
-          <ul class="nav-bar">
-            <li>
-              <a href="../pages/student-dashboard.html">Dashboard</a>
-            </li>
-            <li>
-              <a href="../pages/courses.html">Courses</a>
-            </li>
-            <li>
-              <a href="../pages/transcript.html">Transcript</a>
-            </li>
-            <li>
-              <a href="../pages/schedule.html">Schedule</a>
-            </li>
-          </ul>
-        </nav>
-      </aside>
-    </main>
-    <script></script>
-  </body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transcript</title>
+
+<link rel="stylesheet" href="../css/transcript.css">
+</head>
+
+<body>
+
+<div class="transcript-container">
+
+    <h1>Academic Transcript</h1>
+
+    <table class="transcript-table">
+
+        <tr>
+            <th>Course</th>
+            <th>Credits</th>
+            <th>Grade</th>
+        </tr>
+
+        <tr>
+            <td>Mathematics</td>
+            <td>3</td>
+            <td>A</td>
+        </tr>
+
+        <tr>
+            <td>Computer Science</td>
+            <td>4</td>
+            <td>A-</td>
+        </tr>
+
+        <tr>
+            <td>Physics</td>
+            <td>3</td>
+            <td>B+</td>
+        </tr>
+
+    </table>
+
+</div>
+
+</body>
 </html>
