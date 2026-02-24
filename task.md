@@ -42,7 +42,7 @@
 <h4>HTML</h4>
 
 <ol>
-    <li>[] Create the home page (girl team)</li>
+    <li>[x] Create the home page (girl team)</li>
     <li>[] Insert header and footer HTML from login (girl team)</li>
     <li>[] Edit the main section structure (girl team)</li>
 </ol>
@@ -115,5 +115,5 @@
 <h4>JavaScript</h4>
 
 <ol>
-    <!-- <li>[]Add logic for announcement to take the full page with transparent background when clicked on view details (yvan and yoann)</li> -->
+    <li>[]Add logic for announcement to take the full page with transparent background when clicked on view details (yvan and yoann)</li>
 </ol>
