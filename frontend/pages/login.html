@@ -1,57 +1,45 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SchoolLink</title>
-    <link rel="stylesheet" href="../css/login.css" />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="../frontend/public/images/favicon/apple-touch-icon.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="../public/images/favicon/favicon-32x32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="../frontend/public/images/favicon/favicon-16x16.png"
-    />
-    <link
-      rel="manifest"
-      href="../frontend/public/images/favicon/site.webmanifest"
-    />
-  </head>
-  <body>
-    <header>
-      <img src="../public/images/logo-bg-removed.png" alt="logo" />
-    </header>
-    <main>
-      <div class="container">
-        <form action="">
-          <h1>Login</h1>
-          <label for="UserName">Username</label>
-          <input type="text" id="UserName" placeholder="Username" />
-          <label for="UserPassword">Password</label>
-          <input type="password" id="UserPassword" placeholder="Password" />
-          <button>Login</button>
-          <div class="link">
-            <a href="reset.html">Forgotten your password?</a>
-          </div>
-        </form>
-      </div>
-    </main>
-    <footer>
-      <a
-        href="mailto:schoollink181@gmail.com?subject=Technical%20Support%20Required%20-%20SchoolLink&body=I%20am%20having%20trouble%20with%20the%20SchoolLink%20platform%20and%20would%20like%20to%20open%20a%20support%20ticket.%0A%0AThe%20issue%20is%3A%20%5BBriefly%20describe%20the%20bug%20or%20question%5D.%0AUser%20Account%3A%20%5BYour%20Email%20or%20ID%5D%0ADate%2FTime%20of%20Issue%3A%20%5BInsert%20Date%5D%0A%0APlease%20let%20me%20know%20if%20you%20need%20any%20further%20logs%20or%20screenshots%20to%20help%20diagnose%20this.%0ARegards%2C%0A%5BYour%20Name%5D"
-        >Contact us</a
-      >
-    </footer>
-  </body>
-</html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login | Schoolink</title>
+<link rel="stylesheet" href="../css/login.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
 
+<body>
+
+<div class="login-container">
+
+    <div class="login-left">
+        <h1>Welcome Back</h1>
+        <p>Access your academic dashboard, courses, grades, and schedule securely.</p>
+    </div>
+
+    <div class="login-right">
+        <h2>Student Login</h2>
+
+        <form>
+            <div class="input-group">
+                <label>Email</label>
+                <input type="email" placeholder="Enter your email" required>
+            </div>
+
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" placeholder="Enter your password" required>
+            </div>
+
+            <div class="form-options">
+                <a href="reset.html">Forgot Password?</a>
+            </div>
+
+            <button type="submit" class="btn-login">Login</button>
+        </form>
+    </div>
+
+</div>
+
+</body>
+</html>

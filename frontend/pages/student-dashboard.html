@@ -1,166 +1,91 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="../css/dashboard.css" />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="../frontend/public/images/favicon/apple-touch-icon.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="../public/images/favicon/favicon-32x32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="../frontend/public/images/favicon/favicon-16x16.png"
-    />
-    <link
-      rel="manifest"
-      href="../frontend/public/images/favicon/site.webmanifest"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
-    />
-  </head>
-  <body>
-    <header>
-      <div id="logo">
-        <img src="../public/images/logo-bg-removed.png" alt="logo" />
-      </div>
-      <div id="account">
-        <!-- Will show either "Admin" either the student name -->
-        <details>
-          <summary><class id="student-name">John Doe</class></summary>
-          <a href="#" id="signout-link">Sign out</a>
-        </details>
-      </div>
-    </header>
-    <main>
-      <aside>
-        <nav id="menu">
-          <ul class="nav-bar">
-            <li>
-              <a href="../pages/student-dashboard.html">Dashboard</a>
-            </li>
-            <li>
-              <a href="../pages/courses.html">Courses</a>
-            </li>
-            <li>
-              <a href="../pages/transcript.html">Transcript</a>
-            </li>
-            <li>
-              <a href="../pages/schedule.html">Schedule</a>
-            </li>
-          </ul>
-        </nav>
-      </aside>
-      <section class="dashboard">
-        <div class="greeting">
-          <h1>Welcome , <class id="student-name">John Doe</class>!</h1>
-        </div>
-        <div class="stats">
-          <div class="card">
-            <div class="card-title">
-              <span class="material-symbols-outlined">menu_book</span>
-              <h1>Courses</h1>
-            </div>
-            <span id="enrolled-courses">5</span>
-            <p>courses</p>
-          </div>
-          <div class="card">
-            <div class="card-title">
-              <span><span class="material-symbols-outlined">event</span></span>
-              <h1>Schedule</h1>
-            </div>
-            <!-- remaining classes in the week -->
-            <span id="ongoing-classes">3</span>
-            <p>Upcoming classes</p>
-          </div>
-          <div class="card">
-            <div class="card-title">
-              <span class="material-symbols-outlined">analytics</span>
-              <h1>Transcript</h1>
-            </div>
-            <p><span id="gpa">0.0</span> GPA</p>
-            <p>Current GPA</p>
-          </div>
-        </div>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Dashboard</title>
 
-        <div class="summary">
-          <div class="upcoming">
-            <div class="upcoming-title">
-              <h1>Upcoming classes</h1>
-            </div>
-            <div class="upcoming-container">
-              <article class="upcoming-container-card">
-                <!-- Generated card by js -->
-              </article>
+<link rel="stylesheet" href="../css/dashboard.css">
 
-              <article class="upcoming-container-link">
-                <span
-                  ><span class="material-symbols-outlined">event</span></span
-                >
-                <p>
-                  <a href="schedule.html" class="view-schedule card-link"
-                    >View Schedule ></a
-                  >
-                </p>
-              </article>
-            </div>
-          </div>
-          <div class="grades">
-            <div class="grades-title">
-              <h1>Recent Grades</h1>
-            </div>
-            <div class="grades-container">
-              <article class="grades-container-card">
-                <!-- Generated card by js -->
-              </article>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600;700&display=swap" rel="stylesheet">
 
-              <article class="grades-container-link">
-                <span
-                  ><span class="material-symbols-outlined"
-                    >analytics</span
-                  ></span
-                >
-                <p>
-                  <a href="transcript.html" class="view-schedule card-link"
-                    >View Transcript ></a
-                  >
-                </p>
-              </article>
-            </div>
-          </div>
-          <div class="announcement">
-            <div class="announcement-header">
-              <!-- Need to change the icon -->
-              <span class="material-symbols-outlined">announcement</span>
-              <h1>Announcement</h1>
-            </div>
-            <div class="announcement-container">
-              <h2 id="announcement-title">Announcement title</h2>
-              <p id="announcement-summary">
-                <!-- 55 characters max + "..." -->
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit...
-              </p>
-              <!-- Will pop up when clicked on view details and set blurred background , need to add a close button -->
-              <p class="details">
-                <a href="#" class="view-details card-link">View Details ></a>
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
-    <script></script>
-  </body>
+</head>
+
+<body>
+
+<div class="dashboard">
+
+<aside class="sidebar">
+<h2 class="logo">Schoolink</h2>
+
+<nav>
+<a href="#" class="active">Dashboard</a>
+<a href="courses.html">Courses</a>
+<a href="schedule.html">Schedule</a>
+<a href="transcript.html">Transcript</a>
+<a href="login.html">Logout</a>
+</nav>
+
+</aside>
+
+<main class="main-content">
+
+<header class="top-header">
+<div>
+<h1>Welcome Back, Student</h1>
+<p>Academic Year 2025 - 2026</p>
+</div>
+
+<div class="profile">
+<span class="notification">🔔</span>
+<div class="avatar">MS</div>
+</div>
+</header>
+
+<section class="stats">
+
+<div class="card">
+<h3>Current GPA</h3>
+<h2>3.78</h2>
+<span class="status positive">Excellent Standing</span>
+</div>
+
+<div class="card">
+<h3>Total Credits</h3>
+<h2>84</h2>
+</div>
+
+<div class="card">
+<h3>Attendance</h3>
+<h2>92%</h2>
+</div>
+
+<div class="card">
+<h3>Completed Courses</h3>
+<h2>21</h2>
+</div>
+
+</section>
+
+<section class="announcements">
+
+<h2>University Announcements</h2>
+
+<div class="announcement-card">
+<h4>📢 Midterm Exams Schedule Released</h4>
+<p>Check schedule page for timing details.</p>
+</div>
+
+<div class="announcement-card">
+<h4>🎓 Internship Applications Open</h4>
+<p>Submit applications before March 15.</p>
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+</body>
 </html>

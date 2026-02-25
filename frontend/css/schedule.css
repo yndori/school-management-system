@@ -6,7 +6,7 @@ body{
     padding:50px;
 }
 
-.transcript-container{
+.schedule-container{
     background:#1a1a1a;
     padding:40px;
     border-radius:20px;
@@ -14,23 +14,30 @@ body{
     box-shadow:0 15px 35px rgba(0,0,0,0.7);
 }
 
-.transcript-container h1{
+.schedule-container h1{
     color:rgb(212,175,55);
     margin-bottom:30px;
 }
 
-.transcript-table{
-    width:100%;
-    border-collapse:collapse;
+.schedule-table{
+    display:flex;
+    flex-direction:column;
 }
 
-.transcript-table th,
-.transcript-table td{
+.schedule-row{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
     padding:15px;
     border-bottom:1px solid rgba(255,255,255,0.1);
-    text-align:left;
+    transition:0.3s;
 }
 
-.transcript-table th{
+.schedule-row.header{
+    font-weight:bold;
     color:rgb(212,175,55);
+}
+
+.schedule-row:hover{
+    background:rgb(212,175,55);
+    color:black;
 }
