@@ -121,3 +121,19 @@ body{
     background:white;
     transform:translateY(-3px);
 }
+
+.error-msg {
+    color: #e74c3c;
+    font-size: 13px;
+    margin-bottom: 10px;
+    min-height: 18px;
+    display: block;
+}
+
+.brand {
+    font-size: 28px;
+    font-weight: 700;
+    color: rgb(212,175,55);
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+}

@@ -3,40 +3,42 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Courses</title>
-
+<title>My Courses | Schoolink</title>
+<link rel="stylesheet" href="../css/dashboard.css">
 <link rel="stylesheet" href="../css/courses.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
-<div class="courses-container">
+<div class="dashboard">
 
-    <h1>Available Courses</h1>
+  <aside class="sidebar">
+    <h2 class="logo">Schoolink</h2>
+    <nav>
+      <a href="student-dashboard.html">📊 Dashboard</a>
+      <a href="courses.html" class="active">📚 Courses</a>
+      <a href="schedule.html">🗓 Schedule</a>
+      <a href="transcript.html">🎓 Transcript</a>
+    </nav>
+    <button id="logout-btn" class="logout-btn">Sign Out</button>
+  </aside>
 
-    <div class="courses-grid">
+  <main class="main-content">
 
-        <div class="course-card">
-            <h3>Mathematics</h3>
-            <p>Credits: 3</p>
-            <a href="#" class="course-btn">View Details</a>
-        </div>
+    <header class="top-header">
+      <div>
+        <h1>My Courses</h1>
+        <p>Current Enrolled Courses &amp; Grades</p>
+      </div>
+    </header>
 
-        <div class="course-card">
-            <h3>Computer Science</h3>
-            <p>Credits: 4</p>
-            <a href="#" class="course-btn">View Details</a>
-        </div>
-
-        <div class="course-card">
-            <h3>Physics</h3>
-            <p>Credits: 3</p>
-            <a href="#" class="course-btn">View Details</a>
-        </div>
-
+    <div id="courses-grid" class="courses-grid">
+      <p class="empty-msg">Loading courses…</p>
     </div>
 
+  </main>
 </div>
 
+<script type="module" src="../js/student.js"></script>
 </body>
 </html>

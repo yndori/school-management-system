@@ -3,50 +3,55 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Schedule</title>
-
+<title>Schedule | Schoolink</title>
+<link rel="stylesheet" href="../css/dashboard.css">
 <link rel="stylesheet" href="../css/schedule.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
-<div class="schedule-container">
+<div class="dashboard">
 
-    <h1>Weekly Schedule</h1>
+  <aside class="sidebar">
+    <h2 class="logo">Schoolink</h2>
+    <nav>
+      <a href="student-dashboard.html">📊 Dashboard</a>
+      <a href="courses.html">📚 Courses</a>
+      <a href="schedule.html" class="active">🗓 Schedule</a>
+      <a href="transcript.html">🎓 Transcript</a>
+    </nav>
+    <button id="logout-btn" class="logout-btn">Sign Out</button>
+  </aside>
 
-    <div class="schedule-table">
+  <main class="main-content">
 
-        <div class="schedule-row header">
-            <div>Day</div>
-            <div>Course</div>
-            <div>Time</div>
-            <div>Room</div>
-        </div>
+    <header class="top-header">
+      <div>
+        <h1>Weekly Schedule</h1>
+        <p>Fall 2025</p>
+      </div>
+    </header>
 
-        <div class="schedule-row">
-            <div>Monday</div>
-            <div>Mathematics</div>
-            <div>10:00 AM</div>
-            <div>Room 204</div>
-        </div>
-
-        <div class="schedule-row">
-            <div>Tuesday</div>
-            <div>Computer Science</div>
-            <div>2:00 PM</div>
-            <div>Lab 3</div>
-        </div>
-
-        <div class="schedule-row">
-            <div>Thursday</div>
-            <div>Physics</div>
-            <div>9:00 AM</div>
-            <div>Room 110</div>
-        </div>
-
+    <div class="table-wrapper">
+      <table class="schedule-table">
+        <thead>
+          <tr>
+            <th>Day</th>
+            <th>Course</th>
+            <th>Time</th>
+            <th>Room</th>
+            <th>Instructor</th>
+          </tr>
+        </thead>
+        <tbody id="schedule-body">
+          <tr><td colspan="5" class="empty-msg">Loading schedule…</td></tr>
+        </tbody>
+      </table>
     </div>
 
+  </main>
 </div>
 
+<script type="module" src="../js/student.js"></script>
 </body>
 </html>

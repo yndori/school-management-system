@@ -1,91 +1,74 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Student Dashboard</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard | Schoolink</title>
+    <link rel="stylesheet" href="../css/dashboard.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="dashboard">
+      <aside class="sidebar">
+        <h2 class="logo">Schoolink</h2>
+        <nav>
+          <a href="student-dashboard.html" class="active">📊 Dashboard</a>
+          <a href="courses.html">📚 Courses</a>
+          <a href="schedule.html">🗓 Schedule</a>
+          <a href="transcript.html">🎓 Transcript</a>
+        </nav>
+        <button id="logout-btn" class="logout-btn">Sign Out</button>
+      </aside>
 
-<link rel="stylesheet" href="../css/dashboard.css">
+      <main class="main-content">
+        <header class="top-header">
+          <div>
+            <h1>Welcome Back, <span id="student-name">Student</span></h1>
+            <p>Academic Year 2025 – 2026</p>
+          </div>
+          <div class="profile">
+            <span class="notification">🔔</span>
+            <div class="avatar" id="avatar-initials">ST</div>
+          </div>
+        </header>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600;700&display=swap" rel="stylesheet">
+        <section class="stats">
+          <div class="card">
+            <h3>Current GPA</h3>
+            <h2 id="gpa">—</h2>
+            <span class="status positive">Academic Standing</span>
+          </div>
+          <div class="card">
+            <h3>Total Credits</h3>
+            <h2 id="total-credits">—</h2>
+          </div>
+          <div class="card">
+            <h3>Enrolled Courses</h3>
+            <h2 id="course-count">—</h2>
+          </div>
+          <div class="card">
+            <h3>Quick Links</h3>
+            <div class="quick-links">
+              <a href="transcript.html" class="quick-link">📄 Transcript</a>
+              <a href="schedule.html" class="quick-link">🗓 Schedule</a>
+            </div>
+          </div>
+        </section>
 
-</head>
+        <section class="announcements">
+          <h2>University Announcements</h2>
+          <div id="announcements-list">
+            <div class="announcement-card">
+              <h4>Loading announcements…</h4>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
 
-<body>
-
-<div class="dashboard">
-
-<aside class="sidebar">
-<h2 class="logo">Schoolink</h2>
-
-<nav>
-<a href="#" class="active">Dashboard</a>
-<a href="courses.html">Courses</a>
-<a href="schedule.html">Schedule</a>
-<a href="transcript.html">Transcript</a>
-<a href="login.html">Logout</a>
-</nav>
-
-</aside>
-
-<main class="main-content">
-
-<header class="top-header">
-<div>
-<h1>Welcome Back, Student</h1>
-<p>Academic Year 2025 - 2026</p>
-</div>
-
-<div class="profile">
-<span class="notification">🔔</span>
-<div class="avatar">MS</div>
-</div>
-</header>
-
-<section class="stats">
-
-<div class="card">
-<h3>Current GPA</h3>
-<h2>3.78</h2>
-<span class="status positive">Excellent Standing</span>
-</div>
-
-<div class="card">
-<h3>Total Credits</h3>
-<h2>84</h2>
-</div>
-
-<div class="card">
-<h3>Attendance</h3>
-<h2>92%</h2>
-</div>
-
-<div class="card">
-<h3>Completed Courses</h3>
-<h2>21</h2>
-</div>
-
-</section>
-
-<section class="announcements">
-
-<h2>University Announcements</h2>
-
-<div class="announcement-card">
-<h4>📢 Midterm Exams Schedule Released</h4>
-<p>Check schedule page for timing details.</p>
-</div>
-
-<div class="announcement-card">
-<h4>🎓 Internship Applications Open</h4>
-<p>Submit applications before March 15.</p>
-</div>
-
-</section>
-
-</main>
-
-</div>
-
-</body>
+    <script type="module" src="../js/student.js"></script>
+  </body>
 </html>

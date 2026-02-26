@@ -1,103 +1,157 @@
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Poppins', sans-serif;
+/* ================================================
+   dashboard.css – Shared student layout styles
+   ================================================ */
+
+*, *::before, *::after {
+  margin: 0; padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
 }
 
-body{
-background:#0f0f0f;
-color:white;
+body { background: #0f0f0f; color: white; }
+
+/* ─── Layout ─── */
+.dashboard { display: flex; min-height: 100vh; }
+
+/* ─── Sidebar ─── */
+.sidebar {
+  width: 240px;
+  background: #111;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  position: sticky; top: 0; height: 100vh;
+  border-right: 1px solid #1e1e1e;
 }
 
-/* Layout */
+.logo { font-size: 22px; margin-bottom: 40px; color: rgb(212,175,55); font-weight: 700; }
 
-.dashboard{
-display:flex;
-min-height:100vh;
-}
+.sidebar nav { flex: 1; }
 
-/* Sidebar */
-
-.sidebar{
-width:240px;
-background:#111;
-padding:30px 20px;
-display:flex;
-flex-direction:column;
-}
-
-.logo{
-font-size:22px;
-margin-bottom:40px;
-color:rgb(212,175,55);
-}
-
-.sidebar nav a{
-text-decoration:none;
-color:white;
-padding:12px;
-margin-bottom:10px;
-border-radius:8px;
-transition:0.3s;
-display:block;
+.sidebar nav a {
+  text-decoration: none;
+  color: #ccc;
+  padding: 12px 14px;
+  margin-bottom: 6px;
+  border-radius: 10px;
+  transition: 0.25s;
+  display: block;
+  font-size: 14px;
 }
 
 .sidebar nav a:hover,
-.sidebar nav .active{
-background:rgb(212,175,55);
-color:black;
+.sidebar nav a.active {
+  background: rgb(212,175,55);
+  color: black;
+  font-weight: 600;
 }
 
-/* Main */
+.logout-btn {
+  background: transparent;
+  border: 1px solid #333;
+  color: #999;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  margin-top: 16px;
+  transition: 0.2s;
+  font-family: 'Poppins', sans-serif;
+  width: 100%;
+}
+.logout-btn:hover { border-color: #e74c3c; color: #e74c3c; background: rgba(231,76,60,0.08); }
 
-.main-content{
-flex:1;
-padding:40px;
+/* ─── Main ─── */
+.main-content { flex: 1; padding: 40px; overflow-y: auto; }
+
+/* ─── Header ─── */
+.top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  border-bottom: 1px solid #1e1e1e;
+  padding-bottom: 24px;
+}
+.top-header h1 { font-size: 24px; font-weight: 700; }
+.top-header p  { color: #888; font-size: 13px; margin-top: 4px; }
+
+.profile { display: flex; align-items: center; gap: 14px; }
+
+.notification { font-size: 20px; cursor: pointer; }
+
+.avatar {
+  width: 42px; height: 42px;
+  background: rgb(212,175,55);
+  color: #000;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 14px;
 }
 
-/* Header */
-
-.top-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:40px;
+/* ─── Stats Cards ─── */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 50px;
 }
 
-/* Stats */
+.card {
+  background: #1a1a1a;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+  transition: 0.3s;
+  border: 1px solid transparent;
+}
+.card:hover { transform: translateY(-5px); border-color: rgb(212,175,55); }
+.card h3 { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; }
+.card h2 { font-size: 30px; font-weight: 700; color: rgb(212,175,55); }
+.status { font-size: 12px; color: #888; display: block; margin-top: 6px; }
+.status.positive { color: #2ed573; }
 
-.stats{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:20px;
-margin-bottom:50px;
+/* Quick links inside card */
+.quick-links { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+.quick-link {
+  text-decoration: none;
+  font-size: 13px;
+  color: rgb(212,175,55);
+  padding: 6px 0;
+  border-bottom: 1px solid #222;
+  transition: 0.2s;
+}
+.quick-link:hover { padding-left: 6px; }
+
+/* ─── Announcements ─── */
+.announcements h2 { font-size: 18px; margin-bottom: 20px; font-weight: 600; }
+
+.announcement-card {
+  background: #1a1a1a;
+  padding: 20px 24px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  border-left: 4px solid rgb(212,175,55);
+  transition: 0.25s;
+}
+.announcement-card:hover { transform: translateX(5px); }
+.announcement-card h4 { font-size: 14px; margin-bottom: 6px; }
+.announcement-card p  { font-size: 13px; color: #aaa; }
+
+/* ─── Shared table wrappers ─── */
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: 14px;
+  border: 1px solid #1e1e1e;
 }
 
-.card{
-background:#1a1a1a;
-padding:25px;
-border-radius:15px;
-box-shadow:0 8px 20px rgba(0,0,0,0.5);
-transition:0.3s;
-}
+.empty-msg { text-align: center; color: #555; padding: 40px; }
 
-.card:hover{
-transform:translateY(-5px);
-border:1px solid rgb(212,175,55);
+/* ─── btn-primary shared ─── */
+.btn-primary {
+  background: rgb(212,175,55); color: #000;
+  border: none; padding: 10px 22px; border-radius: 8px;
+  font-weight: 600; font-size: 14px; cursor: pointer;
+  transition: 0.2s; font-family: 'Poppins', sans-serif;
 }
-
-/* Announcements */
-
-.announcement-card{
-background:#1a1a1a;
-padding:20px;
-border-radius:12px;
-margin-bottom:15px;
-border-left:4px solid rgb(212,175,55);
-transition:0.3s;
-}
-
-.announcement-card:hover{
-transform:translateX(5px);
-}
+.btn-primary:hover { background: #f0cc44; transform: translateY(-2px); }
