@@ -3,43 +3,193 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Dashboard</title>
-
+<title>Admin Dashboard | Schoolink</title>
 <link rel="stylesheet" href="../css/admin-dashboard.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
-<div class="admin-container">
+<div class="dashboard">
 
-    <h1>Admin Dashboard</h1>
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2 class="logo">Schoolink</h2>
+    <div class="admin-badge">Admin Panel</div>
+    <nav>
+      <button class="tab-btn active" data-tab="tab-students">👥 Students</button>
+      <button class="tab-btn" data-tab="tab-courses">📚 Courses</button>
+      <button class="tab-btn" data-tab="tab-grades">🎓 Grades</button>
+    </nav>
+    <button id="logout-btn" class="logout-btn">Sign Out</button>
+  </aside>
 
-    <div class="admin-stats">
+  <!-- MAIN -->
+  <main class="main-content">
 
-        <div class="admin-card">
-            <h3>Total Students</h3>
-            <p>320</p>
+    <header class="top-header">
+      <div>
+        <h1>Admin Dashboard</h1>
+        <p>Academic Year 2025 – 2026</p>
+      </div>
+      <div class="stats-header">
+        <span class="stat-chip">👥 <strong id="total-students">0</strong> Students</span>
+        <span class="stat-chip">📚 <strong id="total-courses">0</strong> Courses</span>
+      </div>
+    </header>
+
+    <!-- Credentials display box -->
+    <div id="credentials-box" class="credentials-box" style="display:none"></div>
+
+    <!-- ═══ TAB: STUDENTS ═══ -->
+    <div id="tab-students" class="tab-panel active">
+      <div class="panel-header">
+        <h2>Student Management</h2>
+        <div class="panel-actions">
+          <button id="btn-add-student" class="btn-primary">+ Add Student</button>
+          <button id="btn-enroll" class="btn-secondary">➕ Enroll Student</button>
         </div>
-
-        <div class="admin-card">
-            <h3>Total Courses</h3>
-            <p>28</p>
-        </div>
-
-        <div class="admin-card">
-            <h3>Active Instructors</h3>
-            <p>15</p>
-        </div>
-
+      </div>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Student #</th><th>Name</th><th>Email</th><th>Major</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="students-tbody">
+            <tr><td colspan="5" class="empty-msg">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
-    <div class="admin-actions">
-        <a href="#" class="admin-btn">Manage Students</a>
-        <a href="#" class="admin-btn">Manage Courses</a>
-        <a href="#" class="admin-btn">System Settings</a>
+    <!-- ═══ TAB: COURSES ═══ -->
+    <div id="tab-courses" class="tab-panel">
+      <div class="panel-header">
+        <h2>Course Management</h2>
+        <button id="btn-add-course" class="btn-primary">+ Add Course</button>
+      </div>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Code</th><th>Name</th><th>Credits</th><th>Instructor</th><th>Major</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="courses-tbody">
+            <tr><td colspan="6" class="empty-msg">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
+    <!-- ═══ TAB: GRADES ═══ -->
+    <div id="tab-grades" class="tab-panel">
+      <div class="panel-header">
+        <h2>Grades Management</h2>
+      </div>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Student #</th><th>Student</th><th>Code</th><th>Course</th><th>Term</th><th>Grade</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="grades-tbody">
+            <tr><td colspan="7" class="empty-msg">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
 </div>
 
+<!-- ═══ MODAL: Add Student ═══ -->
+<div id="modal-add-student" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Add New Student</h3>
+      <button class="close-modal">✕</button>
+    </div>
+    <form id="add-student-form">
+      <label>Full Name</label>
+      <input id="s-name" type="text" required placeholder="Marie-Lyne Dubois">
+      <label>Email</label>
+      <input id="s-email" type="email" required placeholder="marie@example.com">
+      <label>Password</label>
+      <input id="s-password" type="text" required placeholder="Initial password">
+      <label>Major</label>
+      <select id="s-major"><option value="">-- No Major --</option></select>
+      <button type="submit" class="btn-primary btn-full">Create Account</button>
+    </form>
+  </div>
+</div>
+
+<!-- ═══ MODAL: Edit Student ═══ -->
+<div id="modal-edit-student" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Edit Student</h3>
+      <button class="close-modal">✕</button>
+    </div>
+    <form id="edit-student-form">
+      <input id="edit-s-id" type="hidden">
+      <label>Full Name</label>
+      <input id="edit-s-name" type="text" required>
+      <label>Email</label>
+      <input id="edit-s-email" type="email" required>
+      <label>Major</label>
+      <select id="edit-s-major"><option value="">-- No Major --</option></select>
+      <button type="submit" class="btn-primary btn-full">Save Changes</button>
+    </form>
+  </div>
+</div>
+
+<!-- ═══ MODAL: Assign Grade ═══ -->
+<div id="modal-grade" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Assign Grade</h3>
+      <button class="close-modal">✕</button>
+    </div>
+    <form id="grade-form">
+      <input id="g-enrollment-id" type="hidden">
+      <p class="modal-info">Student: <strong id="g-student-name"></strong></p>
+      <p class="modal-info">Course:  <strong id="g-course-name"></strong></p>
+      <label>Numeric Grade (0–100)</label>
+      <input id="g-grade" type="number" min="0" max="100" step="0.5" required placeholder="e.g. 87.5">
+      <button type="submit" class="btn-primary btn-full">Save Grade</button>
+    </form>
+  </div>
+</div>
+
+<!-- ═══ MODAL: Enroll Student ═══ -->
+<div id="modal-enroll" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Enroll Student in Course</h3>
+      <button class="close-modal">✕</button>
+    </div>
+    <form id="enroll-form">
+      <label>Student</label>
+      <select id="e-student"></select>
+      <label>Course</label>
+      <select id="e-course"></select>
+      <label>Semester</label>
+      <select id="e-semester">
+        <option value="Fall">Fall</option>
+        <option value="Winter">Winter</option>
+        <option value="Spring">Spring</option>
+        <option value="Summer">Summer</option>
+      </select>
+      <label>Year</label>
+      <input id="e-year" type="number" value="2025" min="2020" max="2030">
+      <button type="submit" class="btn-primary btn-full">Enroll</button>
+    </form>
+  </div>
+</div>
+
+<script type="module" src="../js/admin.js"></script>
 </body>
 </html>

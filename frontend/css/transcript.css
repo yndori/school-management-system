@@ -1,36 +1,97 @@
-body{
-    margin:0;
-    font-family: Arial, sans-serif;
-    background:#101010;
-    color:white;
-    padding:50px;
+/* ================================================
+   transcript.css – Student Transcript Page
+   (extends dashboard.css layout)
+   ================================================ */
+
+/* Summary cards */
+.transcript-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 20px;
+  margin-bottom: 32px;
 }
 
-.transcript-container{
-    background:#1a1a1a;
-    padding:40px;
-    border-radius:20px;
-    border:2px solid rgb(212,175,55);
-    box-shadow:0 15px 35px rgba(0,0,0,0.7);
+.summary-card {
+  background: #1a1a1a;
+  border: 1px solid #222;
+  border-radius: 14px;
+  padding: 24px;
+  text-align: center;
+  transition: transform 0.2s;
+}
+.summary-card:hover { transform: translateY(-4px); }
+.summary-card h3 { font-size: 12px; color: #888; text-transform: uppercase;
+  letter-spacing: 0.06em; margin-bottom: 10px; }
+.summary-card h2 { font-size: 32px; font-weight: 700; color: rgb(212,175,55); }
+
+/* Print button */
+.btn-primary {
+  background: rgb(212,175,55); color: #000;
+  border: none; padding: 10px 22px; border-radius: 8px;
+  font-weight: 600; font-size: 14px; cursor: pointer;
+  transition: 0.2s; font-family: 'Poppins', sans-serif;
+}
+.btn-primary:hover { background: #f0cc44; transform: translateY(-2px); }
+
+/* Table */
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: 14px;
+  border: 1px solid #1e1e1e;
 }
 
-.transcript-container h1{
-    color:rgb(212,175,55);
-    margin-bottom:30px;
+.transcript-table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.transcript-table{
-    width:100%;
-    border-collapse:collapse;
+.transcript-table thead { background: #1a1a1a; }
+.transcript-table th {
+  padding: 14px 20px;
+  text-align: left;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: rgb(212,175,55);
+  border-bottom: 1px solid #282828;
 }
-
-.transcript-table th,
-.transcript-table td{
-    padding:15px;
-    border-bottom:1px solid rgba(255,255,255,0.1);
-    text-align:left;
+.transcript-table td {
+  padding: 15px 20px;
+  font-size: 14px; color: #ccc;
+  border-bottom: 1px solid #1a1a1a;
 }
+.transcript-table tbody tr:hover { background: #141414; }
+.transcript-table tbody tr:last-child td { border-bottom: none; }
 
-.transcript-table th{
-    color:rgb(212,175,55);
+.grade-cell { font-weight: 700; }
+.grade-A  { color: #2ed573; }
+.grade-Am { color: #7bed9f; }
+.grade-Bp { color: #20b2aa; }
+.grade-B  { color: #1e90ff; }
+.grade-Bm { color: #4682b4; }
+.grade-Cp, .grade-C { color: #ffa500; }
+.grade-D  { color: #e07c20; }
+.grade-F  { color: #e74c3c; }
+
+.empty-msg { text-align: center; color: #555; padding: 40px; }
+
+/* ─── PRINT STYLES ─── */
+.print-only { display: none; }
+
+@media print {
+  .no-print  { display: none !important; }
+  .print-only { display: block; text-align: center; margin-bottom: 24px; }
+  .print-only h2 { font-size: 22px; color: #000; }
+  .print-only p  { font-size: 14px; color: #333; }
+
+  body, .main-content { background: white !important; color: #000 !important; }
+  .dashboard { display: block; }
+  .main-content { padding: 20px; }
+
+  .transcript-table th { color: #333 !important; background: #f5f5f5 !important; }
+  .transcript-table td { color: #000 !important; border-color: #ddd !important; }
+  .table-wrapper { border-color: #ccc !important; }
+
+  .grade-A,  .grade-Am { color: #1a7a30 !important; }
+  .grade-Bp, .grade-B  { color: #0066aa !important; }
+  .grade-F              { color: #cc0000 !important; }
 }

@@ -1,56 +1,84 @@
-body{
-    margin:0;
-    font-family: Arial, sans-serif;
-    background:#101010;
-    color:white;
-    padding:50px;
+/* ================================================
+   courses.css – Student Courses Page
+   (extends dashboard.css layout)
+   ================================================ */
+
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  padding-top: 10px;
 }
 
-.courses-container{
-    background:#1a1a1a;
-    padding:40px;
-    border-radius:20px;
-    border:2px solid rgb(212,175,55);
-    box-shadow:0 15px 35px rgba(0,0,0,0.7);
+.course-card {
+  background: #1a1a1a;
+  border: 1px solid #222;
+  border-radius: 16px;
+  padding: 28px;
+  transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+  position: relative;
+  overflow: hidden;
 }
 
-.courses-container h1{
-    color:rgb(212,175,55);
-    margin-bottom:30px;
+.course-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: rgb(212,175,55);
 }
 
-.courses-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:30px;
+.course-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(212,175,55,0.35);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.5);
 }
 
-.course-card{
-    background:#151515;
-    padding:25px;
-    border-radius:15px;
-    border:2px solid rgba(212,175,55,0.3);
-    transition:0.3s;
+.course-code {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgb(212,175,55);
+  margin-bottom: 10px;
 }
 
-.course-card:hover{
-    background:rgb(212,175,55);
-    color:black;
-    transform:translateY(-6px);
+.course-card h3 {
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 14px;
+  line-height: 1.3;
 }
 
-.course-btn{
-    display:inline-block;
-    margin-top:15px;
-    text-decoration:none;
-    padding:8px 15px;
-    border-radius:8px;
-    border:2px solid rgb(212,175,55);
-    color:white;
-    transition:0.3s;
+.course-card p {
+  font-size: 13px;
+  color: #999;
+  margin-bottom: 6px;
 }
 
-.course-btn:hover{
-    background:black;
-    color:rgb(212,175,55);
+.grade-badge {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.grade-A    { background: rgba(46,213,115,0.15); color: #2ed573; }
+.grade-Am   { background: rgba(46,213,115,0.12); color: #7bed9f; }
+.grade-Bp   { background: rgba(32,178,170,0.15); color: #20b2aa; }
+.grade-B    { background: rgba(30,144,255,0.15); color: #1e90ff; }
+.grade-Bm   { background: rgba(70,130,180,0.15); color: #4682b4; }
+.grade-Cp   { background: rgba(255,165,0,0.15);  color: #ffa500; }
+.grade-C    { background: rgba(255,140,0,0.15);  color: #ff8c00; }
+.no-grade   { background: rgba(255,255,255,0.06); color: #888; }
+
+.empty-msg {
+  grid-column: 1/-1;
+  text-align: center;
+  color: #555;
+  padding: 60px 0;
+  font-size: 14px;
 }
