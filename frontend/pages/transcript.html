@@ -1,76 +1,78 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Transcript | Schoolink</title>
-<link rel="stylesheet" href="../css/dashboard.css">
-<link rel="stylesheet" href="../css/transcript.css">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transcript | Schoolink</title>
+    <link rel="stylesheet" href="../css/dashboard.css" />
+    <link rel="stylesheet" href="../css/transcript.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="dashboard">
+      <aside class="sidebar no-print">
+        <h2 class="logo">SchoolLink</h2>
+        <nav>
+          <a href="student-dashboard.html">Dashboard</a>
+          <a href="courses.html">Courses</a>
+          <a href="schedule.html">Schedule</a>
+          <a href="transcript.html" class="active">Transcript</a>
+        </nav>
+        <button id="logout-btn" class="logout-btn">Sign Out</button>
+      </aside>
 
-<div class="dashboard">
+      <main class="main-content">
+        <header class="top-header no-print">
+          <div>
+            <h1>Academic Transcript</h1>
+            <p>Official Academic Record</p>
+          </div>
+          <button id="print-btn" class="btn-primary no-print">
+            Print Transcript
+          </button>
+        </header>
 
-  <aside class="sidebar no-print">
-    <h2 class="logo">Schoolink</h2>
-    <nav>
-      <a href="student-dashboard.html">📊 Dashboard</a>
-      <a href="courses.html">📚 Courses</a>
-      <a href="schedule.html">🗓 Schedule</a>
-      <a href="transcript.html" class="active">🎓 Transcript</a>
-    </nav>
-    <button id="logout-btn" class="logout-btn">Sign Out</button>
-  </aside>
+        <div class="print-header print-only">
+          <h2>Schoolink University</h2>
+          <p>Official Academic Transcript</p>
+          <p id="print-student-name"></p>
+        </div>
 
-  <main class="main-content">
+        <div class="transcript-summary no-print">
+          <div class="summary-card">
+            <h3>Cumulative GPA</h3>
+            <h2 id="transcript-gpa">—</h2>
+          </div>
+          <div class="summary-card">
+            <h3>Total Credits</h3>
+            <h2 id="transcript-credits">—</h2>
+          </div>
+        </div>
 
-    <header class="top-header no-print">
-      <div>
-        <h1>Academic Transcript</h1>
-        <p>Official Academic Record</p>
-      </div>
-      <button id="print-btn" class="btn-primary no-print">🖨 Print Transcript</button>
-    </header>
-
-    <!-- Print header (visible only when printing) -->
-    <div class="print-header print-only">
-      <h2>Schoolink University</h2>
-      <p>Official Academic Transcript</p>
-      <p id="print-student-name"></p>
+        <div class="table-wrapper">
+          <table class="transcript-table">
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Course</th>
+                <th>Credits</th>
+                <th>Term</th>
+                <th>Grade</th>
+              </tr>
+            </thead>
+            <tbody id="transcript-body">
+              <tr>
+                <td colspan="5" class="empty-msg">Loading transcript…</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </main>
     </div>
 
-    <div class="transcript-summary no-print">
-      <div class="summary-card">
-        <h3>Cumulative GPA</h3>
-        <h2 id="transcript-gpa">—</h2>
-      </div>
-      <div class="summary-card">
-        <h3>Total Credits</h3>
-        <h2 id="transcript-credits">—</h2>
-      </div>
-    </div>
-
-    <div class="table-wrapper">
-      <table class="transcript-table">
-        <thead>
-          <tr>
-            <th>Code</th>
-            <th>Course</th>
-            <th>Credits</th>
-            <th>Term</th>
-            <th>Grade</th>
-          </tr>
-        </thead>
-        <tbody id="transcript-body">
-          <tr><td colspan="5" class="empty-msg">Loading transcript…</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-  </main>
-</div>
-
-<script type="module" src="../js/student.js"></script>
-</body>
+    <script type="module" src="../js/student.js"></script>
+  </body>
 </html>

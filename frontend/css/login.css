@@ -1,139 +1,133 @@
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Poppins', sans-serif;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
 }
 
-body{
-    height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:linear-gradient(135deg, #000000, #1a1a1a);
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #000000, #1a1a1a);
 }
 
-/* Container */
-
-.login-container{
-    display:flex;
-    width:900px;
-    height:500px;
-    background:#111;
-    border-radius:20px;
-    overflow:hidden;
-    box-shadow:0 15px 40px rgba(0,0,0,0.6);
+.login-container {
+  display: flex;
+  width: 900px;
+  height: 500px;
+  background: #111;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
 }
 
-/* Left Section */
-
-.login-left{
-    flex:1;
-    background:linear-gradient(135deg, #000, rgb(212,175,55));
-    padding:50px;
-    color:white;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
+.login-left {
+  flex: 1;
+  background: linear-gradient(135deg, #000, rgb(212, 175, 55));
+  padding: 50px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.login-left h1{
-    font-size:36px;
-    margin-bottom:20px;
+.login-left h1 {
+  font-size: 36px;
+  margin-bottom: 20px;
 }
 
-.login-left p{
-    font-size:15px;
-    opacity:0.9;
+.login-left p {
+  font-size: 15px;
+  opacity: 0.9;
 }
 
-/* Right Section */
-
-.login-right{
-    flex:1;
-    background:#1a1a1a;
-    padding:50px;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    color:white;
+.login-right {
+  flex: 1;
+  background: #1a1a1a;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: white;
 }
 
-.login-right h2{
-    margin-bottom:30px;
-    font-weight:600;
+.login-right h2 {
+  margin-bottom: 30px;
+  font-weight: 600;
 }
 
-.input-group{
-    margin-bottom:20px;
+.input-group {
+  margin-bottom: 20px;
 }
 
-.input-group label{
-    font-size:14px;
-    margin-bottom:5px;
-    display:block;
+.input-group label {
+  font-size: 14px;
+  margin-bottom: 5px;
+  display: block;
 }
 
-.input-group input{
-    width:100%;
-    padding:12px;
-    border:none;
-    border-radius:8px;
-    background:#2a2a2a;
-    color:white;
-    transition:0.3s;
+.input-group input {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #2a2a2a;
+  color: white;
+  transition: 0.3s;
 }
 
-.input-group input:focus{
-    outline:none;
-    border:1px solid rgb(212,175,55);
-    box-shadow:0 0 10px rgba(212,175,55,0.4);
+.input-group input:focus {
+  outline: none;
+  border: 1px solid rgb(212, 175, 55);
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
 }
 
-.form-options{
-    text-align:right;
-    margin-bottom:20px;
+.form-options {
+  text-align: right;
+  margin-bottom: 20px;
 }
 
-.form-options a{
-    color:rgb(212,175,55);
-    text-decoration:none;
-    font-size:14px;
+.form-options a {
+  color: rgb(212, 175, 55);
+  text-decoration: none;
+  font-size: 14px;
 }
 
-.form-options a:hover{
-    text-decoration:underline;
+.form-options a:hover {
+  text-decoration: underline;
 }
 
-.btn-login{
-    width:100%;
-    padding:12px;
-    border:none;
-    border-radius:8px;
-    background:rgb(212,175,55);
-    color:black;
-    font-weight:600;
-    cursor:pointer;
-    transition:0.3s;
+.btn-login {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: rgb(212, 175, 55);
+  color: black;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-.btn-login:hover{
-    background:white;
-    transform:translateY(-3px);
+.btn-login:hover {
+  background: white;
+  transform: translateY(-3px);
 }
 
 .error-msg {
-    color: #e74c3c;
-    font-size: 13px;
-    margin-bottom: 10px;
-    min-height: 18px;
-    display: block;
+  color: #e74c3c;
+  font-size: 13px;
+  margin-bottom: 10px;
+  min-height: 18px;
+  display: block;
 }
 
 .brand {
-    font-size: 28px;
-    font-weight: 700;
-    color: rgb(212,175,55);
-    margin-bottom: 20px;
-    letter-spacing: 1px;
+  font-size: 28px;
+  font-weight: 700;
+  color: rgb(212, 175, 55);
+  margin-bottom: 20px;
+  letter-spacing: 1px;
 }
