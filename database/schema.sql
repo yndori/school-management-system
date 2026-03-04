@@ -43,13 +43,27 @@ CREATE TABLE IF NOT EXISTS enrollments (
     FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
 );
 
--- Grades
+-- Assignments (per-course, weighted)
+CREATE TABLE IF NOT EXISTS assignments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    course_id INT NOT NULL,
+    name VARCHAR(150) NOT NULL,
+    description TEXT,
+    weight DECIMAL(5,2) NOT NULL,
+    max_points DECIMAL(6,2) DEFAULT 100,
+    FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
+);
+
+-- Grades (per-enrollment, per-assignment)
 CREATE TABLE IF NOT EXISTS grades (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    enrollment_id INT NOT NULL UNIQUE,
+    enrollment_id INT NOT NULL,
+    assignment_id INT NOT NULL,
     grade DECIMAL(5,2),
     letter_grade VARCHAR(3),
-    FOREIGN KEY (enrollment_id) REFERENCES enrollments(id) ON DELETE CASCADE
+    UNIQUE KEY unique_enrollment_assignment (enrollment_id, assignment_id),
+    FOREIGN KEY (enrollment_id) REFERENCES enrollments(id) ON DELETE CASCADE,
+    FOREIGN KEY (assignment_id) REFERENCES assignments(id) ON DELETE CASCADE
 );
 
 -- Schedule slots

@@ -21,6 +21,12 @@
           </button>
           <button class="tab-btn" data-tab="tab-courses">Courses</button>
           <button class="tab-btn" data-tab="tab-grades">Grades</button>
+          <button class="tab-btn" data-tab="tab-announcements">
+            Announcements
+          </button>
+          <button class="tab-btn" data-tab="tab-schedule-admin">
+            Schedule
+          </button>
         </nav>
         <button id="logout-btn" class="logout-btn">Sign Out</button>
       </aside>
@@ -79,9 +85,14 @@
         <div id="tab-courses" class="tab-panel">
           <div class="panel-header">
             <h2>Course Management</h2>
-            <button id="btn-add-course" class="btn-primary">
-              + Add Course
-            </button>
+            <div class="panel-actions">
+              <button id="btn-add-course" class="btn-primary">
+                + Add Course
+              </button>
+              <button id="btn-add-assignment" class="btn-primary">
+                + Add Assignment
+              </button>
+            </div>
           </div>
           <div class="table-wrapper">
             <table class="data-table">
@@ -116,6 +127,7 @@
                   <th>Student</th>
                   <th>Code</th>
                   <th>Course</th>
+                  <th>Assignment</th>
                   <th>Term</th>
                   <th>Grade</th>
                   <th>Actions</th>
@@ -128,6 +140,77 @@
               </tbody>
             </table>
           </div>
+        </div>
+
+        <div id="tab-announcements" class="tab-panel">
+          <div class="panel-header">
+            <h2>Announcements</h2>
+          </div>
+          <form id="announcement-form">
+            <label for="ann-title">Title</label>
+            <input
+              id="ann-title"
+              type="text"
+              required
+              placeholder="e.g. Campus closure on Friday"
+            />
+            <label for="ann-body">Message</label>
+            <input
+              id="ann-body"
+              type="text"
+              placeholder="Short description of the announcement"
+            />
+            <button type="submit" class="btn-primary btn-full">
+              Post Announcement
+            </button>
+          </form>
+          <div class="table-wrapper" style="margin-top: 20px">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Message</th>
+                  <th>Created</th>
+                </tr>
+              </thead>
+              <tbody id="admin-announcements-tbody">
+                <tr>
+                  <td colspan="3" class="empty-msg">Loading…</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="tab-schedule-admin" class="tab-panel">
+          <header class="top-header">
+            <div>
+              <h1>Weekly Schedule</h1>
+              <p>All course meetings</p>
+            </div>
+            <button id="btn-edit-schedule" class="btn-primary">
+              Edit Schedule
+            </button>
+          </header>
+
+          <div class="week-grid-wrap">
+            <div class="week-grid" id="week-grid">
+              <!-- Header row -->
+              <div class="wg-day-header corner"></div>
+              <div class="wg-day-header mon">Mon</div>
+              <div class="wg-day-header tue">Tue</div>
+              <div class="wg-day-header wed">Wed</div>
+              <div class="wg-day-header thu">Thu</div>
+              <div class="wg-day-header fri">Fri</div>
+              <!-- Time rows injected by JS -->
+            </div>
+          </div>
+
+          <!-- Hidden data source: admin.js will populate this tbody,
+               and the shared grid builder reads from it -->
+          <table style="display: none">
+            <tbody id="schedule-body"></tbody>
+          </table>
         </div>
       </main>
     </div>
@@ -202,10 +285,15 @@
         </div>
         <form id="grade-form">
           <input id="g-enrollment-id" type="hidden" />
+          <input id="g-course-id" type="hidden" />
           <p class="modal-info">
             Student: <strong id="g-student-name"></strong>
           </p>
           <p class="modal-info">Course: <strong id="g-course-name"></strong></p>
+          <label for="g-assignment">Assignment</label>
+          <select id="g-assignment" required>
+            <option value="">Select assignment…</option>
+          </select>
           <label>Numeric Grade (0–100)</label>
           <input
             id="g-grade"
@@ -217,6 +305,40 @@
             placeholder="e.g. 87.5"
           />
           <button type="submit" class="btn-primary btn-full">Save Grade</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="modal-assignment" class="modal-overlay">
+      <div class="modal">
+        <div class="modal-header">
+          <h3>Add Assignment</h3>
+          <button class="close-modal">✕</button>
+        </div>
+        <form id="assignment-form">
+          <label for="a-course">Course</label>
+          <select id="a-course" required></select>
+          <label for="a-name">Assignment Name</label>
+          <input id="a-name" type="text" required placeholder="Midterm Exam" />
+          <label for="a-weight">Weight (%)</label>
+          <input
+            id="a-weight"
+            type="number"
+            min="0"
+            max="100"
+            step="0.5"
+            required
+            placeholder="e.g. 20"
+          />
+          <label for="a-description">Description (optional)</label>
+          <input
+            id="a-description"
+            type="text"
+            placeholder="Short description"
+          />
+          <button type="submit" class="btn-primary btn-full">
+            Save Assignment
+          </button>
         </form>
       </div>
     </div>
