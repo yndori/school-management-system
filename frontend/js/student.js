@@ -1,3 +1,4 @@
+import { handleLogout } from "./auth.js";
 const API_BASE = "/api";
 
 // Tab switching
@@ -28,13 +29,7 @@ document
   ?.addEventListener("click", () => window.print());
 
 // Logout
-document.getElementById("logout-btn")?.addEventListener("click", () => {
-  if (typeof signOut === "function") signOut();
-  else {
-    localStorage.clear();
-    window.location.href = "../index.html";
-  }
-});
+document.getElementById("logout-btn")?.addEventListener("click", handleLogout);
 
 async function fetchJSON(url, options = {}) {
   const res = await fetch(url, {
@@ -47,7 +42,8 @@ async function fetchJSON(url, options = {}) {
 
 // ── Transcript + dashboard summary using weighted grades ──
 async function loadStudentOverview() {
-  const studentId = Number(localStorage.getItem("studentId"));
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const studentId = user.id;
   if (!studentId) return;
 
   try {
@@ -293,14 +289,13 @@ function buildScheduleGrid() {
 
 // Load schedule from API and build grid
 async function loadStudentSchedule() {
-  const studentId = Number(localStorage.getItem("studentId"));
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const studentId = user.id;
   if (!studentId) return;
   const tbody = document.getElementById("schedule-body");
   if (!tbody) return;
   try {
-    const rows = await fetchJSON(
-      `${API_BASE}/students/${studentId}/schedule`,
-    );
+    const rows = await fetchJSON(`${API_BASE}/students/${studentId}/schedule`);
     const events = rows.map((r) => ({
       day: r.day,
       code: r.course_code,

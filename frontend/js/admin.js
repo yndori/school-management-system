@@ -1,3 +1,4 @@
+import { handleLogout } from "./auth.js";
 const API_BASE = "/api";
 
 // Tab switching
@@ -15,13 +16,7 @@ tabBtns.forEach((btn) =>
 );
 
 // Logout
-document.getElementById("logout-btn")?.addEventListener("click", () => {
-  if (typeof signOut === "function") signOut();
-  else {
-    localStorage.clear();
-    window.location.href = "../index.html";
-  }
-});
+document.getElementById("logout-btn")?.addEventListener("click", handleLogout);
 
 // ── Modal helpers ──
 function openModal(modal) {
@@ -239,10 +234,7 @@ function buildScheduleGrid() {
     const totalMin = minTime + s * SLOT_MIN_ADMIN;
     const h = Math.floor(totalMin / 60);
     const m = totalMin % 60;
-    const label = `${String(h).padStart(2, "0")}:${String(m).padStart(
-      2,
-      "0",
-    )}`;
+    const label = `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
 
     const timeCell = document.createElement("div");
     timeCell.className = "wg-time-label";
@@ -315,9 +307,11 @@ async function loadScheduleAdmin() {
       instructor: r.instructor || "",
     }));
     tbody.dataset.scheduleJson = JSON.stringify(events);
-    if (document
-      .getElementById("tab-schedule-admin")
-      ?.classList.contains("active"))
+    if (
+      document
+        .getElementById("tab-schedule-admin")
+        ?.classList.contains("active")
+    )
       buildScheduleGrid();
   } catch (err) {
     console.error("Failed to load admin schedule", err);
@@ -433,8 +427,7 @@ async function openGradeModalFromButton(btn) {
   gCourseName.textContent = courseName;
 
   // Load assignments for this course
-  gAssignmentSelect.innerHTML =
-    '<option value="">Select assignment…</option>';
+  gAssignmentSelect.innerHTML = '<option value="">Select assignment…</option>';
   try {
     const assignments = await fetchJSON(
       `${API_BASE}/courses/${courseId}/assignments`,

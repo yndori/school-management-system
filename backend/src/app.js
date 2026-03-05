@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import pool from "./config/db.js";
+import authRoutes from "./routes/auth.routes.js";
 
 const app = express();
 
@@ -11,6 +12,8 @@ app.use(express.json());
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok" });
 });
+
+app.use("/api/auth", authRoutes);
 
 // ── Announcements ──
 
@@ -154,15 +157,7 @@ app.post("/api/grades", async (req, res) => {
   }
   const g = Number(grade);
   const letter =
-    g >= 90
-      ? "A"
-      : g >= 80
-        ? "B"
-        : g >= 70
-          ? "C"
-          : g >= 60
-            ? "D"
-            : "F";
+    g >= 90 ? "A" : g >= 80 ? "B" : g >= 70 ? "C" : g >= 60 ? "D" : "F";
   try {
     await pool.query(
       `INSERT INTO grades (enrollment_id, assignment_id, grade, letter_grade)
