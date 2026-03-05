@@ -61,20 +61,28 @@ async function loadStudentOverview() {
     const tGpaEl = document.getElementById("transcript-gpa");
     const tCreditsEl = document.getElementById("transcript-credits");
     const tbody = document.getElementById("transcript-body");
+    const printStudentNameEl = document.getElementById("print-student-name");
 
-    if (gpaEl && data.gpa != null) gpaEl.textContent = data.gpa.toFixed(2);
-    if (totalCreditsEl) totalCreditsEl.textContent = data.totalCredits || 0;
-    if (courseCountEl) courseCountEl.textContent = data.courses.length || 0;
-    if (tGpaEl && data.gpa != null) tGpaEl.textContent = data.gpa.toFixed(2);
-    if (tCreditsEl) tCreditsEl.textContent = data.totalCredits || 0;
+    let calcTotalCredits = 0;
+    let totalPoints = 0;
 
     if (tbody) {
-      if (!data.courses.length) {
+      if (!data.courses || !data.courses.length) {
         tbody.innerHTML =
           '<tr><td colspan="5" class="empty-msg">No transcript data.</td></tr>';
       } else {
         tbody.innerHTML = "";
         data.courses.forEach((c) => {
+          if (c.numericGrade != null) {
+            calcTotalCredits += c.credits;
+            let points = 0;
+            if (c.letterGrade === "A") points = 4;
+            else if (c.letterGrade === "B") points = 3;
+            else if (c.letterGrade === "C") points = 2;
+            else if (c.letterGrade === "D") points = 1;
+            totalPoints += points * c.credits;
+          }
+
           const tr = document.createElement("tr");
           tr.innerHTML = `
             <td>${c.code}</td>
@@ -92,6 +100,24 @@ async function loadStudentOverview() {
           tbody.appendChild(tr);
         });
       }
+    }
+
+    const calcGpa = calcTotalCredits > 0 ? totalPoints / calcTotalCredits : 0;
+    const finalGpa = data.gpa != null ? data.gpa : calcGpa;
+    const finalCredits =
+      data.totalCredits != null ? data.totalCredits : calcTotalCredits;
+
+    if (gpaEl) gpaEl.textContent = finalGpa.toFixed(2);
+    if (totalCreditsEl) totalCreditsEl.textContent = finalCredits;
+    if (courseCountEl)
+      courseCountEl.textContent = data.courses ? data.courses.length : 0;
+    if (tGpaEl) tGpaEl.textContent = finalGpa.toFixed(2);
+    if (tCreditsEl) tCreditsEl.textContent = finalCredits;
+
+    if (printStudentNameEl) {
+      const nameEl = document.getElementById("student-name");
+      printStudentNameEl.textContent =
+        "Student Name: " + (nameEl ? nameEl.textContent : "Student");
     }
   } catch (err) {
     console.error("Failed to load transcript", err);
@@ -298,9 +324,7 @@ async function loadStudentSchedule() {
   const tbody = document.getElementById("schedule-body");
   if (!tbody) return;
   try {
-    const rows = await fetchJSON(
-      `${API_BASE}/students/${studentId}/schedule`,
-    );
+    const rows = await fetchJSON(`${API_BASE}/students/${studentId}/schedule`);
     const events = rows.map((r) => ({
       day: r.day,
       code: r.course_code,
