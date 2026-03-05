@@ -368,6 +368,74 @@
       </div>
     </div>
 
+    <div id="modal-add-course" class="modal-overlay">
+      <div class="modal">
+        <div class="modal-header">
+          <h3>Add New Course</h3>
+          <button class="close-modal">✕</button>
+        </div>
+        <form id="add-course-form">
+          <label>Course Code</label>
+          <input id="c-code" type="text" required placeholder="e.g. CS101" />
+          <label>Course Name</label>
+          <input
+            id="c-name"
+            type="text"
+            required
+            placeholder="Introduction to Computer Science"
+          />
+          <label>Credits</label>
+          <input
+            id="c-credits"
+            type="number"
+            required
+            value="3"
+            min="1"
+            max="6"
+          />
+          <label>Instructor</label>
+          <input id="c-instructor" type="text" placeholder="Dr. Smith" />
+          <label>Major</label>
+          <select id="c-major">
+            <option value="">-- Core Course (No Major) --</option>
+          </select>
+          <button type="submit" class="btn-primary btn-full">
+            Create Course
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div id="modal-add-schedule" class="modal-overlay">
+      <div class="modal">
+        <div class="modal-header">
+          <h3>Add Class Schedule Slot</h3>
+          <button class="close-modal">✕</button>
+        </div>
+        <form id="add-schedule-form">
+          <label>Course</label>
+          <select id="sch-course" required></select>
+          <label>Day of Week</label>
+          <select id="sch-day" required>
+            <option value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+          </select>
+          <label>Start Time</label>
+          <input id="sch-start" type="time" required value="09:00" />
+          <label>End Time</label>
+          <input id="sch-end" type="time" required value="10:30" />
+          <label>Room</label>
+          <input id="sch-room" type="text" placeholder="Room 402" />
+          <button type="submit" class="btn-primary btn-full">
+            Save Schedule Slot
+          </button>
+        </form>
+      </div>
+    </div>
+
     <script type="module" src="../js/admin.js"></script>
   </body>
 </html>

@@ -1,5 +1,5 @@
 import { handleLogout } from "./auth.js";
-const API_BASE = "/api";
+const API_BASE = "http://localhost:3000/api";
 
 // Tab switching
 const tabBtns = document.querySelectorAll(".tab-btn");
@@ -480,7 +480,266 @@ editScheduleBtn?.addEventListener("click", () => {
   loadScheduleAdmin();
 });
 
+// ── Student Management ──
+
+const studentsTbody = document.getElementById("students-tbody");
+const addStudentModal = document.getElementById("modal-add-student");
+const addStudentForm = document.getElementById("add-student-form");
+const editStudentModal = document.getElementById("modal-edit-student");
+const editStudentForm = document.getElementById("edit-student-form");
+const enrollModal = document.getElementById("modal-enroll");
+const enrollForm = document.getElementById("enroll-form");
+
+let majorsCache = [];
+
+async function loadMajors() {
+  try {
+    majorsCache = await fetchJSON(`${API_BASE}/majors`);
+    const majorSelects = [
+      document.getElementById("s-major"),
+      document.getElementById("edit-s-major"),
+      document.getElementById("c-major"),
+    ];
+
+    majorSelects.forEach((select) => {
+      if (!select) return;
+      select.innerHTML =
+        select.id === "c-major"
+          ? '<option value="">-- Core Course (No Major) --</option>'
+          : '<option value="">-- No Major --</option>';
+      majorsCache.forEach((m) => {
+        const opt = document.createElement("option");
+        opt.value = m.id;
+        opt.textContent = m.name;
+        select.appendChild(opt);
+      });
+    });
+  } catch (err) {
+    console.error("Failed to load majors", err);
+  }
+}
+
+async function loadStudents() {
+  if (!studentsTbody) return;
+  studentsTbody.innerHTML =
+    '<tr><td colspan="5" class="empty-msg">Loading…</td></tr>';
+  try {
+    const students = await fetchJSON(`${API_BASE}/students`);
+    if (!students.length) {
+      studentsTbody.innerHTML =
+        '<tr><td colspan="5" class="empty-msg">No students found.</td></tr>';
+      return;
+    }
+    studentsTbody.innerHTML = "";
+    students.forEach((s) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${s.student_number || "—"}</td>
+        <td>${s.name}</td>
+        <td>${s.email}</td>
+        <td>${s.major_name || "—"}</td>
+        <td>
+          <button class="action-btn edit-btn btn-edit-student" 
+            data-id="${s.id}" data-name="${s.name}" data-email="${s.email}" data-major="${s.major_id || ""}">Edit</button>
+          <button class="action-btn btn-enroll-student" data-id="${s.id}">Enroll</button>
+        </td>
+      `;
+      studentsTbody.appendChild(tr);
+    });
+  } catch (err) {
+    studentsTbody.innerHTML =
+      '<tr><td colspan="5" class="empty-msg">Failed to load students.</td></tr>';
+    console.error(err);
+  }
+}
+
+document.getElementById("btn-add-student")?.addEventListener("click", () => {
+  addStudentForm?.reset();
+  openModal(addStudentModal);
+});
+
+addStudentForm?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const name = document.getElementById("s-name").value.trim();
+  const email = document.getElementById("s-email").value.trim();
+  const password = document.getElementById("s-password").value;
+  const major = document.getElementById("s-major").value;
+
+  try {
+    await fetchJSON(`${API_BASE}/students`, {
+      method: "POST",
+      body: JSON.stringify({ name, email, password, major }),
+    });
+    closeModal(addStudentModal);
+    await loadStudents();
+  } catch (err) {
+    alert(err.message || "Failed to add student");
+  }
+});
+
+studentsTbody?.addEventListener("click", async (e) => {
+  if (e.target.classList.contains("btn-edit-student")) {
+    const btn = e.target;
+    document.getElementById("edit-s-id").value = btn.dataset.id;
+    document.getElementById("edit-s-name").value = btn.dataset.name;
+    document.getElementById("edit-s-email").value = btn.dataset.email;
+    document.getElementById("edit-s-major").value = btn.dataset.major || "";
+    openModal(editStudentModal);
+  } else if (e.target.classList.contains("btn-enroll-student")) {
+    const studentId = e.target.dataset.id;
+    const eStudentSelect = document.getElementById("e-student");
+    const eCourseSelect = document.getElementById("e-course");
+
+    // Pre-fill student
+    eStudentSelect.innerHTML = `<option value="${studentId}">Loading...</option>`;
+
+    try {
+      // Re-fetch students and courses to ensure fresh data
+      const students = await fetchJSON(`${API_BASE}/students`);
+      const courses = await fetchJSON(`${API_BASE}/courses`);
+
+      eStudentSelect.innerHTML = "";
+      students.forEach((s) => {
+        const opt = document.createElement("option");
+        opt.value = s.id;
+        opt.textContent = `${s.name} (${s.student_number || "N/A"})`;
+        if (s.id == studentId) opt.selected = true;
+        eStudentSelect.appendChild(opt);
+      });
+
+      eCourseSelect.innerHTML = "";
+      courses.forEach((c) => {
+        const opt = document.createElement("option");
+        opt.value = c.id;
+        opt.textContent = `${c.code} – ${c.name}`;
+        eCourseSelect.appendChild(opt);
+      });
+
+      enrollForm.reset();
+      // Restore selected student
+      eStudentSelect.value = studentId;
+      openModal(enrollModal);
+    } catch (err) {
+      console.error("Failed to load data for enrollment", err);
+    }
+  }
+});
+
+editStudentForm?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const id = document.getElementById("edit-s-id").value;
+  const name = document.getElementById("edit-s-name").value.trim();
+  const email = document.getElementById("edit-s-email").value.trim();
+  const major = document.getElementById("edit-s-major").value;
+
+  try {
+    await fetchJSON(`${API_BASE}/students/${id}`, {
+      method: "PUT",
+      body: JSON.stringify({ name, email, major }),
+    });
+    closeModal(editStudentModal);
+    await loadStudents();
+  } catch (err) {
+    alert(err.message || "Failed to update student");
+  }
+});
+
+enrollForm?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const studentId = document.getElementById("e-student").value;
+  const courseId = document.getElementById("e-course").value;
+  const semester = document.getElementById("e-semester").value;
+  const year = document.getElementById("e-year").value;
+
+  try {
+    await fetchJSON(`${API_BASE}/enrollments`, {
+      method: "POST",
+      body: JSON.stringify({ studentId, courseId, semester, year }),
+    });
+    closeModal(enrollModal);
+    await loadGradesTable(); // Refresh grades/enrollment table
+  } catch (err) {
+    alert(err.message || "Failed to enroll student");
+  }
+});
+
+// ── Course & Schedule Modals ──
+
+const addCourseModal = document.getElementById("modal-add-course");
+const addCourseForm = document.getElementById("add-course-form");
+
+document.getElementById("btn-add-course")?.addEventListener("click", () => {
+  addCourseForm?.reset();
+  openModal(addCourseModal);
+});
+
+addCourseForm?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const code = document.getElementById("c-code").value.trim();
+  const name = document.getElementById("c-name").value.trim();
+  const credits = document.getElementById("c-credits").value;
+  const instructor = document.getElementById("c-instructor").value.trim();
+  const major = document.getElementById("c-major").value;
+
+  try {
+    await fetchJSON(`${API_BASE}/courses`, {
+      method: "POST",
+      body: JSON.stringify({ code, name, credits, instructor, major }),
+    });
+    closeModal(addCourseModal);
+    await loadCoursesForTables();
+  } catch (err) {
+    alert(err.message || "Failed to add course");
+  }
+});
+
+const addScheduleModal = document.getElementById("modal-add-schedule");
+const addScheduleForm = document.getElementById("add-schedule-form");
+
+editScheduleBtn?.addEventListener("click", async () => {
+  const schCourse = document.getElementById("sch-course");
+  if (schCourse) {
+    try {
+      const courses = await fetchJSON(`${API_BASE}/courses`);
+      schCourse.innerHTML = '<option value="">Select course...</option>';
+      courses.forEach((c) => {
+        const opt = document.createElement("option");
+        opt.value = c.id;
+        opt.textContent = `${c.code} – ${c.name}`;
+        schCourse.appendChild(opt);
+      });
+    } catch (err) {
+      console.error("Failed to load courses for schedule", err);
+    }
+  }
+  addScheduleForm?.reset();
+  openModal(addScheduleModal);
+});
+
+addScheduleForm?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const courseId = document.getElementById("sch-course").value;
+  const day = document.getElementById("sch-day").value;
+  const timeStart = document.getElementById("sch-start").value;
+  const timeEnd = document.getElementById("sch-end").value;
+  const room = document.getElementById("sch-room").value.trim();
+
+  try {
+    await fetchJSON(`${API_BASE}/schedule`, {
+      method: "POST",
+      body: JSON.stringify({ courseId, day, timeStart, timeEnd, room }),
+    });
+    closeModal(addScheduleModal);
+    await loadScheduleAdmin();
+  } catch (err) {
+    alert(err.message || "Failed to save schedule slot");
+  }
+});
+
 // Initial loads
+loadMajors().then(() => {
+  loadStudents();
+});
 loadCoursesForTables();
 loadGradesTable();
 loadAdminAnnouncements();

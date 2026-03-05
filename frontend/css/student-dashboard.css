@@ -408,9 +408,14 @@ body {
   vertical-align: middle;
 }
 
+.data-table tbody tr:nth-child(even) td,
+.transcript-table tbody tr:nth-child(even) td {
+  background: #161616;
+}
+
 .data-table tr:hover td,
 .transcript-table tr:hover td {
-  background: #141414;
+  background: #202020;
 }
 
 .empty-msg {
@@ -686,4 +691,3 @@ body {
   opacity: 0.9;
   transform: translateY(-1px);
 }
-

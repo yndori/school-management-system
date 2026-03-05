@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import bcrypt from "bcrypt";
 import pool from "./config/db.js";
 import authRoutes from "./routes/auth.routes.js";
 
@@ -11,6 +12,108 @@ app.use(express.json());
 // Health check
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok" });
+});
+
+app.use("/api/auth", authRoutes);
+
+// ── Commons ──
+
+app.get("/api/majors", async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      "SELECT id, name FROM majors ORDER BY name",
+    );
+    res.json(rows);
+  } catch (err) {
+    console.error("GET /api/majors error:", err);
+    res.status(500).json({ error: "Failed to load majors" });
+  }
+});
+
+// ── Students Management (Admin) ──
+
+app.get("/api/students", async (req, res) => {
+  try {
+    const [rows] = await pool.query(`
+      SELECT u.id, u.name, u.email, u.student_number, m.name as major_name, m.id as major_id
+      FROM users u
+      LEFT JOIN majors m ON u.major_id = m.id
+      WHERE u.role = 'student'
+      ORDER BY u.name
+    `);
+    res.json(rows);
+  } catch (err) {
+    console.error("GET /api/students error:", err);
+    res.status(500).json({ error: "Failed to load students" });
+  }
+});
+
+app.post("/api/students", async (req, res) => {
+  const { name, email, password, major } = req.body || {};
+  if (!name || !email || !password) {
+    return res
+      .status(400)
+      .json({ error: "Name, email, and password are required" });
+  }
+
+  try {
+    // Check if email exists
+    const [existing] = await pool.query(
+      "SELECT id FROM users WHERE email = ?",
+      [email],
+    );
+    if (existing.length > 0) {
+      return res.status(400).json({ error: "Email already in use" });
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Generate student number STU-XXXX
+    const randomNum = Math.floor(1000 + Math.random() * 9000);
+    const studentNumber = `STU-${randomNum}`;
+
+    const majorId = major ? parseInt(major, 10) : null;
+
+    const [result] = await pool.query(
+      "INSERT INTO users (name, email, password_hash, role, student_number, major_id) VALUES (?, ?, ?, 'student', ?, ?)",
+      [name, email, hashedPassword, studentNumber, majorId],
+    );
+
+    res
+      .status(201)
+      .json({
+        id: result.insertId,
+        student_number: studentNumber,
+        message: "Student created successfully",
+      });
+  } catch (err) {
+    console.error("POST /api/students error:", err);
+    res.status(500).json({ error: "Failed to create student" });
+  }
+});
+
+app.put("/api/students/:id", async (req, res) => {
+  const { id } = req.params;
+  const { name, email, major } = req.body || {};
+
+  if (!name || !email) {
+    return res.status(400).json({ error: "Name and email are required" });
+  }
+
+  try {
+    const majorId = major ? parseInt(major, 10) : null;
+
+    await pool.query(
+      "UPDATE users SET name = ?, email = ?, major_id = ? WHERE id = ? AND role = 'student'",
+      [name, email, majorId, id],
+    );
+
+    res.json({ success: true, message: "Student updated successfully" });
+  } catch (err) {
+    console.error("PUT /api/students error:", err);
+    res.status(500).json({ error: "Failed to update student" });
+  }
 });
 
 app.use("/api/auth", authRoutes);
@@ -69,6 +172,32 @@ app.get("/api/courses", async (req, res) => {
   } catch (err) {
     console.error("GET /api/courses error:", err);
     res.status(500).json({ error: "Failed to load courses" });
+  }
+});
+
+app.post("/api/courses", async (req, res) => {
+  const { code, name, credits, instructor, major } = req.body || {};
+  if (!code || !name || !credits) {
+    return res
+      .status(400)
+      .json({ error: "Code, name, and credits are required" });
+  }
+
+  try {
+    const majorId = major ? parseInt(major, 10) : null;
+    const [result] = await pool.query(
+      "INSERT INTO courses (code, name, credits, instructor, major_id) VALUES (?, ?, ?, ?, ?)",
+      [code, name, parseInt(credits, 10), instructor || null, majorId],
+    );
+    res
+      .status(201)
+      .json({ id: result.insertId, message: "Course added successfully" });
+  } catch (err) {
+    console.error("POST /api/courses error:", err);
+    if (err.code === "ER_DUP_ENTRY") {
+      return res.status(400).json({ error: "Course code already exists" });
+    }
+    res.status(500).json({ error: "Failed to create course" });
   }
 });
 
@@ -169,6 +298,37 @@ app.post("/api/grades", async (req, res) => {
   } catch (err) {
     console.error("POST /api/grades error:", err);
     res.status(500).json({ error: "Failed to save grade" });
+  }
+});
+
+// ── Admin: Enrollments ──
+
+app.post("/api/enrollments", async (req, res) => {
+  const { studentId, courseId, semester, year } = req.body || {};
+  if (!studentId || !courseId) {
+    return res.status(400).json({ error: "Student and course are required" });
+  }
+
+  try {
+    const sem = semester || "Fall";
+    const yr = year || 2025;
+
+    await pool.query(
+      "INSERT INTO enrollments (student_id, course_id, semester, year) VALUES (?, ?, ?, ?)",
+      [studentId, courseId, sem, yr],
+    );
+
+    res.status(201).json({ message: "Student enrolled successfully" });
+  } catch (err) {
+    console.error("POST /api/enrollments error:", err);
+    if (err.code === "ER_DUP_ENTRY") {
+      return res
+        .status(400)
+        .json({
+          error: "Student is already enrolled in this course for this semester",
+        });
+    }
+    res.status(500).json({ error: "Failed to enroll student" });
   }
 });
 

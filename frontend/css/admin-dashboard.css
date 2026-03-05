@@ -224,8 +224,11 @@ body {
   font-size: 13px;
   border-bottom: 1px solid #1a1a1a;
 }
+.data-table tbody tr:nth-child(even) {
+  background: #161616;
+}
 .data-table tbody tr:hover {
-  background: #141414;
+  background: #202020;
 }
 .data-table tbody tr:last-child td {
   border-bottom: none;
