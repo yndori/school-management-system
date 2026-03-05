@@ -69,7 +69,6 @@
                   <th>Student #</th>
                   <th>Name</th>
                   <th>Email</th>
-                  <th>Major</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -102,7 +101,6 @@
                   <th>Name</th>
                   <th>Credits</th>
                   <th>Instructor</th>
-                  <th>Major</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -243,10 +241,6 @@
             required
             placeholder="Initial password"
           />
-          <label>Major</label>
-          <select id="s-major">
-            <option value="">-- No Major --</option>
-          </select>
           <button type="submit" class="btn-primary btn-full">
             Create Account
           </button>
@@ -266,10 +260,6 @@
           <input id="edit-s-name" type="text" required />
           <label>Email</label>
           <input id="edit-s-email" type="email" required />
-          <label>Major</label>
-          <select id="edit-s-major">
-            <option value="">-- No Major --</option>
-          </select>
           <button type="submit" class="btn-primary btn-full">
             Save Changes
           </button>
@@ -395,10 +385,6 @@
           />
           <label>Instructor</label>
           <input id="c-instructor" type="text" placeholder="Dr. Smith" />
-          <label>Major</label>
-          <select id="c-major">
-            <option value="">-- Core Course (No Major) --</option>
-          </select>
           <button type="submit" class="btn-primary btn-full">
             Create Course
           </button>

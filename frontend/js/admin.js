@@ -58,13 +58,13 @@ async function fetchJSON(url, options = {}) {
 async function loadCoursesForTables() {
   if (!coursesTbody) return;
   coursesTbody.innerHTML =
-    '<tr><td colspan="6" class="empty-msg">Loading…</td></tr>';
+    '<tr><td colspan="5" class="empty-msg">Loading…</td></tr>';
   try {
     const courses = await fetchJSON(`${API_BASE}/courses`);
     coursesCache = courses;
     if (!courses.length) {
       coursesTbody.innerHTML =
-        '<tr><td colspan="6" class="empty-msg">No courses found.</td></tr>';
+        '<tr><td colspan="5" class="empty-msg">No courses found.</td></tr>';
       return;
     }
     coursesTbody.innerHTML = "";
@@ -75,7 +75,6 @@ async function loadCoursesForTables() {
         <td>${c.name}</td>
         <td>${c.credits}</td>
         <td>${c.instructor || ""}</td>
-        <td>${c.major_name || ""}</td>
         <td>
           <button class="action-btn edit-btn" data-course-id="${c.id}">Assignments</button>
         </td>
@@ -84,7 +83,7 @@ async function loadCoursesForTables() {
     });
   } catch (err) {
     coursesTbody.innerHTML =
-      '<tr><td colspan="6" class="empty-msg">Failed to load courses.</td></tr>';
+      '<tr><td colspan="5" class="empty-msg">Failed to load courses.</td></tr>';
     console.error(err);
   }
 }
@@ -140,6 +139,7 @@ announcementForm?.addEventListener("submit", async (e) => {
     await loadAdminAnnouncements();
   } catch (err) {
     console.error("Failed to post announcement", err);
+    alert("Failed to post announcement: " + err.message);
   }
 });
 
@@ -490,44 +490,15 @@ const editStudentForm = document.getElementById("edit-student-form");
 const enrollModal = document.getElementById("modal-enroll");
 const enrollForm = document.getElementById("enroll-form");
 
-let majorsCache = [];
-
-async function loadMajors() {
-  try {
-    majorsCache = await fetchJSON(`${API_BASE}/majors`);
-    const majorSelects = [
-      document.getElementById("s-major"),
-      document.getElementById("edit-s-major"),
-      document.getElementById("c-major"),
-    ];
-
-    majorSelects.forEach((select) => {
-      if (!select) return;
-      select.innerHTML =
-        select.id === "c-major"
-          ? '<option value="">-- Core Course (No Major) --</option>'
-          : '<option value="">-- No Major --</option>';
-      majorsCache.forEach((m) => {
-        const opt = document.createElement("option");
-        opt.value = m.id;
-        opt.textContent = m.name;
-        select.appendChild(opt);
-      });
-    });
-  } catch (err) {
-    console.error("Failed to load majors", err);
-  }
-}
-
 async function loadStudents() {
   if (!studentsTbody) return;
   studentsTbody.innerHTML =
-    '<tr><td colspan="5" class="empty-msg">Loading…</td></tr>';
+    '<tr><td colspan="4" class="empty-msg">Loading…</td></tr>';
   try {
     const students = await fetchJSON(`${API_BASE}/students`);
     if (!students.length) {
       studentsTbody.innerHTML =
-        '<tr><td colspan="5" class="empty-msg">No students found.</td></tr>';
+        '<tr><td colspan="4" class="empty-msg">No students found.</td></tr>';
       return;
     }
     studentsTbody.innerHTML = "";
@@ -537,10 +508,9 @@ async function loadStudents() {
         <td>${s.student_number || "—"}</td>
         <td>${s.name}</td>
         <td>${s.email}</td>
-        <td>${s.major_name || "—"}</td>
         <td>
           <button class="action-btn edit-btn btn-edit-student" 
-            data-id="${s.id}" data-name="${s.name}" data-email="${s.email}" data-major="${s.major_id || ""}">Edit</button>
+            data-id="${s.id}" data-name="${s.name}" data-email="${s.email}">Edit</button>
           <button class="action-btn btn-enroll-student" data-id="${s.id}">Enroll</button>
         </td>
       `;
@@ -548,7 +518,7 @@ async function loadStudents() {
     });
   } catch (err) {
     studentsTbody.innerHTML =
-      '<tr><td colspan="5" class="empty-msg">Failed to load students.</td></tr>';
+      '<tr><td colspan="4" class="empty-msg">Failed to load students.</td></tr>';
     console.error(err);
   }
 }
@@ -563,12 +533,11 @@ addStudentForm?.addEventListener("submit", async (e) => {
   const name = document.getElementById("s-name").value.trim();
   const email = document.getElementById("s-email").value.trim();
   const password = document.getElementById("s-password").value;
-  const major = document.getElementById("s-major").value;
 
   try {
     await fetchJSON(`${API_BASE}/students`, {
       method: "POST",
-      body: JSON.stringify({ name, email, password, major }),
+      body: JSON.stringify({ name, email, password }),
     });
     closeModal(addStudentModal);
     await loadStudents();
@@ -583,7 +552,6 @@ studentsTbody?.addEventListener("click", async (e) => {
     document.getElementById("edit-s-id").value = btn.dataset.id;
     document.getElementById("edit-s-name").value = btn.dataset.name;
     document.getElementById("edit-s-email").value = btn.dataset.email;
-    document.getElementById("edit-s-major").value = btn.dataset.major || "";
     openModal(editStudentModal);
   } else if (e.target.classList.contains("btn-enroll-student")) {
     const studentId = e.target.dataset.id;
@@ -630,12 +598,11 @@ editStudentForm?.addEventListener("submit", async (e) => {
   const id = document.getElementById("edit-s-id").value;
   const name = document.getElementById("edit-s-name").value.trim();
   const email = document.getElementById("edit-s-email").value.trim();
-  const major = document.getElementById("edit-s-major").value;
 
   try {
     await fetchJSON(`${API_BASE}/students/${id}`, {
       method: "PUT",
-      body: JSON.stringify({ name, email, major }),
+      body: JSON.stringify({ name, email }),
     });
     closeModal(editStudentModal);
     await loadStudents();
@@ -737,9 +704,7 @@ addScheduleForm?.addEventListener("submit", async (e) => {
 });
 
 // Initial loads
-loadMajors().then(() => {
-  loadStudents();
-});
+loadStudents();
 loadCoursesForTables();
 loadGradesTable();
 loadAdminAnnouncements();

@@ -18,26 +18,13 @@ app.use("/api/auth", authRoutes);
 
 // ── Commons ──
 
-app.get("/api/majors", async (req, res) => {
-  try {
-    const [rows] = await pool.query(
-      "SELECT id, name FROM majors ORDER BY name",
-    );
-    res.json(rows);
-  } catch (err) {
-    console.error("GET /api/majors error:", err);
-    res.status(500).json({ error: "Failed to load majors" });
-  }
-});
-
 // ── Students Management (Admin) ──
 
 app.get("/api/students", async (req, res) => {
   try {
     const [rows] = await pool.query(`
-      SELECT u.id, u.name, u.email, u.student_number, m.name as major_name, m.id as major_id
+      SELECT u.id, u.name, u.email, u.student_number
       FROM users u
-      LEFT JOIN majors m ON u.major_id = m.id
       WHERE u.role = 'student'
       ORDER BY u.name
     `);
@@ -49,7 +36,7 @@ app.get("/api/students", async (req, res) => {
 });
 
 app.post("/api/students", async (req, res) => {
-  const { name, email, password, major } = req.body || {};
+  const { name, email, password } = req.body || {};
   if (!name || !email || !password) {
     return res
       .status(400)
@@ -73,20 +60,16 @@ app.post("/api/students", async (req, res) => {
     const randomNum = Math.floor(1000 + Math.random() * 9000);
     const studentNumber = `STU-${randomNum}`;
 
-    const majorId = major ? parseInt(major, 10) : null;
-
     const [result] = await pool.query(
-      "INSERT INTO users (name, email, password_hash, role, student_number, major_id) VALUES (?, ?, ?, 'student', ?, ?)",
-      [name, email, hashedPassword, studentNumber, majorId],
+      "INSERT INTO users (name, email, password_hash, role, student_number) VALUES (?, ?, ?, 'student', ?)",
+      [name, email, hashedPassword, studentNumber],
     );
 
-    res
-      .status(201)
-      .json({
-        id: result.insertId,
-        student_number: studentNumber,
-        message: "Student created successfully",
-      });
+    res.status(201).json({
+      id: result.insertId,
+      student_number: studentNumber,
+      message: "Student created successfully",
+    });
   } catch (err) {
     console.error("POST /api/students error:", err);
     res.status(500).json({ error: "Failed to create student" });
@@ -95,18 +78,16 @@ app.post("/api/students", async (req, res) => {
 
 app.put("/api/students/:id", async (req, res) => {
   const { id } = req.params;
-  const { name, email, major } = req.body || {};
+  const { name, email } = req.body || {};
 
   if (!name || !email) {
     return res.status(400).json({ error: "Name and email are required" });
   }
 
   try {
-    const majorId = major ? parseInt(major, 10) : null;
-
     await pool.query(
-      "UPDATE users SET name = ?, email = ?, major_id = ? WHERE id = ? AND role = 'student'",
-      [name, email, majorId, id],
+      "UPDATE users SET name = ?, email = ? WHERE id = ? AND role = 'student'",
+      [name, email, id],
     );
 
     res.json({ success: true, message: "Student updated successfully" });
@@ -115,8 +96,6 @@ app.put("/api/students/:id", async (req, res) => {
     res.status(500).json({ error: "Failed to update student" });
   }
 });
-
-app.use("/api/auth", authRoutes);
 
 // ── Announcements ──
 
@@ -162,10 +141,8 @@ app.post("/api/announcements", async (req, res) => {
 app.get("/api/courses", async (req, res) => {
   try {
     const [rows] = await pool.query(
-      `SELECT c.id, c.code, c.name, c.credits, c.instructor,
-              m.name AS major_name
+      `SELECT c.id, c.code, c.name, c.credits, c.instructor
        FROM courses c
-       LEFT JOIN majors m ON c.major_id = m.id
        ORDER BY c.code`,
     );
     res.json(rows);
@@ -176,7 +153,7 @@ app.get("/api/courses", async (req, res) => {
 });
 
 app.post("/api/courses", async (req, res) => {
-  const { code, name, credits, instructor, major } = req.body || {};
+  const { code, name, credits, instructor } = req.body || {};
   if (!code || !name || !credits) {
     return res
       .status(400)
@@ -184,10 +161,9 @@ app.post("/api/courses", async (req, res) => {
   }
 
   try {
-    const majorId = major ? parseInt(major, 10) : null;
     const [result] = await pool.query(
-      "INSERT INTO courses (code, name, credits, instructor, major_id) VALUES (?, ?, ?, ?, ?)",
-      [code, name, parseInt(credits, 10), instructor || null, majorId],
+      "INSERT INTO courses (code, name, credits, instructor) VALUES (?, ?, ?, ?)",
+      [code, name, parseInt(credits, 10), instructor || null],
     );
     res
       .status(201)
@@ -322,11 +298,9 @@ app.post("/api/enrollments", async (req, res) => {
   } catch (err) {
     console.error("POST /api/enrollments error:", err);
     if (err.code === "ER_DUP_ENTRY") {
-      return res
-        .status(400)
-        .json({
-          error: "Student is already enrolled in this course for this semester",
-        });
+      return res.status(400).json({
+        error: "Student is already enrolled in this course for this semester",
+      });
     }
     res.status(500).json({ error: "Failed to enroll student" });
   }
