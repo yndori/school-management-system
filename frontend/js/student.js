@@ -51,6 +51,24 @@ async function loadStudentOverview() {
   if (!studentId) return;
 
   try {
+    // 1. Fetch student profile
+    const profile = await fetchJSON(`${API_BASE}/students/${studentId}`);
+    const nameEl = document.getElementById("student-name");
+    const avatarEl = document.getElementById("avatar-initials");
+    const printNameEl = document.getElementById("print-student-name");
+
+    if (nameEl) nameEl.textContent = profile.name;
+    if (printNameEl) printNameEl.textContent = profile.name;
+    if (avatarEl && profile.name) {
+      const initials = profile.name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase();
+      avatarEl.textContent = initials.slice(0, 2);
+    }
+
+    // 2. Fetch transcript/overview data
     const data = await fetchJSON(
       `${API_BASE}/students/${studentId}/transcript`,
     );
@@ -67,6 +85,9 @@ async function loadStudentOverview() {
     if (courseCountEl) courseCountEl.textContent = data.courses.length || 0;
     if (tGpaEl && data.gpa != null) tGpaEl.textContent = data.gpa.toFixed(2);
     if (tCreditsEl) tCreditsEl.textContent = data.totalCredits || 0;
+
+    // 3. Render courses grid
+    renderCoursesGrid(data.courses);
 
     if (tbody) {
       if (!data.courses.length) {
@@ -94,8 +115,40 @@ async function loadStudentOverview() {
       }
     }
   } catch (err) {
-    console.error("Failed to load transcript", err);
+    console.error("Failed to load student overview", err);
   }
+}
+
+function renderCoursesGrid(courses) {
+  const container = document.getElementById("courses-grid");
+  if (!container) return;
+
+  if (!courses || !courses.length) {
+    container.innerHTML = '<p class="empty-msg">No courses enrolled.</p>';
+    return;
+  }
+
+  container.innerHTML = "";
+  courses.forEach((c) => {
+    const card = document.createElement("div");
+    card.className = "course-card";
+    card.innerHTML = `
+      <div class="course-header">
+        <span class="course-code">${c.code}</span>
+        <h3>${c.name}</h3>
+      </div>
+      <div class="course-info">
+        <p><strong>Credits:</strong> ${c.credits}</p>
+        <p><strong>Term:</strong> ${c.semester} ${c.year}</p>
+      </div>
+      <div class="course-footer">
+        <span class="grade-badge ${c.letterGrade ? "graded" : "pending"}">
+          ${c.letterGrade || "Enrolled"}
+        </span>
+      </div>
+    `;
+    container.appendChild(card);
+  });
 }
 
 // ── Announcements for students ──
@@ -298,9 +351,7 @@ async function loadStudentSchedule() {
   const tbody = document.getElementById("schedule-body");
   if (!tbody) return;
   try {
-    const rows = await fetchJSON(
-      `${API_BASE}/students/${studentId}/schedule`,
-    );
+    const rows = await fetchJSON(`${API_BASE}/students/${studentId}/schedule`);
     const events = rows.map((r) => ({
       day: r.day,
       code: r.course_code,

@@ -154,15 +154,7 @@ app.post("/api/grades", async (req, res) => {
   }
   const g = Number(grade);
   const letter =
-    g >= 90
-      ? "A"
-      : g >= 80
-        ? "B"
-        : g >= 70
-          ? "C"
-          : g >= 60
-            ? "D"
-            : "F";
+    g >= 90 ? "A" : g >= 80 ? "B" : g >= 70 ? "C" : g >= 60 ? "D" : "F";
   try {
     await pool.query(
       `INSERT INTO grades (enrollment_id, assignment_id, grade, letter_grade)
@@ -242,6 +234,26 @@ app.put("/api/schedule/:id", async (req, res) => {
   } catch (err) {
     console.error("PUT /api/schedule/:id error:", err);
     res.status(500).json({ error: "Failed to update schedule slot" });
+  }
+});
+
+// Student profile details
+app.get("/api/students/:studentId", async (req, res) => {
+  const { studentId } = req.params;
+  try {
+    const [rows] = await pool.query(
+      `SELECT id, student_number, name
+       FROM users
+       WHERE id = ? AND role = 'student'`,
+      [studentId],
+    );
+    if (!rows.length) {
+      return res.status(404).json({ error: "Student not found" });
+    }
+    res.json(rows[0]);
+  } catch (err) {
+    console.error("GET /api/students/:studentId error:", err);
+    res.status(500).json({ error: "Failed to load student profile" });
   }
 });
 
