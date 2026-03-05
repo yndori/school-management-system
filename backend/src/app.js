@@ -154,15 +154,7 @@ app.post("/api/grades", async (req, res) => {
   }
   const g = Number(grade);
   const letter =
-    g >= 90
-      ? "A"
-      : g >= 80
-        ? "B"
-        : g >= 70
-          ? "C"
-          : g >= 60
-            ? "D"
-            : "F";
+    g >= 90 ? "A" : g >= 80 ? "B" : g >= 70 ? "C" : g >= 60 ? "D" : "F";
   try {
     await pool.query(
       `INSERT INTO grades (enrollment_id, assignment_id, grade, letter_grade)
@@ -344,6 +336,49 @@ app.get("/api/students/:studentId/transcript", async (req, res) => {
   } catch (err) {
     console.error("GET /api/students/:studentId/transcript error:", err);
     res.status(500).json({ error: "Failed to load transcript" });
+  }
+});
+
+app.get("/api/students/:studentId/profile", async (req, res) => {
+  const { studentId } = req.params;
+  try {
+    const [rows] = await pool.query(
+      `SELECT u.name, e.semester, e.year
+       FROM users u
+       LEFT JOIN enrollments e ON u.id = e.student_id
+       WHERE u.id = ?
+       ORDER BY e.year DESC, e.semester DESC
+       LIMIT 1`,
+      [studentId],
+    );
+    if (!rows.length) {
+      return res.status(404).json({ error: "Student not found" });
+    }
+    res.json(rows[0]);
+  } catch (err) {
+    console.error("GET /api/students/:studentId/profile error:", err);
+    res.status(500).json({ error: "Failed to load profile" });
+  }
+});
+
+app.get("/api/students/:studentId/recent-grades", async (req, res) => {
+  const { studentId } = req.params;
+  try {
+    const [rows] = await pool.query(
+      `SELECT g.grade, g.letter_grade, a.name AS assignment_name, c.name AS course_name, c.code AS course_code, g.id
+       FROM grades g
+       JOIN enrollments e ON g.enrollment_id = e.id
+       JOIN assignments a ON g.assignment_id = a.id
+       JOIN courses c ON e.course_id = c.id
+       WHERE e.student_id = ?
+       ORDER BY g.id DESC
+       LIMIT 3`,
+      [studentId],
+    );
+    res.json(rows);
+  } catch (err) {
+    console.error("GET /api/students/:studentId/recent-grades error:", err);
+    res.status(500).json({ error: "Failed to load recent grades" });
   }
 });
 

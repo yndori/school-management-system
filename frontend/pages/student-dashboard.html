@@ -31,10 +31,18 @@
           <header class="top-header">
             <div>
               <h1>Welcome Back, <span id="student-name">Student</span></h1>
-              <p>Academic Year 2025 – 2026</p>
+              <p id="academic-year-info">Academic Year 2025 – 2026</p>
             </div>
             <div class="profile">
-              <span class="notification">🔔</span>
+              <div class="notification-wrapper">
+                <span class="notification-icon" id="notification-btn">🔔</span>
+                <div class="notification-dropdown" id="notification-dropdown">
+                  <div class="notification-header">Recent Grades</div>
+                  <div id="notifications-list">
+                    <p class="empty-msg">No new notifications.</p>
+                  </div>
+                </div>
+              </div>
               <div class="avatar" id="avatar-initials">ST</div>
             </div>
           </header>

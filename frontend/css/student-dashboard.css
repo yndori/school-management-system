@@ -687,3 +687,68 @@ body {
   transform: translateY(-1px);
 }
 
+/* ── NOTIFICATIONS ── */
+.notification-wrapper {
+  position: relative;
+}
+
+.notification-icon {
+  font-size: 1.4rem;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: color 0.2s;
+}
+.notification-icon:hover {
+  color: var(--accent);
+}
+
+.notification-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 280px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  margin-top: 12px;
+  display: none;
+  z-index: 1000;
+  padding: 12px;
+}
+.notification-dropdown.active {
+  display: block;
+  animation: fadeIn 0.2s ease;
+}
+
+.notification-header {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.notification-item {
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+.notification-item:last-child {
+  border-bottom: none;
+}
+.notification-item-title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.notification-item-text {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+.notification-grade {
+  color: var(--accent3);
+  font-weight: 700;
+}

@@ -51,6 +51,7 @@ async function loadStudentOverview() {
   if (!studentId) return;
 
   try {
+    // Load Transcript Data
     const data = await fetchJSON(
       `${API_BASE}/students/${studentId}/transcript`,
     );
@@ -93,10 +94,83 @@ async function loadStudentOverview() {
         });
       }
     }
+
+    // Load Profile Data (Name, Term, Year)
+    const profile = await fetchJSON(
+      `${API_BASE}/students/${studentId}/profile`,
+    );
+    const nameEl = document.getElementById("student-name");
+    const yearEl = document.getElementById("academic-year-info");
+    const initialsEl = document.getElementById("avatar-initials");
+    const printNameEl = document.getElementById("print-student-name");
+
+    if (nameEl) nameEl.textContent = profile.name;
+    if (yearEl && profile.year) {
+      yearEl.textContent = `Academic Year ${profile.year} – ${profile.year + 1}`;
+    }
+    if (initialsEl && profile.name) {
+      initialsEl.textContent = profile.name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2);
+    }
+    if (printNameEl) printNameEl.textContent = profile.name;
+
+    // Update schedule term label
+    const termEl = document.getElementById("schedule-term");
+    if (termEl && profile.semester) {
+      termEl.textContent = `${profile.semester} ${profile.year}`;
+    }
   } catch (err) {
-    console.error("Failed to load transcript", err);
+    console.error("Failed to load student overview/profile", err);
   }
 }
+
+// ── Notifications (Recent Grades) ──
+async function loadNotifications() {
+  const studentId = Number(localStorage.getItem("studentId"));
+  if (!studentId) return;
+
+  const list = document.getElementById("notifications-list");
+  if (!list) return;
+
+  try {
+    const records = await fetchJSON(
+      `${API_BASE}/students/${studentId}/recent-grades`,
+    );
+    if (!records.length) {
+      list.innerHTML = '<p class="empty-msg">No new notifications.</p>';
+      return;
+    }
+
+    list.innerHTML = "";
+    records.forEach((r) => {
+      const div = document.createElement("div");
+      div.className = "notification-item";
+      div.innerHTML = `
+        <div class="notification-item-title">${r.course_code}: ${r.assignment_name}</div>
+        <div class="notification-item-text">
+          Grade: <span class="notification-grade">${r.grade} (${r.letter_grade})</span>
+        </div>
+      `;
+      list.appendChild(div);
+    });
+  } catch (err) {
+    console.error("Failed to load notifications", err);
+  }
+}
+
+// Notification Dropdown Toggle
+document.getElementById("notification-btn")?.addEventListener("click", (e) => {
+  e.stopPropagation();
+  document.getElementById("notification-dropdown")?.classList.toggle("active");
+});
+
+document.addEventListener("click", () => {
+  document.getElementById("notification-dropdown")?.classList.remove("active");
+});
 
 // ── Announcements for students ──
 async function loadAnnouncements() {
@@ -298,9 +372,7 @@ async function loadStudentSchedule() {
   const tbody = document.getElementById("schedule-body");
   if (!tbody) return;
   try {
-    const rows = await fetchJSON(
-      `${API_BASE}/students/${studentId}/schedule`,
-    );
+    const rows = await fetchJSON(`${API_BASE}/students/${studentId}/schedule`);
     const events = rows.map((r) => ({
       day: r.day,
       code: r.course_code,
@@ -321,3 +393,4 @@ async function loadStudentSchedule() {
 loadStudentOverview();
 loadAnnouncements();
 loadStudentSchedule();
+loadNotifications();
