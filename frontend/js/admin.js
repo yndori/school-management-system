@@ -42,7 +42,6 @@ document.querySelectorAll(".modal-overlay").forEach((overlay) => {
 // ── Courses & assignments ──
 const coursesTbody = document.getElementById("courses-tbody");
 const gradesTbody = document.getElementById("grades-tbody");
-let coursesCache = [];
 
 async function fetchJSON(url, options = {}) {
   const res = await fetch(url, {
@@ -61,7 +60,6 @@ async function loadCoursesForTables() {
     '<tr><td colspan="5" class="empty-msg">Loading…</td></tr>';
   try {
     const courses = await fetchJSON(`${API_BASE}/courses`);
-    coursesCache = courses;
     if (!courses.length) {
       coursesTbody.innerHTML =
         '<tr><td colspan="5" class="empty-msg">No courses found.</td></tr>';
