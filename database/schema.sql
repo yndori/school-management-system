@@ -1,12 +1,6 @@
 CREATE DATABASE IF NOT EXISTS school_management;
 USE school_management;
 
--- Majors
-CREATE TABLE IF NOT EXISTS majors (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL
-);
-
 -- Users (admins and students)
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -15,9 +9,7 @@ CREATE TABLE IF NOT EXISTS users (
     password_hash VARCHAR(255) NOT NULL,
     role ENUM('admin', 'student') NOT NULL DEFAULT 'student',
     student_number VARCHAR(20) UNIQUE,
-    major_id INT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (major_id) REFERENCES majors(id) ON DELETE SET NULL
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Courses
@@ -26,9 +18,7 @@ CREATE TABLE IF NOT EXISTS courses (
     code VARCHAR(20) NOT NULL UNIQUE,
     name VARCHAR(150) NOT NULL,
     credits INT NOT NULL DEFAULT 3,
-    instructor VARCHAR(150),
-    major_id INT,
-    FOREIGN KEY (major_id) REFERENCES majors(id) ON DELETE SET NULL
+    instructor VARCHAR(150)
 );
 
 -- Enrollments (student <-> course)
