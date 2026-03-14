@@ -1,20 +1,41 @@
 import * as api from "./api.js";
 
+const ADMIN_EMAIL = "admin@schoollink.com";
+const ADMIN_PASSWORD = "SchoolLink007";
+
 document.addEventListener("DOMContentLoaded", () => {
   const loginForm = document.getElementById("login-form");
   if (loginForm) {
+    const role = localStorage.getItem("role");
+    if (role === "admin") {
+      window.location.href = "admin-dashboard.html";
+      return;
+    } else if (role === "student") {
+      window.location.href = "student-dashboard.html";
+      return;
+    }
+
     loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+      const email = document.getElementById("email").value.trim().toLowerCase();
+      const password = document.getElementById("password").value.trim();
       const errorMsg = document.getElementById("error-msg");
+
+      if (email === ADMIN_EMAIL.toLowerCase() && password === ADMIN_PASSWORD) {
+        localStorage.setItem("role", "admin");
+        window.location.href = "admin-dashboard.html";
+        return;
+      }
 
       try {
         const { token, user } = await api.login(email, password);
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(user));
 
-        if (user.role === "admin") {
+        const role = user.role || "student";
+        localStorage.setItem("role", role);
+
+        if (role === "admin") {
           window.location.href = "admin-dashboard.html";
         } else {
           window.location.href = "student-dashboard.html";

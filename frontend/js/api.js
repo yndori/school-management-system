@@ -25,6 +25,7 @@ export async function resetPassword(email) {
 export async function logout() {
   localStorage.removeItem("token");
   localStorage.removeItem("user");
+  localStorage.removeItem("role");
   // Optional: Notify backend
   await fetch(`${API_URL}/auth/logout`, { method: "POST" }).catch(() => {});
 }

@@ -1,6 +1,11 @@
 import { handleLogout } from "./auth.js";
 const API_BASE = "http://localhost:3000/api";
 
+// Check admin access
+if (localStorage.getItem("role") !== "admin") {
+  window.location.href = "login.html";
+}
+
 // Tab switching
 const tabBtns = document.querySelectorAll(".tab-btn");
 const tabPanels = document.querySelectorAll(".tab-panel");
