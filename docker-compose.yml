@@ -33,6 +33,13 @@ services:
       ADMIN_EMAIL: ${ADMIN_EMAIL}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD}
       PORT: ${PORT:-5501}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASS: ${SMTP_PASS}
+      SMTP_SECURE: ${SMTP_SECURE:-false}
+      SMTP_FROM: ${SMTP_FROM}
+      SCHOOL_ADMIN_EMAIL: ${SCHOOL_ADMIN_EMAIL:-schoollink181@gmail.com}
     ports:
       - "5501:5501"
     command: sh -c "node src/seeders/seed-admin.js && npm start"

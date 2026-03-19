@@ -42,16 +42,17 @@ document.addEventListener("DOMContentLoaded", () => {
   if (resetForm) {
     resetForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const email = resetForm.querySelector('input[type="email"]').value;
+      const email = resetForm
+        .querySelector('input[type="email"]')
+        .value.trim()
+        .toLowerCase();
       const btn = resetForm.querySelector(".btn-reset");
 
       try {
         btn.textContent = "Sending...";
         btn.disabled = true;
-        await api.resetPassword(email);
-        alert(
-          "If an account exists, a reset link has been sent to your email.",
-        );
+        const data = await api.resetPassword(email);
+        alert(data.message || "Password reset request sent.");
         window.location.href = "login.html";
       } catch (err) {
         alert(err.message);

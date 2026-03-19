@@ -24,8 +24,15 @@ export async function resetPassword(email) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email }),
   });
-  const data = await response.json();
-  if (!response.ok) throw new Error(data.error || "Reset request failed");
+  let data = {};
+  try {
+    data = await response.json();
+  } catch {
+    data = {};
+  }
+  if (!response.ok) {
+    throw new Error(data.error || "Email is not registered");
+  }
   return data;
 }
 

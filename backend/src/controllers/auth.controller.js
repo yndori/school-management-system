@@ -1,6 +1,7 @@
 import pool from "../config/db.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import nodemailer from "nodemailer";
 
 export const login = async (req, res) => {
   const { email, password } = req.body || {};
@@ -47,29 +48,48 @@ export const signOut = (req, res) => {
 
 export const requestPasswordReset = async (req, res) => {
   const { email } = req.body || {};
-  if (!email) {
+  const normalizedEmail = (email || "").trim().toLowerCase();
+  if (!normalizedEmail) {
     return res.status(400).json({ error: "Email is required" });
   }
 
   try {
-    const [rows] = await pool.query("SELECT id FROM users WHERE email = ?", [
-      email,
-    ]);
+    const [rows] = await pool.query(
+      "SELECT id, name, email FROM users WHERE email = ? AND role = 'student'",
+      [normalizedEmail],
+    );
     if (rows.length === 0) {
-      // Don't reveal if user exists for security
-      return res.json({
-        message: "If an account exists, a reset link has been sent.",
-      });
+      return res.status(404).json({ error: "Email is not registered" });
     }
 
-    const token = Math.random().toString(36).substring(2, 15);
-    const resetLink = `http://localhost:3000/pages/reset.html?token=${token}`;
+    const smtpHost = process.env.SMTP_HOST;
+    const smtpPort = Number(process.env.SMTP_PORT || 587);
+    const smtpUser = process.env.SMTP_USER;
+    const smtpPass = process.env.SMTP_PASS;
+    const smtpSecure = String(process.env.SMTP_SECURE || "").toLowerCase() === "true";
+    const fromAddress = process.env.SMTP_FROM || smtpUser;
+    const adminEmail = process.env.SCHOOL_ADMIN_EMAIL || "schoollink181@gmail.com";
 
-    // Simulate sending email
-    console.log(`[PASSWORD RESET] Email sent to: ${email}`);
-    console.log(`[PASSWORD RESET] Link: ${resetLink}`);
+    if (!smtpHost || !smtpUser || !smtpPass || !fromAddress) {
+      return res.status(500).json({ error: "Email service not configured" });
+    }
 
-    res.json({ message: "If an account exists, a reset link has been sent." });
+    const transporter = nodemailer.createTransport({
+      host: smtpHost,
+      port: smtpPort,
+      secure: smtpSecure,
+      auth: { user: smtpUser, pass: smtpPass },
+    });
+
+    const student = rows[0];
+    await transporter.sendMail({
+      from: fromAddress,
+      to: adminEmail,
+      subject: "Password reset request",
+      text: `Password reset requested for student:\nName: ${student.name}\nEmail: ${student.email}\nPlease contact the student to change the password.`,
+    });
+
+    res.json({ message: "Password reset request sent." });
   } catch (err) {
     console.error("Password reset error:", err);
     res.status(500).json({ error: "Internal server error" });

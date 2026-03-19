@@ -132,6 +132,13 @@ JWT_SECRET=your_secret_key
 ADMIN_EMAIL=your_admin_email
 ADMIN_PASSWORD=your_admin_password
 PORT=5501
+SMTP_HOST=your_smtp_host
+SMTP_PORT=587
+SMTP_USER=your_smtp_user
+SMTP_PASS=your_smtp_password
+SMTP_SECURE=false
+SMTP_FROM=your_smtp_from_address
+SCHOOL_ADMIN_EMAIL=schoollink181@gmail.com
 ```
 
 Start the server:
