@@ -217,8 +217,8 @@ To keep the project clean and avoid conflicts:
 
 ## Development Status
 
-- [ ] Database schema
-- [ ] Authentication system
+- [x] Database schema
+- [x] Authentication system
 - [ ] Admin dashboard
 - [ ] Student dashboard
 - [ ] Grades & transcript
