@@ -1,4 +1,7 @@
-const API_URL = "http://localhost:3000/api";
+const DEFAULT_API_PORT = "5501";
+const configuredApiUrl = localStorage.getItem("apiBaseUrl");
+const inferredApiUrl = `${window.location.protocol}//${window.location.hostname}:${DEFAULT_API_PORT}/api`;
+const API_URL = configuredApiUrl || inferredApiUrl;
 
 export async function login(email, password) {
   const response = await fetch(`${API_URL}/auth/login`, {

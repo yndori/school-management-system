@@ -1,8 +1,5 @@
 import * as api from "./api.js";
 
-const ADMIN_EMAIL = "admin@schoollink.com";
-const ADMIN_PASSWORD = "SchoolLink007";
-
 document.addEventListener("DOMContentLoaded", () => {
   const loginForm = document.getElementById("login-form");
   if (loginForm) {
@@ -20,12 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const email = document.getElementById("email").value.trim().toLowerCase();
       const password = document.getElementById("password").value.trim();
       const errorMsg = document.getElementById("error-msg");
-
-      if (email === ADMIN_EMAIL.toLowerCase() && password === ADMIN_PASSWORD) {
-        localStorage.setItem("role", "admin");
-        window.location.href = "admin-dashboard.html";
-        return;
-      }
 
       try {
         const { token, user } = await api.login(email, password);

@@ -107,35 +107,94 @@ All database-related files are located in the `database/` folder.
 
 ```bash
 mysql -u root -p
-CREATE DATABASE sms_db;
-USE sms_db;
+CREATE DATABASE school_management;
+USE school_management;
 SOURCE database/schema.sql;
 SOURCE database/seed.sql;
 ```
 
 ---
 
-## Backend Setup
+## Backend Setup (Local)
 
 ```bash
 cd backend
 npm install
 ```
 
-Create a `.env` file based on `.env.example`:
+Create a `backend/.env` file:
 
 ```
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=your_password
-DB_NAME=sms_db
+DB_NAME=school_management
+DB_PORT=3306
 JWT_SECRET=your_secret_key
+ADMIN_EMAIL=your_admin_email
+ADMIN_PASSWORD=your_admin_password
+PORT=5501
 ```
 
 Start the server:
 
 ```bash
-npm start
+npm run seed:admin
+npm run dev
+```
+
+## Frontend API Configuration
+
+The frontend reads the API base URL from local storage key `apiBaseUrl`.
+If not set, it defaults to:
+
+```
+http://<current-host>:5501/api
+```
+
+To override manually in the browser console:
+
+```js
+localStorage.setItem("apiBaseUrl", "http://localhost:5501/api");
+```
+
+To reset to default behavior:
+
+```js
+localStorage.removeItem("apiBaseUrl");
+```
+
+## Docker Setup (Recommended for Team)
+
+Create a local Docker env file (do not commit secrets):
+
+```bash
+cp .env.docker.example .env
+```
+
+Then edit `.env` and set secure values for:
+
+- `MYSQL_ROOT_PASSWORD`
+- `JWT_SECRET`
+- `ADMIN_EMAIL`
+- `ADMIN_PASSWORD`
+
+Run all services (MySQL + backend API + frontend static server):
+
+```bash
+docker compose up --build
+```
+
+Service URLs:
+
+- Frontend: `http://localhost:8080`
+- Backend API: `http://localhost:5501/api`
+- Health check: `http://localhost:5501/api/health`
+
+Stop services:
+
+```bash
+docker compose down
 ```
 
 ---
