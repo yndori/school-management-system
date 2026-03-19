@@ -101,7 +101,6 @@ Authentication is handled using **JWT (JSON Web Tokens)**.
 All database-related files are located in the `database/` folder.
 
 - `schema.sql` → database structure (tables, relations)
-- `seed.sql` → test data (admin, sample students, courses)
 
 ### Local setup
 
@@ -110,7 +109,6 @@ mysql -u root -p
 CREATE DATABASE school_management;
 USE school_management;
 SOURCE database/schema.sql;
-SOURCE database/seed.sql;
 ```
 
 ---

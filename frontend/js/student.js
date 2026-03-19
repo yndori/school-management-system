@@ -1,5 +1,6 @@
 import { handleLogout } from "./auth.js";
-const API_BASE = "http://localhost:3000/api";
+import { getApiBase } from "./api.js";
+const API_BASE = getApiBase();
 
 // Check student access
 if (localStorage.getItem("role") !== "student") {

@@ -234,6 +234,23 @@
             required
             placeholder="marie@example.com"
           />
+          <label>Major</label>
+          <select id="s-major">
+            <option value="BSc Computer Science">BSc Computer Science</option>
+            <option value="BBA">BBA</option>
+            <option value="BSc Computer Engineering">BSc Computer Engineering</option>
+            <option value="BA Political Science">BA Political Science</option>
+            <option value="BA Law">BA Law</option>
+          </select>
+          <label>Semester</label>
+          <select id="s-semester">
+            <option value="Fall">Fall</option>
+            <option value="Winter">Winter</option>
+            <option value="Spring">Spring</option>
+            <option value="Summer">Summer</option>
+          </select>
+          <label>Year</label>
+          <input id="s-year" type="number" value="2025" min="2020" max="2030" />
           <label>Password</label>
           <input
             id="s-password"
@@ -260,6 +277,25 @@
           <input id="edit-s-name" type="text" required />
           <label>Email</label>
           <input id="edit-s-email" type="email" required />
+          <label>Major</label>
+          <select id="edit-s-major">
+            <option value="BSc Computer Science">BSc Computer Science</option>
+            <option value="BBA">BBA</option>
+            <option value="BSc Computer Engineering">BSc Computer Engineering</option>
+            <option value="BA Political Science">BA Political Science</option>
+            <option value="BA Law">BA Law</option>
+          </select>
+          <label>Semester</label>
+          <select id="edit-s-semester">
+            <option value="Fall">Fall</option>
+            <option value="Winter">Winter</option>
+            <option value="Spring">Spring</option>
+            <option value="Summer">Summer</option>
+          </select>
+          <label>Year</label>
+          <input id="edit-s-year" type="number" value="2025" min="2020" max="2030" />
+          <label>New Password (optional)</label>
+          <input id="edit-s-password" type="text" placeholder="Leave blank to keep current" />
           <button type="submit" class="btn-primary btn-full">
             Save Changes
           </button>
@@ -333,30 +369,7 @@
       </div>
     </div>
 
-    <div id="modal-enroll" class="modal-overlay">
-      <div class="modal">
-        <div class="modal-header">
-          <h3>Enroll Student in Course</h3>
-          <button class="close-modal">✕</button>
-        </div>
-        <form id="enroll-form">
-          <label>Student</label>
-          <select id="e-student"></select>
-          <label>Course</label>
-          <select id="e-course"></select>
-          <label>Semester</label>
-          <select id="e-semester">
-            <option value="Fall">Fall</option>
-            <option value="Winter">Winter</option>
-            <option value="Spring">Spring</option>
-            <option value="Summer">Summer</option>
-          </select>
-          <label>Year</label>
-          <input id="e-year" type="number" value="2025" min="2020" max="2030" />
-          <button type="submit" class="btn-primary btn-full">Enroll</button>
-        </form>
-      </div>
-    </div>
+    
 
     <div id="modal-add-course" class="modal-overlay">
       <div class="modal">

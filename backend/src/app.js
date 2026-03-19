@@ -23,7 +23,7 @@ app.use("/api/auth", authRoutes);
 app.get("/api/students", async (req, res) => {
   try {
     const [rows] = await pool.query(`
-      SELECT u.id, u.name, u.email, u.student_number
+      SELECT u.id, u.name, u.email, u.student_number, u.major, u.entry_semester, u.entry_year
       FROM users u
       WHERE u.role = 'student'
       ORDER BY u.name
@@ -36,7 +36,7 @@ app.get("/api/students", async (req, res) => {
 });
 
 app.post("/api/students", async (req, res) => {
-  const { name, email, password } = req.body || {};
+  const { name, email, password, major, semester, year } = req.body || {};
   if (!name || !email || !password) {
     return res
       .status(400)
@@ -61,8 +61,16 @@ app.post("/api/students", async (req, res) => {
     const studentNumber = `STU-${randomNum}`;
 
     const [result] = await pool.query(
-      "INSERT INTO users (name, email, password_hash, role, student_number) VALUES (?, ?, ?, 'student', ?)",
-      [name, email, hashedPassword, studentNumber],
+      "INSERT INTO users (name, email, password_hash, role, student_number, major, entry_semester, entry_year) VALUES (?, ?, ?, 'student', ?, ?, ?, ?)",
+      [
+        name,
+        email,
+        hashedPassword,
+        studentNumber,
+        major || null,
+        semester || null,
+        year || null,
+      ],
     );
 
     res.status(201).json({
@@ -78,22 +86,43 @@ app.post("/api/students", async (req, res) => {
 
 app.put("/api/students/:id", async (req, res) => {
   const { id } = req.params;
-  const { name, email } = req.body || {};
+  const { name, email, major, semester, year, password } = req.body || {};
 
   if (!name || !email) {
     return res.status(400).json({ error: "Name and email are required" });
   }
 
   try {
-    await pool.query(
-      "UPDATE users SET name = ?, email = ? WHERE id = ? AND role = 'student'",
-      [name, email, id],
-    );
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      await pool.query(
+        "UPDATE users SET name = ?, email = ?, major = ?, entry_semester = ?, entry_year = ?, password_hash = ? WHERE id = ? AND role = 'student'",
+        [name, email, major || null, semester || null, year || null, hashedPassword, id],
+      );
+    } else {
+      await pool.query(
+        "UPDATE users SET name = ?, email = ?, major = ?, entry_semester = ?, entry_year = ? WHERE id = ? AND role = 'student'",
+        [name, email, major || null, semester || null, year || null, id],
+      );
+    }
 
     res.json({ success: true, message: "Student updated successfully" });
   } catch (err) {
     console.error("PUT /api/students error:", err);
     res.status(500).json({ error: "Failed to update student" });
+  }
+});
+
+app.delete("/api/students/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    await pool.query("DELETE FROM users WHERE id = ? AND role = 'student'", [
+      id,
+    ]);
+    res.json({ success: true });
+  } catch (err) {
+    console.error("DELETE /api/students error:", err);
+    res.status(500).json({ error: "Failed to delete student" });
   }
 });
 
@@ -280,14 +309,25 @@ app.post("/api/grades", async (req, res) => {
 // ── Admin: Enrollments ──
 
 app.post("/api/enrollments", async (req, res) => {
-  const { studentId, courseId, semester, year } = req.body || {};
-  if (!studentId || !courseId) {
-    return res.status(400).json({ error: "Student and course are required" });
+  const { studentId, courseId, semester, year, major } = req.body || {};
+  if (!studentId) {
+    return res.status(400).json({ error: "Student is required" });
   }
 
   try {
     const sem = semester || "Fall";
     const yr = year || 2025;
+
+    if (!courseId) {
+      return res.status(200).json({ message: "No course selected" });
+    }
+
+    if (major) {
+      await pool.query("UPDATE users SET major = ? WHERE id = ?", [
+        major,
+        studentId,
+      ]);
+    }
 
     await pool.query(
       "INSERT INTO enrollments (student_id, course_id, semester, year) VALUES (?, ?, ?, ?)",
@@ -476,9 +516,35 @@ app.get("/api/students/:studentId/transcript", async (req, res) => {
   }
 });
 
+async function ensureStudentColumns() {
+  try {
+    const dbName = process.env.DB_NAME;
+    if (!dbName) return;
+    const columns = [
+      { name: "major", sql: "ALTER TABLE users ADD COLUMN major VARCHAR(100) NULL" },
+      { name: "entry_semester", sql: "ALTER TABLE users ADD COLUMN entry_semester VARCHAR(20) NULL" },
+      { name: "entry_year", sql: "ALTER TABLE users ADD COLUMN entry_year INT NULL" },
+    ];
+    for (const col of columns) {
+      const [rows] = await pool.query(
+        `SELECT COUNT(*) AS count
+         FROM INFORMATION_SCHEMA.COLUMNS
+         WHERE TABLE_SCHEMA = ? AND TABLE_NAME = 'users' AND COLUMN_NAME = ?`,
+        [dbName, col.name],
+      );
+      if (rows[0]?.count === 0) {
+        await pool.query(col.sql);
+      }
+    }
+  } catch (err) {
+    console.error("Ensure student columns error:", err.message);
+  }
+}
+
 // Basic startup-time DB ping
 (async () => {
   try {
+    await ensureStudentColumns();
     await pool.query("SELECT 1");
     console.log("MySQL connected");
   } catch (err) {

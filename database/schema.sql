@@ -9,6 +9,9 @@ CREATE TABLE IF NOT EXISTS users (
     password_hash VARCHAR(255) NOT NULL,
     role ENUM('admin', 'student') NOT NULL DEFAULT 'student',
     student_number VARCHAR(20) UNIQUE,
+    major VARCHAR(100),
+    entry_semester VARCHAR(20),
+    entry_year INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

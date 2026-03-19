@@ -1,5 +1,6 @@
 import { handleLogout } from "./auth.js";
-const API_BASE = "http://localhost:3000/api";
+import { getApiBase } from "./api.js";
+const API_BASE = getApiBase();
 
 // Check admin access
 if (localStorage.getItem("role") !== "admin") {
@@ -47,6 +48,8 @@ document.querySelectorAll(".modal-overlay").forEach((overlay) => {
 // ── Courses & assignments ──
 const coursesTbody = document.getElementById("courses-tbody");
 const gradesTbody = document.getElementById("grades-tbody");
+const totalStudentsEl = document.getElementById("total-students");
+const totalCoursesEl = document.getElementById("total-courses");
 
 async function fetchJSON(url, options = {}) {
   const res = await fetch(url, {
@@ -65,6 +68,7 @@ async function loadCoursesForTables() {
     '<tr><td colspan="5" class="empty-msg">Loading…</td></tr>';
   try {
     const courses = await fetchJSON(`${API_BASE}/courses`);
+    if (totalCoursesEl) totalCoursesEl.textContent = courses.length || 0;
     if (!courses.length) {
       coursesTbody.innerHTML =
         '<tr><td colspan="5" class="empty-msg">No courses found.</td></tr>';
@@ -85,6 +89,7 @@ async function loadCoursesForTables() {
       coursesTbody.appendChild(tr);
     });
   } catch (err) {
+    if (totalCoursesEl) totalCoursesEl.textContent = 0;
     coursesTbody.innerHTML =
       '<tr><td colspan="5" class="empty-msg">Failed to load courses.</td></tr>';
     console.error(err);
@@ -374,7 +379,6 @@ document
   ?.addEventListener("click", async () => {
     if (!assignmentModal || !aCourseSelect) return;
     try {
-      const courses = await fetchJSON(`${API_BASE}/courses`);
       aCourseSelect.innerHTML = '<option value="">Select course…</option>';
       courses.forEach((c) => {
         const opt = document.createElement("option");
@@ -490,8 +494,6 @@ const addStudentModal = document.getElementById("modal-add-student");
 const addStudentForm = document.getElementById("add-student-form");
 const editStudentModal = document.getElementById("modal-edit-student");
 const editStudentForm = document.getElementById("edit-student-form");
-const enrollModal = document.getElementById("modal-enroll");
-const enrollForm = document.getElementById("enroll-form");
 
 async function loadStudents() {
   if (!studentsTbody) return;
@@ -499,6 +501,7 @@ async function loadStudents() {
     '<tr><td colspan="4" class="empty-msg">Loading…</td></tr>';
   try {
     const students = await fetchJSON(`${API_BASE}/students`);
+    if (totalStudentsEl) totalStudentsEl.textContent = students.length || 0;
     if (!students.length) {
       studentsTbody.innerHTML =
         '<tr><td colspan="4" class="empty-msg">No students found.</td></tr>';
@@ -513,13 +516,16 @@ async function loadStudents() {
         <td>${s.email}</td>
         <td>
           <button class="action-btn edit-btn btn-edit-student" 
-            data-id="${s.id}" data-name="${s.name}" data-email="${s.email}">Edit</button>
-          <button class="action-btn btn-enroll-student" data-id="${s.id}">Enroll</button>
+            data-id="${s.id}" data-name="${s.name}" data-email="${s.email}"
+            data-major="${s.major || ""}" data-semester="${s.entry_semester || ""}"
+            data-year="${s.entry_year || ""}">Edit</button>
+          <button class="action-btn btn-delete-student" data-id="${s.id}">Delete</button>
         </td>
       `;
       studentsTbody.appendChild(tr);
     });
   } catch (err) {
+    if (totalStudentsEl) totalStudentsEl.textContent = 0;
     studentsTbody.innerHTML =
       '<tr><td colspan="4" class="empty-msg">Failed to load students.</td></tr>';
     console.error(err);
@@ -535,12 +541,15 @@ addStudentForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
   const name = document.getElementById("s-name").value.trim();
   const email = document.getElementById("s-email").value.trim();
+  const major = document.getElementById("s-major")?.value || "";
+  const semester = document.getElementById("s-semester")?.value || "";
+  const year = document.getElementById("s-year")?.value || "";
   const password = document.getElementById("s-password").value;
 
   try {
     await fetchJSON(`${API_BASE}/students`, {
       method: "POST",
-      body: JSON.stringify({ name, email, password }),
+      body: JSON.stringify({ name, email, password, major, semester, year }),
     });
     closeModal(addStudentModal);
     await loadStudents();
@@ -555,43 +564,27 @@ studentsTbody?.addEventListener("click", async (e) => {
     document.getElementById("edit-s-id").value = btn.dataset.id;
     document.getElementById("edit-s-name").value = btn.dataset.name;
     document.getElementById("edit-s-email").value = btn.dataset.email;
+    const majorEl = document.getElementById("edit-s-major");
+    const semesterEl = document.getElementById("edit-s-semester");
+    const yearEl = document.getElementById("edit-s-year");
+    if (majorEl) majorEl.value = btn.dataset.major || "";
+    if (semesterEl) semesterEl.value = btn.dataset.semester || "Fall";
+    if (yearEl) yearEl.value = btn.dataset.year || "2025";
+    const passEl = document.getElementById("edit-s-password");
+    if (passEl) passEl.value = "";
     openModal(editStudentModal);
-  } else if (e.target.classList.contains("btn-enroll-student")) {
+  } else if (e.target.classList.contains("btn-delete-student")) {
     const studentId = e.target.dataset.id;
-    const eStudentSelect = document.getElementById("e-student");
-    const eCourseSelect = document.getElementById("e-course");
-
-    // Pre-fill student
-    eStudentSelect.innerHTML = `<option value="${studentId}">Loading...</option>`;
-
+    if (!studentId) return;
+    if (!confirm("Delete this student and all related enrollments?")) return;
     try {
-      // Re-fetch students and courses to ensure fresh data
-      const students = await fetchJSON(`${API_BASE}/students`);
-      const courses = await fetchJSON(`${API_BASE}/courses`);
-
-      eStudentSelect.innerHTML = "";
-      students.forEach((s) => {
-        const opt = document.createElement("option");
-        opt.value = s.id;
-        opt.textContent = `${s.name} (${s.student_number || "N/A"})`;
-        if (s.id == studentId) opt.selected = true;
-        eStudentSelect.appendChild(opt);
+      await fetchJSON(`${API_BASE}/students/${studentId}`, {
+        method: "DELETE",
       });
-
-      eCourseSelect.innerHTML = "";
-      courses.forEach((c) => {
-        const opt = document.createElement("option");
-        opt.value = c.id;
-        opt.textContent = `${c.code} – ${c.name}`;
-        eCourseSelect.appendChild(opt);
-      });
-
-      enrollForm.reset();
-      // Restore selected student
-      eStudentSelect.value = studentId;
-      openModal(enrollModal);
+      await loadStudents();
+      await loadGradesTable();
     } catch (err) {
-      console.error("Failed to load data for enrollment", err);
+      alert(err.message || "Failed to delete student");
     }
   }
 });
@@ -601,11 +594,18 @@ editStudentForm?.addEventListener("submit", async (e) => {
   const id = document.getElementById("edit-s-id").value;
   const name = document.getElementById("edit-s-name").value.trim();
   const email = document.getElementById("edit-s-email").value.trim();
+  const major = document.getElementById("edit-s-major")?.value || "";
+  const semester = document.getElementById("edit-s-semester")?.value || "";
+  const year = document.getElementById("edit-s-year")?.value || "";
+  const password = document.getElementById("edit-s-password")?.value || "";
+
+  const payload = { name, email, major, semester, year };
+  if (password) payload.password = password;
 
   try {
     await fetchJSON(`${API_BASE}/students/${id}`, {
       method: "PUT",
-      body: JSON.stringify({ name, email }),
+      body: JSON.stringify(payload),
     });
     closeModal(editStudentModal);
     await loadStudents();
@@ -614,24 +614,7 @@ editStudentForm?.addEventListener("submit", async (e) => {
   }
 });
 
-enrollForm?.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const studentId = document.getElementById("e-student").value;
-  const courseId = document.getElementById("e-course").value;
-  const semester = document.getElementById("e-semester").value;
-  const year = document.getElementById("e-year").value;
-
-  try {
-    await fetchJSON(`${API_BASE}/enrollments`, {
-      method: "POST",
-      body: JSON.stringify({ studentId, courseId, semester, year }),
-    });
-    closeModal(enrollModal);
-    await loadGradesTable(); // Refresh grades/enrollment table
-  } catch (err) {
-    alert(err.message || "Failed to enroll student");
-  }
-});
+ 
 
 // ── Course & Schedule Modals ──
 
@@ -670,7 +653,6 @@ editScheduleBtn?.addEventListener("click", async () => {
   const schCourse = document.getElementById("sch-course");
   if (schCourse) {
     try {
-      const courses = await fetchJSON(`${API_BASE}/courses`);
       schCourse.innerHTML = '<option value="">Select course...</option>';
       courses.forEach((c) => {
         const opt = document.createElement("option");
@@ -712,3 +694,7 @@ loadCoursesForTables();
 loadGradesTable();
 loadAdminAnnouncements();
 loadScheduleAdmin();
+
+
+
+

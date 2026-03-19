@@ -3,6 +3,10 @@ const configuredApiUrl = localStorage.getItem("apiBaseUrl");
 const inferredApiUrl = `${window.location.protocol}//${window.location.hostname}:${DEFAULT_API_PORT}/api`;
 const API_URL = configuredApiUrl || inferredApiUrl;
 
+export function getApiBase() {
+  return API_URL;
+}
+
 export async function login(email, password) {
   const response = await fetch(`${API_URL}/auth/login`, {
     method: "POST",
