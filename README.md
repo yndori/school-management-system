@@ -175,9 +175,12 @@ cp .env.docker.example .env
 Then edit `.env` and set secure values for:
 
 - `MYSQL_ROOT_PASSWORD`
+- `MYSQL_ROOT_HOST` (`%` allows the backend container to connect as root)
 - `JWT_SECRET`
 - `ADMIN_EMAIL`
 - `ADMIN_PASSWORD`
+
+If you ever change the MySQL root password/host or the seeded admin credentials, run `docker compose down -v` before restarting so the volume re-creates with the new secrets.
 
 Run all services (MySQL + backend API + frontend static server):
 

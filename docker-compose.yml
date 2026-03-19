@@ -4,6 +4,7 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_ROOT_HOST: ${MYSQL_ROOT_HOST:-%}
       MYSQL_DATABASE: ${MYSQL_DATABASE:-school_management}
     volumes:
       - db_data:/var/lib/mysql
