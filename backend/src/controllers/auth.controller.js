@@ -82,14 +82,21 @@ export const requestPasswordReset = async (req, res) => {
     });
 
     const student = rows[0];
+    const resetToken = jwt.sign(
+      { id: student.id, email: student.email, intent: "reset_password" },
+      process.env.JWT_SECRET || "fallback_secret",
+      { expiresIn: "1h" }
+    );
+    const resetLink = `http://localhost:5500/pages/reset.html?token=${resetToken}`;
+
     await transporter.sendMail({
       from: fromAddress,
-      to: adminEmail,
-      subject: "Password reset request",
-      text: `Password reset requested for student:\nName: ${student.name}\nEmail: ${student.email}\nPlease contact the student to change the password.`,
+      to: student.email,
+      subject: "Password Reset Link",
+      text: `Hello ${student.name},\n\nPlease click the following link to reset your password:\n${resetLink}\n\nThis link will expire in 1 hour.`,
     });
 
-    res.json({ message: "Password reset request sent." });
+    res.json({ message: "Password reset link sent to your email." });
   } catch (err) {
     console.error("Password reset error:", err);
     res.status(500).json({ error: "Internal server error" });
