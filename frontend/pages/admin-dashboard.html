@@ -151,14 +151,16 @@
               id="ann-title"
               type="text"
               required
+              class="ann-input"
               placeholder="e.g. Campus closure on Friday"
             />
             <label for="ann-body">Message</label>
-            <input
+            <textarea
               id="ann-body"
-              type="text"
+              class="ann-input ann-textarea"
+              rows="3"
               placeholder="Short description of the announcement"
-            />
+            ></textarea>
             <button type="submit" class="btn-primary btn-full">
               Post Announcement
             </button>
@@ -170,11 +172,12 @@
                   <th>Title</th>
                   <th>Message</th>
                   <th>Created</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody id="admin-announcements-tbody">
                 <tr>
-                  <td colspan="3" class="empty-msg">Loading…</td>
+                  <td colspan="4" class="empty-msg">Loading…</td>
                 </tr>
               </tbody>
             </table>

@@ -165,6 +165,23 @@ app.post("/api/announcements", async (req, res) => {
   }
 });
 
+app.delete("/api/announcements/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const [result] = await pool.query(
+      "DELETE FROM announcements WHERE id = ?",
+      [id],
+    );
+    if (!result.affectedRows) {
+      return res.status(404).json({ error: "Announcement not found" });
+    }
+    res.json({ success: true });
+  } catch (err) {
+    console.error("DELETE /api/announcements/:id error:", err);
+    res.status(500).json({ error: "Failed to delete announcement" });
+  }
+});
+
 // ── Admin: courses & assignments ──
 
 app.get("/api/courses", async (req, res) => {

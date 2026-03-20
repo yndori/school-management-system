@@ -173,6 +173,27 @@ body {
   gap: 10px;
 }
 
+#announcement-form .ann-input {
+  width: 100%;
+  background: #1e1e1e;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  color: #fff;
+  padding: 12px 14px;
+  font-size: 14px;
+  font-family: "Poppins", sans-serif;
+  margin-bottom: 8px;
+}
+#announcement-form .ann-textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+#announcement-form .ann-input:focus {
+  outline: none;
+  border-color: rgb(212, 175, 55);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+}
+
 .btn-primary {
   background: rgb(212, 175, 55);
   color: #000;

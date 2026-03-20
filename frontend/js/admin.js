@@ -146,12 +146,12 @@ const adminAnnouncementsTbody = document.getElementById(
 async function loadAdminAnnouncements() {
   if (!adminAnnouncementsTbody) return;
   adminAnnouncementsTbody.innerHTML =
-    '<tr><td colspan="3" class="empty-msg">Loading…</td></tr>';
+    '<tr><td colspan="4" class="empty-msg">Loading…</td></tr>';
   try {
     const anns = await fetchJSON(`${API_BASE}/announcements`);
     if (!anns.length) {
       adminAnnouncementsTbody.innerHTML =
-        '<tr><td colspan="3" class="empty-msg">No announcements yet.</td></tr>';
+        '<tr><td colspan="4" class="empty-msg">No announcements yet.</td></tr>';
       return;
     }
     adminAnnouncementsTbody.innerHTML = "";
@@ -164,20 +164,25 @@ async function loadAdminAnnouncements() {
         <td>${a.title}</td>
         <td>${a.body || ""}</td>
         <td>${created}</td>
+        <td>
+          <button class="action-btn del-btn btn-delete-announcement" data-id="${a.id}">Delete</button>
+        </td>
       `;
       adminAnnouncementsTbody.appendChild(tr);
     });
   } catch (err) {
     adminAnnouncementsTbody.innerHTML =
-      '<tr><td colspan="3" class="empty-msg">Failed to load announcements.</td></tr>';
+      '<tr><td colspan="4" class="empty-msg">Failed to load announcements.</td></tr>';
     console.error(err);
   }
 }
 
 announcementForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const title = document.getElementById("ann-title").value.trim();
-  const body = document.getElementById("ann-body").value.trim();
+  const titleEl = document.getElementById("ann-title");
+  const bodyEl = document.getElementById("ann-body");
+  const title = titleEl?.value?.trim() || "";
+  const body = bodyEl?.value?.trim() || "";
   if (!title) return;
   try {
     await fetchJSON(`${API_BASE}/announcements`, {
@@ -189,6 +194,20 @@ announcementForm?.addEventListener("submit", async (e) => {
   } catch (err) {
     console.error("Failed to post announcement", err);
     alert("Failed to post announcement: " + err.message);
+  }
+});
+
+adminAnnouncementsTbody?.addEventListener("click", async (e) => {
+  const btn = e.target.closest(".btn-delete-announcement");
+  if (!btn) return;
+  const id = btn.dataset.id;
+  if (!id) return;
+  if (!confirm("Delete this announcement?")) return;
+  try {
+    await fetchJSON(`${API_BASE}/announcements/${id}`, { method: "DELETE" });
+    await loadAdminAnnouncements();
+  } catch (err) {
+    alert(err.message || "Failed to delete announcement");
   }
 });
 
