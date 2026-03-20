@@ -170,7 +170,7 @@ app.post("/api/announcements", async (req, res) => {
 app.get("/api/courses", async (req, res) => {
   try {
     const [rows] = await pool.query(
-      `SELECT c.id, c.code, c.name, c.credits, c.instructor
+      `SELECT c.id, c.code, c.name, c.credits, c.instructor, c.majors
        FROM courses c
        ORDER BY c.code`,
     );
@@ -182,7 +182,7 @@ app.get("/api/courses", async (req, res) => {
 });
 
 app.post("/api/courses", async (req, res) => {
-  const { code, name, credits, instructor } = req.body || {};
+  const { code, name, credits, instructor, majors } = req.body || {};
   if (!code || !name || !credits) {
     return res
       .status(400)
@@ -190,9 +190,10 @@ app.post("/api/courses", async (req, res) => {
   }
 
   try {
+    const majorsJson = Array.isArray(majors) ? JSON.stringify(majors) : null;
     const [result] = await pool.query(
-      "INSERT INTO courses (code, name, credits, instructor) VALUES (?, ?, ?, ?)",
-      [code, name, parseInt(credits, 10), instructor || null],
+      "INSERT INTO courses (code, name, credits, instructor, majors) VALUES (?, ?, ?, ?, ?)",
+      [code, name, parseInt(credits, 10), instructor || null, majorsJson],
     );
     res
       .status(201)
@@ -203,6 +204,58 @@ app.post("/api/courses", async (req, res) => {
       return res.status(400).json({ error: "Course code already exists" });
     }
     res.status(500).json({ error: "Failed to create course" });
+  }
+});
+
+app.put("/api/courses/:courseId", async (req, res) => {
+  const { courseId } = req.params;
+  const { code, name, credits, instructor, majors } = req.body || {};
+  if (!code || !name || credits == null) {
+    return res
+      .status(400)
+      .json({ error: "Code, name, and credits are required" });
+  }
+  try {
+    const majorsJson = Array.isArray(majors) ? JSON.stringify(majors) : null;
+    await pool.query(
+      `UPDATE courses
+       SET code = ?, name = ?, credits = ?, instructor = ?, majors = ?
+       WHERE id = ?`,
+      [code, name, parseInt(credits, 10), instructor || null, majorsJson, courseId],
+    );
+    const [rows] = await pool.query(
+      `SELECT id, code, name, credits, instructor, majors
+       FROM courses
+       WHERE id = ?`,
+      [courseId],
+    );
+    if (!rows.length) {
+      return res.status(404).json({ error: "Course not found" });
+    }
+    res.json(rows[0]);
+  } catch (err) {
+    console.error("PUT /api/courses error:", err);
+    if (err.code === "ER_DUP_ENTRY") {
+      return res.status(400).json({ error: "Course code already exists" });
+    }
+    res.status(500).json({ error: "Failed to update course" });
+  }
+});
+
+app.delete("/api/courses/:courseId", async (req, res) => {
+  const { courseId } = req.params;
+  try {
+    const [result] = await pool.query(
+      "DELETE FROM courses WHERE id = ?",
+      [courseId],
+    );
+    if (!result.affectedRows) {
+      return res.status(404).json({ error: "Course not found" });
+    }
+    res.json({ message: "Course deleted" });
+  } catch (err) {
+    console.error("DELETE /api/courses error:", err);
+    res.status(500).json({ error: "Failed to delete course" });
   }
 });
 
@@ -246,6 +299,54 @@ app.post("/api/assignments", async (req, res) => {
   } catch (err) {
     console.error("POST /api/assignments error:", err);
     res.status(500).json({ error: "Failed to create assignment" });
+  }
+});
+
+app.put("/api/assignments/:assignmentId", async (req, res) => {
+  const { assignmentId } = req.params;
+  const { name, description, weight, maxPoints } = req.body || {};
+  if (!name || weight == null) {
+    return res
+      .status(400)
+      .json({ error: "name and weight are required" });
+  }
+  try {
+    await pool.query(
+      `UPDATE assignments
+       SET name = ?, description = ?, weight = ?, max_points = ?
+       WHERE id = ?`,
+      [name, description || null, weight, maxPoints || 100, assignmentId],
+    );
+    const [rows] = await pool.query(
+      `SELECT id, course_id, name, description, weight, max_points
+       FROM assignments
+       WHERE id = ?`,
+      [assignmentId],
+    );
+    if (!rows.length) {
+      return res.status(404).json({ error: "Assignment not found" });
+    }
+    res.json(rows[0]);
+  } catch (err) {
+    console.error("PUT /api/assignments error:", err);
+    res.status(500).json({ error: "Failed to update assignment" });
+  }
+});
+
+app.delete("/api/assignments/:assignmentId", async (req, res) => {
+  const { assignmentId } = req.params;
+  try {
+    const [result] = await pool.query(
+      "DELETE FROM assignments WHERE id = ?",
+      [assignmentId],
+    );
+    if (!result.affectedRows) {
+      return res.status(404).json({ error: "Assignment not found" });
+    }
+    res.json({ message: "Assignment deleted" });
+  } catch (err) {
+    console.error("DELETE /api/assignments error:", err);
+    res.status(500).json({ error: "Failed to delete assignment" });
   }
 });
 
@@ -541,10 +642,29 @@ async function ensureStudentColumns() {
   }
 }
 
+async function ensureCourseColumns() {
+  try {
+    const dbName = process.env.DB_NAME;
+    if (!dbName) return;
+    const [rows] = await pool.query(
+      `SELECT COUNT(*) AS count
+       FROM INFORMATION_SCHEMA.COLUMNS
+       WHERE TABLE_SCHEMA = ? AND TABLE_NAME = 'courses' AND COLUMN_NAME = 'majors'`,
+      [dbName],
+    );
+    if (rows[0]?.count === 0) {
+      await pool.query("ALTER TABLE courses ADD COLUMN majors TEXT NULL");
+    }
+  } catch (err) {
+    console.error("Ensure course columns error:", err.message);
+  }
+}
+
 // Basic startup-time DB ping
 (async () => {
   try {
     await ensureStudentColumns();
+    await ensureCourseColumns();
     await pool.query("SELECT 1");
     console.log("MySQL connected");
   } catch (err) {

@@ -21,7 +21,8 @@ CREATE TABLE IF NOT EXISTS courses (
     code VARCHAR(20) NOT NULL UNIQUE,
     name VARCHAR(150) NOT NULL,
     credits INT NOT NULL DEFAULT 3,
-    instructor VARCHAR(150)
+    instructor VARCHAR(150),
+    majors TEXT
 );
 
 -- Enrollments (student <-> course)
