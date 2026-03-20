@@ -32,7 +32,18 @@ document.querySelectorAll(".nav-link").forEach((a) => {
 // Print
 document
   .getElementById("print-btn")
-  ?.addEventListener("click", () => window.print());
+  ?.addEventListener("click", () => {
+    const tabTranscript = document.getElementById("tab-transcript");
+    if (tabTranscript) {
+      const originalContents = document.body.innerHTML;
+      document.body.innerHTML = tabTranscript.innerHTML;
+      window.print();
+      document.body.innerHTML = originalContents;
+      window.location.reload();
+    } else {
+      window.print();
+    }
+  });
 
 // Logout
 document.getElementById("logout-btn")?.addEventListener("click", handleLogout);
@@ -56,6 +67,83 @@ async function loadStudentOverview() {
     const data = await fetchJSON(
       `${API_BASE}/students/${studentId}/transcript`,
     );
+
+    const userNameEl = document.getElementById("student-name");
+    const avatarEl = document.getElementById("avatar-initials");
+    const printNameEl = document.getElementById("print-student-name");
+    
+    if (userNameEl && user.name) userNameEl.textContent = user.name;
+    if (printNameEl && user.name) printNameEl.textContent = user.name;
+    if (avatarEl && user.name) {
+      avatarEl.textContent = user.name.split(" ").map(n => n[0]).join("").substring(0, 2).toUpperCase();
+    }
+
+    if (data.courses && data.courses.length > 0) {
+      const latest = [...data.courses].sort((a,b) => b.year - a.year)[0];
+      const scheduleTerm = document.getElementById("schedule-term");
+      if (scheduleTerm) scheduleTerm.textContent = `${latest.semester} ${latest.year}`;
+      const dashYear = document.querySelector("#tab-dashboard .top-header p");
+      if (dashYear) dashYear.textContent = `Academic Year ${latest.year} - ${latest.year + 1}`;
+    }
+
+    const coursesGrid = document.getElementById("courses-grid");
+    if (coursesGrid) {
+      if (!data.courses.length) {
+        coursesGrid.innerHTML = '<p class="empty-msg">No courses found.</p>';
+      } else {
+        coursesGrid.innerHTML = "";
+        data.courses.forEach(c => {
+          const div = document.createElement("div");
+          div.className = "card";
+          div.innerHTML = `
+            <h3>${c.code}</h3>
+            <p>${c.name}</p>
+            <p><strong>Credits:</strong> ${c.credits}</p>
+            <p><strong>Term:</strong> ${c.semester} ${c.year}</p>
+          `;
+          coursesGrid.appendChild(div);
+        });
+      }
+    }
+
+    const notificationIcon = document.querySelector(".notification");
+    if (notificationIcon) {
+      const gradedCourses = (data.courses || []).filter(c => c.numericGrade != null);
+      const recentGrades = gradedCourses.slice(-3);
+      
+      const notifContainer = document.createElement("div");
+      notifContainer.style.position = "absolute";
+      notifContainer.style.top = "30px";
+      notifContainer.style.right = "0";
+      notifContainer.style.background = "#fff";
+      notifContainer.style.border = "1px solid #ddd";
+      notifContainer.style.padding = "15px";
+      notifContainer.style.display = "none";
+      notifContainer.style.zIndex = "100";
+      notifContainer.style.borderRadius = "8px";
+      notifContainer.style.boxShadow = "0 4px 12px rgba(0,0,0,0.15)";
+      notifContainer.style.minWidth = "220px";
+      notifContainer.style.color = "#333";
+      
+      let notifHtml = "<h4 style='margin-top:0; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:5px;'>Recent Grades</h4><ul style='list-style:none; padding:0; margin:0;'>";
+      if (recentGrades.length) {
+          recentGrades.forEach(c => {
+              notifHtml += `<li style='margin-bottom: 8px; font-size: 0.9em; display:flex; justify-content:space-between;'><strong>${c.code}</strong> <span style='background:#e3f2fd; color:#1e88e5; padding:2px 6px; border-radius:4px; font-weight:bold;'>${c.letterGrade}</span></li>`;
+          });
+      } else {
+          notifHtml += "<li style='color:#777; font-size:0.9em;'>No recent grades</li>";
+      }
+      notifHtml += "</ul>";
+      notifContainer.innerHTML = notifHtml;
+      
+      notificationIcon.style.position = "relative";
+      notificationIcon.style.cursor = "pointer";
+      notificationIcon.appendChild(notifContainer);
+      
+      notificationIcon.addEventListener("click", () => {
+           notifContainer.style.display = notifContainer.style.display === "none" ? "block" : "none";
+      });
+    }
 
     const gpaEl = document.getElementById("gpa");
     const totalCreditsEl = document.getElementById("total-credits");
