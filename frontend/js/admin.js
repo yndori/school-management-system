@@ -64,6 +64,41 @@ async function fetchJSON(url, options = {}) {
   return await res.json();
 }
 
+function getAcademicInfoUTC() {
+  const now = new Date();
+  const year = now.getUTCFullYear();
+  const month = now.getUTCMonth(); // 0-11
+
+  let term = "Fall";
+  if (month <= 3) {
+    term = "Winter";
+  } else if (month <= 5) {
+    term = "Spring";
+  } else if (month <= 7) {
+    term = "Summer";
+  }
+
+  const academicYearStart = month >= 8 ? year : year - 1;
+  const academicYearLabel = `Academic Year ${academicYearStart} - ${
+    academicYearStart + 1
+  }`;
+  const termLabel = `${term} ${year}`;
+
+  return { academicYearLabel, termLabel };
+}
+
+function updateAcademicLabels() {
+  const { academicYearLabel, termLabel } = getAcademicInfoUTC();
+  document.querySelectorAll("[data-academic-year]").forEach((el) => {
+    el.textContent = academicYearLabel;
+  });
+  document.querySelectorAll("[data-academic-term]").forEach((el) => {
+    el.textContent = termLabel;
+  });
+}
+
+document.addEventListener("DOMContentLoaded", updateAcademicLabels);
+
 function parseMajors(value) {
   if (!value) return [];
   if (Array.isArray(value)) return value;

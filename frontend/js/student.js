@@ -57,6 +57,41 @@ async function fetchJSON(url, options = {}) {
   return await res.json();
 }
 
+function getAcademicInfoUTC() {
+  const now = new Date();
+  const year = now.getUTCFullYear();
+  const month = now.getUTCMonth(); // 0-11
+
+  let term = "Fall";
+  if (month <= 3) {
+    term = "Winter";
+  } else if (month <= 5) {
+    term = "Spring";
+  } else if (month <= 7) {
+    term = "Summer";
+  }
+
+  const academicYearStart = month >= 8 ? year : year - 1;
+  const academicYearLabel = `Academic Year ${academicYearStart} - ${
+    academicYearStart + 1
+  }`;
+  const termLabel = `${term} ${year}`;
+
+  return { academicYearLabel, termLabel };
+}
+
+function updateAcademicLabels() {
+  const { academicYearLabel, termLabel } = getAcademicInfoUTC();
+  document.querySelectorAll("[data-academic-year]").forEach((el) => {
+    el.textContent = academicYearLabel;
+  });
+  document.querySelectorAll("[data-academic-term]").forEach((el) => {
+    el.textContent = termLabel;
+  });
+}
+
+document.addEventListener("DOMContentLoaded", updateAcademicLabels);
+
 // ── Transcript + dashboard summary using weighted grades ──
 async function loadStudentOverview() {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
@@ -76,14 +111,6 @@ async function loadStudentOverview() {
     if (printNameEl && user.name) printNameEl.textContent = user.name;
     if (avatarEl && user.name) {
       avatarEl.textContent = user.name.split(" ").map(n => n[0]).join("").substring(0, 2).toUpperCase();
-    }
-
-    if (data.courses && data.courses.length > 0) {
-      const latest = [...data.courses].sort((a,b) => b.year - a.year)[0];
-      const scheduleTerm = document.getElementById("schedule-term");
-      if (scheduleTerm) scheduleTerm.textContent = `${latest.semester} ${latest.year}`;
-      const dashYear = document.querySelector("#tab-dashboard .top-header p");
-      if (dashYear) dashYear.textContent = `Academic Year ${latest.year} - ${latest.year + 1}`;
     }
 
     const coursesGrid = document.getElementById("courses-grid");
