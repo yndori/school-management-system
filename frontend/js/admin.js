@@ -194,6 +194,7 @@ announcementForm?.addEventListener("submit", async (e) => {
 
 // ── Admin schedule (same grid builder as student) ──
 const editScheduleBtn = document.getElementById("btn-edit-schedule");
+const scheduleListTbody = document.getElementById("schedule-list-tbody");
 
 const DAY_MAP_ADMIN = {
   monday: 0,
@@ -355,6 +356,28 @@ async function loadScheduleAdmin() {
       room: r.room || "",
       instructor: r.instructor || "",
     }));
+    if (scheduleListTbody) {
+      if (!rows.length) {
+        scheduleListTbody.innerHTML =
+          '<tr><td colspan="5" class="empty-msg">No schedule slots yet.</td></tr>';
+      } else {
+        scheduleListTbody.innerHTML = "";
+        rows.forEach((r) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${r.course_code} – ${r.course_name}</td>
+            <td>${r.day}</td>
+            <td>${r.time_start} - ${r.time_end}</td>
+            <td>${r.room || ""}</td>
+            <td>
+              <button class="action-btn edit-btn btn-edit-schedule" data-id="${r.id}" data-course-id="${r.course_id}" data-day="${r.day}" data-start="${r.time_start}" data-end="${r.time_end}" data-room="${r.room || ""}">Edit</button>
+              <button class="action-btn del-btn btn-delete-schedule" data-id="${r.id}">Delete</button>
+            </td>
+          `;
+          scheduleListTbody.appendChild(tr);
+        });
+      }
+    }
     tbody.dataset.scheduleJson = JSON.stringify(events);
     if (
       document
@@ -832,7 +855,7 @@ async function openAssignmentsForCourse(courseId) {
   }
 }
 coursesTbody?.addEventListener("click", async (e) => {
-  const btn = e.target.closest("#assignments-tbody button");
+  const btn = e.target.closest("button");
   if (!btn) return;
 
   if (btn.classList.contains("btn-course-assignments")) {
@@ -897,29 +920,39 @@ editCourseForm?.addEventListener("submit", async (e) => {
 
 const addScheduleModal = document.getElementById("modal-add-schedule");
 const addScheduleForm = document.getElementById("add-schedule-form");
+const scheduleModalTitle = document.querySelector(
+  "#modal-add-schedule .modal-header h3",
+);
+
+async function populateScheduleCourseOptions(selectedId) {
+  const schCourse = document.getElementById("sch-course");
+  if (!schCourse) return;
+  try {
+    schCourse.innerHTML = '<option value="">Select course...</option>';
+    let list = coursesCache;
+    if (!list.length) {
+      list = await fetchJSON(`${API_BASE}/courses`);
+    }
+    list.forEach((c) => {
+      const opt = document.createElement("option");
+      opt.value = c.id;
+      opt.textContent = `${c.code} – ${c.name}`;
+      schCourse.appendChild(opt);
+    });
+    if (selectedId) schCourse.value = String(selectedId);
+  } catch (err) {
+    console.error("Failed to load courses for schedule", err);
+  }
+}
 
 editScheduleBtn?.addEventListener("click", async () => {
-  const schCourse = document.getElementById("sch-course");
-  if (schCourse) {
-    try {
-      schCourse.innerHTML = '<option value="">Select course...</option>';
-      let list = coursesCache;
-      if (!list.length) {
-        list = await fetchJSON(`${API_BASE}/courses`);
-      }
-      list.forEach((c) => {
-        const opt = document.createElement("option");
-        opt.value = c.id;
-        opt.textContent = `${c.code} – ${c.name}`;
-        schCourse.appendChild(opt);
-      });
-    } catch (err) {
-      console.error("Failed to load courses for schedule", err);
-    }
-  }
   addScheduleForm?.reset();
+  addScheduleForm.dataset.editingId = "";
+  if (scheduleModalTitle)
+    scheduleModalTitle.textContent = "Add Class Schedule Slot";
+  await populateScheduleCourseOptions();
   openModal(addScheduleModal);
-});
+});
 
 addScheduleForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -928,10 +961,15 @@ addScheduleForm?.addEventListener("submit", async (e) => {
   const timeStart = document.getElementById("sch-start").value;
   const timeEnd = document.getElementById("sch-end").value;
   const room = document.getElementById("sch-room").value.trim();
+  const editingId = addScheduleForm.dataset.editingId;
 
   try {
-    await fetchJSON(`${API_BASE}/schedule`, {
-      method: "POST",
+    const url = editingId
+      ? `${API_BASE}/schedule/${editingId}`
+      : `${API_BASE}/schedule`;
+    const method = editingId ? "PUT" : "POST";
+    await fetchJSON(url, {
+      method,
       body: JSON.stringify({ courseId, day, timeStart, timeEnd, room }),
     });
     closeModal(addScheduleModal);
@@ -939,8 +977,39 @@ addScheduleForm?.addEventListener("submit", async (e) => {
   } catch (err) {
     alert(err.message || "Failed to save schedule slot");
   }
-});
+});
 
+scheduleListTbody?.addEventListener("click", async (e) => {
+  const btn = e.target.closest("button");
+  if (!btn) return;
+
+  if (btn.classList.contains("btn-edit-schedule")) {
+    const id = btn.dataset.id;
+    const courseId = btn.dataset.courseId;
+    if (scheduleModalTitle)
+      scheduleModalTitle.textContent = "Edit Schedule Slot";
+    addScheduleForm.dataset.editingId = id;
+    await populateScheduleCourseOptions(courseId);
+    document.getElementById("sch-day").value = btn.dataset.day || "Monday";
+    document.getElementById("sch-start").value = btn.dataset.start || "09:00";
+    document.getElementById("sch-end").value = btn.dataset.end || "10:30";
+    document.getElementById("sch-room").value = btn.dataset.room || "";
+    openModal(addScheduleModal);
+    return;
+  }
+
+  if (btn.classList.contains("btn-delete-schedule")) {
+    const id = btn.dataset.id;
+    if (!id) return;
+    if (!confirm("Delete this schedule slot?")) return;
+    try {
+      await fetchJSON(`${API_BASE}/schedule/${id}`, { method: "DELETE" });
+      await loadScheduleAdmin();
+    } catch (err) {
+      alert(err.message || "Failed to delete schedule slot");
+    }
+  }
+});
 // Initial loads
 loadStudents();
 loadCoursesForTables();

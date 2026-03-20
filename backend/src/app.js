@@ -515,6 +515,23 @@ app.put("/api/schedule/:id", async (req, res) => {
   }
 });
 
+app.delete("/api/schedule/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const [result] = await pool.query(
+      "DELETE FROM schedule WHERE id = ?",
+      [id],
+    );
+    if (!result.affectedRows) {
+      return res.status(404).json({ error: "Schedule slot not found" });
+    }
+    res.json({ success: true });
+  } catch (err) {
+    console.error("DELETE /api/schedule/:id error:", err);
+    res.status(500).json({ error: "Failed to delete schedule slot" });
+  }
+});
+
 // Student-specific schedule (for weekly grid)
 app.get("/api/students/:studentId/schedule", async (req, res) => {
   const { studentId } = req.params;
