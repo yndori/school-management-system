@@ -283,9 +283,11 @@ body {
   background: #161616;
   border: 1px solid #2a2a2a;
   border-radius: 16px;
-  padding: 32px;
-  width: 440px;
+  padding: 18px;
+  width: 320px;
   max-width: 95vw;
+  max-height: 80vh;
+  overflow-y: auto;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
   animation: slideUp 0.2s ease;
 }
@@ -306,7 +308,7 @@ body {
   margin-bottom: 24px;
 }
 .modal-header h3 {
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 600;
 }
 .close-modal {
@@ -322,10 +324,10 @@ body {
 }
 .modal label {
   display: block;
-  font-size: 12px;
+  font-size: 10px;
   color: #888;
-  margin-bottom: 6px;
-  margin-top: 16px;
+  margin-bottom: 4px;
+  margin-top: 10px;
   font-weight: 600;
   text-transform: uppercase;
 }
@@ -336,8 +338,8 @@ body {
   border: 1px solid #2a2a2a;
   border-radius: 8px;
   color: white;
-  padding: 11px 14px;
-  font-size: 14px;
+  padding: 8px 10px;
+  font-size: 12px;
   transition: border-color 0.2s;
   font-family: "Poppins", sans-serif;
 }
@@ -347,6 +349,37 @@ body {
   border-color: rgb(212, 175, 55);
   box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
 }
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 10px;
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  padding: 12px;
+}
+.checkbox-grid label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #2a2a2a;
+  background: #1e1e1e;
+  color: #ddd;
+  font-size: 13px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.checkbox-grid label:hover {
+  background: #232323;
+  border-color: rgba(212, 175, 55, 0.5);
+}
+.checkbox-grid input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: rgb(212, 175, 55);
+}
 .modal-info {
   font-size: 14px;
   color: #aaa;
@@ -354,6 +387,11 @@ body {
 }
 .modal-info strong {
   color: #e0e0e0;
+}
+.modal.modal-wide {
+  width: 900px;
+  max-width: 96vw;
+  max-height: 90vh;
 }
 
 /* ── WEEKLY SCHEDULE GRID (copied from student-dashboard) ── */

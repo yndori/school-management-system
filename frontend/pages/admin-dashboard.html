@@ -101,6 +101,7 @@
                   <th>Name</th>
                   <th>Credits</th>
                   <th>Instructor</th>
+                  <th>Majors</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -356,6 +357,14 @@
             required
             placeholder="e.g. 20"
           />
+          <label for="a-max">Max Points</label>
+          <input
+            id="a-max"
+            type="number"
+            min="1"
+            step="1"
+            placeholder="e.g. 100"
+          />
           <label for="a-description">Description (optional)</label>
           <input
             id="a-description"
@@ -364,6 +373,71 @@
           />
           <button type="submit" class="btn-primary btn-full">
             Save Assignment
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div id="modal-course-assignments" class="modal-overlay">
+      <div class="modal modal-wide">
+        <div class="modal-header">
+          <h3>Assignments</h3>
+          <button class="close-modal">✕</button>
+        </div>
+        <p class="modal-info">
+          Course: <strong id="assignments-course-name"></strong>
+        </p>
+        <div class="panel-actions" style="margin: 10px 0">
+          <button id="btn-add-assignment-inline" class="btn-primary">
+            + Add Assignment
+          </button>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Weight</th>
+                <th>Max</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="assignments-tbody">
+              <tr>
+                <td colspan="4" class="empty-msg">Loading…</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-edit-assignment" class="modal-overlay">
+      <div class="modal">
+        <div class="modal-header">
+          <h3>Edit Assignment</h3>
+          <button class="close-modal">✕</button>
+        </div>
+        <form id="edit-assignment-form">
+          <input id="edit-a-id" type="hidden" />
+          <input id="edit-a-course-id" type="hidden" />
+          <label>Assignment Name</label>
+          <input id="edit-a-name" type="text" required />
+          <label>Weight (%)</label>
+          <input
+            id="edit-a-weight"
+            type="number"
+            min="0"
+            max="100"
+            step="0.5"
+            required
+          />
+          <label>Max Points</label>
+          <input id="edit-a-max" type="number" min="1" step="1" />
+          <label>Description (optional)</label>
+          <input id="edit-a-description" type="text" />
+          <button type="submit" class="btn-primary btn-full">
+            Save Changes
           </button>
         </form>
       </div>
@@ -398,8 +472,47 @@
           />
           <label>Instructor</label>
           <input id="c-instructor" type="text" placeholder="Dr. Smith" />
+          <label>Majors</label>
+          <div id="c-majors" class="checkbox-grid">
+            <label><input type="checkbox" value="BSc Computer Science" /> BSc Computer Science</label>
+            <label><input type="checkbox" value="BBA" /> BBA</label>
+            <label><input type="checkbox" value="BSc Computer Engineering" /> BSc Computer Engineering</label>
+            <label><input type="checkbox" value="BA Political Science" /> BA Political Science</label>
+            <label><input type="checkbox" value="BA Law" /> BA Law</label>
+          </div>
           <button type="submit" class="btn-primary btn-full">
             Create Course
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div id="modal-edit-course" class="modal-overlay">
+      <div class="modal">
+        <div class="modal-header">
+          <h3>Edit Course</h3>
+          <button class="close-modal">✕</button>
+        </div>
+        <form id="edit-course-form">
+          <input id="edit-c-id" type="hidden" />
+          <label>Course Code</label>
+          <input id="edit-c-code" type="text" required />
+          <label>Course Name</label>
+          <input id="edit-c-name" type="text" required />
+          <label>Credits</label>
+          <input id="edit-c-credits" type="number" required min="1" max="6" />
+          <label>Instructor</label>
+          <input id="edit-c-instructor" type="text" />
+          <label>Majors</label>
+          <div id="edit-c-majors" class="checkbox-grid">
+            <label><input type="checkbox" value="BSc Computer Science" /> BSc Computer Science</label>
+            <label><input type="checkbox" value="BBA" /> BBA</label>
+            <label><input type="checkbox" value="BSc Computer Engineering" /> BSc Computer Engineering</label>
+            <label><input type="checkbox" value="BA Political Science" /> BA Political Science</label>
+            <label><input type="checkbox" value="BA Law" /> BA Law</label>
+          </div>
+          <button type="submit" class="btn-primary btn-full">
+            Save Changes
           </button>
         </form>
       </div>
