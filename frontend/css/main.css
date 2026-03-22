@@ -35,7 +35,7 @@ body {
 .hero {
   text-align: center;
   padding: 80px 20px;
-  background-image: url(/frontend/public/images/hero-banner.jpg);
+  background-image: url(../public/images/hero-banner.jpg);
   background-size: cover;
   background-position: center;
 }
