@@ -469,7 +469,7 @@ body {
   max-height: 90vh;
 }
 
-/* ── WEEKLY SCHEDULE GRID (copied from student-dashboard) ── */
+/* ── WEEKLY SCHEDULE GRID ── */
 .week-grid-wrap {
   overflow-x: auto;
 }
@@ -497,21 +497,11 @@ body {
 .wg-day-header.corner {
   background: #0f0f0f;
 }
-.wg-day-header.mon {
-  color: rgb(212, 175, 55);
-}
-.wg-day-header.tue {
-  color: #f0cc44;
-}
-.wg-day-header.wed {
-  color: #81c784;
-}
-.wg-day-header.thu {
-  color: #f0cc44;
-}
-.wg-day-header.fri {
-  color: #e74c3c;
-}
+.wg-day-header.mon { color: rgb(212, 175, 55); }
+.wg-day-header.tue { color: #f0cc44; }
+.wg-day-header.wed { color: #81c784; }
+.wg-day-header.thu { color: #f0cc44; }
+.wg-day-header.fri { color: #e74c3c; }
 
 .wg-time-label {
   background: #111111;
@@ -615,3 +605,254 @@ body {
   color: #888888;
   font-size: 13px;
 }
+
+/* ── Transcripts Tab ── */
+
+.transcripts-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 16px;
+  align-items: start;
+  min-width: 0;
+}
+
+@media (max-width: 1100px) {
+  .transcripts-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.transcript-student-panel {
+  background: #141414;
+  border: 1px solid #1e1e1e;
+  border-radius: 12px;
+  padding: 16px;
+  min-width: 0;
+}
+.transcript-student-panel h3 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.transcript-search-input {
+  width: 100%;
+  background: #1e1e1e;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  color: #fff;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-family: "Poppins", sans-serif;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+.transcript-search-input:focus {
+  outline: none;
+  border-color: rgb(212, 175, 55);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+}
+
+.transcript-preview-panel {
+  background: #141414;
+  border: 1px solid #1e1e1e;
+  border-radius: 12px;
+  padding: 20px;
+  min-height: 500px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.transcript-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  color: #444;
+  gap: 14px;
+}
+.transcript-placeholder-icon {
+  font-size: 56px;
+  opacity: 0.4;
+}
+.transcript-placeholder p {
+  font-size: 14px;
+}
+
+.transcript-doc-header {
+  margin-bottom: 20px;
+}
+.transcript-school-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.transcript-school-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: rgb(212, 175, 55);
+}
+.transcript-school-sub {
+  font-size: 12px;
+  color: #888;
+  margin-top: 2px;
+}
+.transcript-issued-date {
+  font-size: 12px;
+  color: #666;
+  text-align: right;
+}
+.transcript-divider {
+  height: 1px;
+  background: #2a2a2a;
+  margin: 12px 0;
+}
+.transcript-student-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+  background: #1a1a1a;
+  border: 1px solid #252525;
+  border-radius: 10px;
+  padding: 14px;
+}
+.transcript-student-info-grid > div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.transcript-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #666;
+  font-weight: 600;
+}
+.transcript-value {
+  font-size: 13px;
+  color: #ddd;
+  font-weight: 500;
+  word-break: break-word;
+}
+
+.transcript-section-title {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgb(212, 175, 55);
+  margin: 18px 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.transcript-table td {
+  font-size: 13px;
+}
+
+.grade-A { color: #81c784; font-weight: 700; }
+.grade-B { color: #64b5f6; font-weight: 700; }
+.grade-C { color: #ffb74d; font-weight: 700; }
+.grade-D { color: #ff8a65; font-weight: 700; }
+.grade-F { color: #e74c3c; font-weight: 700; }
+.grade-pending { color: #555; font-style: italic; }
+
+.transcript-summary {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+  padding: 14px 18px;
+  background: #1a1a1a;
+  border: 1px solid #252525;
+  border-radius: 10px;
+  align-items: center;
+}
+.transcript-summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tr-gpa-badge {
+  display: inline-block;
+  font-size: 22px;
+  font-weight: 700;
+  color: rgb(212, 175, 55);
+}
+
+/* ── Print styles ── */
+@media print {
+  /* Hide everything except the transcript document */
+  .sidebar,
+  .credentials-box,
+  .panel-header,
+  .transcript-student-panel,
+  .transcript-placeholder,
+  .top-header,
+  #credentials-box {
+    display: none !important;
+  }
+
+  /* Flatten the dashboard layout so no flex/grid causes extra pages */
+  .dashboard {
+    display: block !important;
+  }
+  .main-content {
+    padding: 20px !important;
+    overflow: visible !important;
+  }
+
+  /* Hide all tab panels, then show only the transcripts one */
+  .tab-panel {
+    display: none !important;
+  }
+  #tab-transcripts {
+    display: block !important;
+  }
+
+  /* Collapse the two-column layout into a single column */
+  .transcripts-layout {
+    display: block !important;
+  }
+
+  /* Strip decoration from the preview wrapper */
+  .transcript-preview-panel {
+    border: none !important;
+    padding: 0 !important;
+    min-height: unset !important;
+    overflow: visible !important;
+    background: transparent !important;
+  }
+
+  /* Document content colours */
+  #transcript-document {
+    display: block !important;
+    background: #fff !important;
+    color: #000 !important;
+  }
+  .transcript-school-name { color: #b8860b !important; }
+  .transcript-label { color: #555 !important; }
+  .transcript-value { color: #000 !important; }
+  .transcript-issued-date { color: #555 !important; }
+  .transcript-section-title { color: #b8860b !important; border-color: #ccc !important; }
+  .transcript-student-info-grid { background: #f9f9f9 !important; border-color: #ddd !important; }
+  .transcript-summary { background: #f9f9f9 !important; border-color: #ddd !important; }
+  .transcript-divider { background: #ccc !important; }
+  .tr-gpa-badge { color: #b8860b !important; }
+  .data-table th { color: #b8860b !important; background: #f2f2f2 !important; }
+  .data-table td { color: #000 !important; border-color: #ddd !important; }
+  .data-table tbody tr:nth-child(even) { background: #fafafa !important; }
+  .table-wrapper { border-color: #ddd !important; }
+  .grade-A { color: #2e7d32 !important; }
+  .grade-B { color: #1565c0 !important; }
+  .grade-C { color: #e65100 !important; }
+  .grade-D { color: #bf360c !important; }
+  .grade-F { color: #c62828 !important; }
+}
+

@@ -1287,6 +1287,142 @@ loadCoursesForTables();
 initGradesManagement();
 loadAdminAnnouncements();
 loadScheduleAdmin();
+loadTranscriptStudents();
+
+// ── Transcripts ──
+
+let allTranscriptStudents = [];
+
+async function loadTranscriptStudents() {
+  const tbody = document.getElementById("transcript-students-tbody");
+  if (!tbody) return;
+  tbody.innerHTML = '<tr><td colspan="3" class="empty-msg">Loading…</td></tr>';
+  try {
+    const students = await fetchJSON(`${API_BASE}/students`);
+    allTranscriptStudents = students;
+    renderTranscriptStudentList(students);
+  } catch (err) {
+    tbody.innerHTML = '<tr><td colspan="3" class="empty-msg">Failed to load students.</td></tr>';
+    console.error(err);
+  }
+}
+
+function renderTranscriptStudentList(students) {
+  const tbody = document.getElementById("transcript-students-tbody");
+  if (!tbody) return;
+  if (!students.length) {
+    tbody.innerHTML = '<tr><td colspan="3" class="empty-msg">No students found.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = "";
+  students.forEach((s) => {
+    const tr = document.createElement("tr");
+    tr.classList.add("clickable-row");
+    tr.innerHTML = `
+      <td>${s.student_number || "—"}</td>
+      <td>${s.name}</td>
+      <td>${s.major || "—"}</td>
+    `;
+    tr.addEventListener("click", () => {
+      tbody.querySelectorAll("tr").forEach((r) => r.classList.remove("active"));
+      tr.classList.add("active");
+      loadTranscript(s);
+    });
+    tbody.appendChild(tr);
+  });
+}
+
+// Live search
+document.getElementById("transcript-search")?.addEventListener("input", (e) => {
+  const q = e.target.value.toLowerCase().trim();
+  const filtered = allTranscriptStudents.filter(
+    (s) =>
+      s.name.toLowerCase().includes(q) ||
+      (s.student_number || "").toLowerCase().includes(q),
+  );
+  renderTranscriptStudentList(filtered);
+});
+
+async function loadTranscript(student) {
+  const doc = document.getElementById("transcript-document");
+  const placeholder = document.getElementById("transcript-placeholder");
+  const printBtn = document.getElementById("btn-print-transcript");
+
+  if (!doc || !placeholder) return;
+
+  // Show loading state in preview panel
+  placeholder.style.display = "flex";
+  placeholder.innerHTML = '<div class="transcript-placeholder-icon">⏳</div><p>Loading transcript…</p>';
+  doc.style.display = "none";
+  if (printBtn) printBtn.style.display = "none";
+
+  try {
+    const data = await fetchJSON(`${API_BASE}/students/${student.id}/transcript`);
+
+    // Populate student info
+    document.getElementById("tr-student-name").textContent = student.name;
+    document.getElementById("tr-student-number").textContent = student.student_number || "—";
+    document.getElementById("tr-student-email").textContent = student.email;
+    document.getElementById("tr-student-major").textContent = student.major || "—";
+    document.getElementById("tr-student-entry").textContent =
+      student.entry_semester && student.entry_year
+        ? `${student.entry_semester} ${student.entry_year}`
+        : "—";
+    document.getElementById("transcript-issued-date").textContent =
+      `Issued: ${new Date().toLocaleDateString("en-CA", { year: "numeric", month: "long", day: "numeric" })}`;
+
+    // Populate course rows
+    const tbody = document.getElementById("transcript-courses-tbody");
+    if (tbody) {
+      if (!data.courses || !data.courses.length) {
+        tbody.innerHTML = '<tr><td colspan="7" class="empty-msg">No enrollment records found.</td></tr>';
+      } else {
+        tbody.innerHTML = "";
+        data.courses.forEach((course) => {
+          const tr = document.createElement("tr");
+          const letterClass = course.letterGrade ? `grade-${course.letterGrade}` : "grade-pending";
+          tr.innerHTML = `
+            <td>${course.code}</td>
+            <td>${course.name}</td>
+            <td>${course.credits}</td>
+            <td>${course.semester}</td>
+            <td>${course.year}</td>
+            <td>${course.numericGrade != null ? course.numericGrade.toFixed(1) + "%" : '<span class="grade-pending">—</span>'}</td>
+            <td class="${letterClass}">${course.letterGrade || "—"}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+    }
+
+    // Summary
+    const gpaEl = document.getElementById("tr-gpa");
+    const creditsEl = document.getElementById("tr-total-credits");
+    if (creditsEl) creditsEl.textContent = data.totalCredits ?? "0";
+    if (gpaEl) {
+      gpaEl.textContent = data.gpa != null ? data.gpa.toFixed(2) : "N/A";
+      // Color the GPA badge
+      gpaEl.className = "tr-gpa-badge";
+      if (data.gpa != null) {
+        if (data.gpa >= 3.5) gpaEl.style.color = "#81c784";
+        else if (data.gpa >= 2.5) gpaEl.style.color = "rgb(212,175,55)";
+        else if (data.gpa >= 1.5) gpaEl.style.color = "#ffb74d";
+        else gpaEl.style.color = "#e74c3c";
+      }
+    }
+
+    // Show the document
+    placeholder.style.display = "none";
+    doc.style.display = "block";
+    if (printBtn) printBtn.style.display = "";
+  } catch (err) {
+    placeholder.style.display = "flex";
+    placeholder.innerHTML = '<div class="transcript-placeholder-icon">⚠️</div><p>Failed to load transcript.</p>';
+    doc.style.display = "none";
+    console.error("Failed to load transcript", err);
+  }
+}
+
 
 
 

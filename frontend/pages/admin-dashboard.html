@@ -31,6 +31,9 @@
           <button class="tab-btn" data-tab="tab-schedule-admin">
             Schedule
           </button>
+          <button class="tab-btn" data-tab="tab-transcripts">
+            Transcripts
+          </button>
         </nav>
         <button id="logout-btn" class="logout-btn">Sign Out</button>
       </aside>
@@ -281,6 +284,114 @@
                 </tr>
               </tbody>
             </table>
+          </div>
+        </div>
+
+        <!-- ── Transcripts ── -->
+        <div id="tab-transcripts" class="tab-panel">
+          <div class="panel-header">
+            <h2>Student Transcripts</h2>
+            <div class="panel-actions">
+              <button id="btn-print-transcript" class="btn-primary" style="display:none;" onclick="window.print()">
+                🖨 Print Transcript
+              </button>
+            </div>
+          </div>
+
+          <div class="transcripts-layout">
+            <!-- Left: student list -->
+            <div class="transcript-student-panel">
+              <h3>All Students</h3>
+              <input
+                id="transcript-search"
+                type="text"
+                class="transcript-search-input"
+                placeholder="Search by name or student #…"
+              />
+              <div class="table-wrapper" style="margin-top:10px;">
+                <table class="data-table compact">
+                  <thead>
+                    <tr>
+                      <th>Student #</th>
+                      <th>Name</th>
+                      <th>Major</th>
+                    </tr>
+                  </thead>
+                  <tbody id="transcript-students-tbody">
+                    <tr>
+                      <td colspan="3" class="empty-msg">Loading…</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Right: transcript preview -->
+            <div class="transcript-preview-panel" id="transcript-preview">
+              <div class="transcript-placeholder" id="transcript-placeholder">
+                <div class="transcript-placeholder-icon">📋</div>
+                <p>Select a student to view their transcript</p>
+              </div>
+
+              <!-- Printable transcript document -->
+              <div id="transcript-document" style="display:none;">
+                <!-- Print header (school info) -->
+                <div class="transcript-doc-header">
+                  <div class="transcript-school-info">
+                    <div style="display:flex;align-items:center;gap:10px;">
+                      <img src="../public/images/favicon/favicon-large.png" alt="Logo" style="width:40px;height:40px;" />
+                      <div>
+                        <div class="transcript-school-name">Schoolink University</div>
+                        <div class="transcript-school-sub">Official Academic Transcript</div>
+                      </div>
+                    </div>
+                    <div class="transcript-issued-date" id="transcript-issued-date"></div>
+                  </div>
+                  <div class="transcript-divider"></div>
+                  <div class="transcript-student-info-grid">
+                    <div><span class="transcript-label">Student Name</span><span class="transcript-value" id="tr-student-name"></span></div>
+                    <div><span class="transcript-label">Student Number</span><span class="transcript-value" id="tr-student-number"></span></div>
+                    <div><span class="transcript-label">Email</span><span class="transcript-value" id="tr-student-email"></span></div>
+                    <div><span class="transcript-label">Program</span><span class="transcript-value" id="tr-student-major"></span></div>
+                    <div><span class="transcript-label">Entry Term</span><span class="transcript-value" id="tr-student-entry"></span></div>
+                  </div>
+                </div>
+
+                <!-- Course records -->
+                <div class="transcript-section-title">Academic Record</div>
+                <div class="table-wrapper">
+                  <table class="data-table transcript-table" id="transcript-courses-table">
+                    <thead>
+                      <tr>
+                        <th>Course Code</th>
+                        <th>Course Name</th>
+                        <th>Credits</th>
+                        <th>Semester</th>
+                        <th>Year</th>
+                        <th>Grade (%)</th>
+                        <th>Letter</th>
+                      </tr>
+                    </thead>
+                    <tbody id="transcript-courses-tbody">
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- Summary -->
+                <div class="transcript-summary">
+                  <div class="transcript-summary-item">
+                    <span class="transcript-label">Total Credits Earned</span>
+                    <span class="transcript-value" id="tr-total-credits">—</span>
+                  </div>
+                  <div class="transcript-summary-item">
+                    <span class="transcript-label">Cumulative GPA</span>
+                    <span id="tr-gpa" class="tr-gpa-badge">—</span>
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
           </div>
         </div>
       </main>
