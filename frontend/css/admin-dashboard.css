@@ -255,6 +255,60 @@ body {
   border-bottom: none;
 }
 
+.grades-layout {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 18px;
+}
+.grades-panel {
+  background: #141414;
+  border: 1px solid #1e1e1e;
+  border-radius: 12px;
+  padding: 16px;
+}
+.grades-panel h3 {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+.grades-panel-full {
+  margin-top: 10px;
+}
+.data-table.compact th {
+  padding: 10px 12px;
+  font-size: 11px;
+}
+.data-table.compact td {
+  padding: 10px 12px;
+  font-size: 13px;
+}
+.clickable-row {
+  cursor: pointer;
+}
+.clickable-row.active {
+  background: #1f1f1f;
+}
+.grade-input {
+  width: 80px;
+  background: #1e1e1e;
+  border: 1px solid #2a2a2a;
+  border-radius: 6px;
+  color: #fff;
+  padding: 6px 8px;
+  font-size: 13px;
+}
+.grade-input:focus {
+  outline: none;
+  border-color: rgb(212, 175, 55);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+}
+
+@media (max-width: 1100px) {
+  .grades-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
 .action-btn {
   padding: 5px 12px;
   border: none;

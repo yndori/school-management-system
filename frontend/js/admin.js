@@ -47,7 +47,11 @@ document.querySelectorAll(".modal-overlay").forEach((overlay) => {
 
 // ── Courses & assignments ──
 const coursesTbody = document.getElementById("courses-tbody");
-const gradesTbody = document.getElementById("grades-tbody");
+const gradesCoursesTbody = document.getElementById("grades-courses-tbody");
+const gradesStudentsTbody = document.getElementById("grades-students-tbody");
+const gradesAssignmentsTbody = document.getElementById("grades-assignments-tbody");
+const gradesStudentsTitle = document.getElementById("grades-students-title");
+const gradesAssignmentsTitle = document.getElementById("grades-assignments-title");
 const totalStudentsEl = document.getElementById("total-students");
 const totalCoursesEl = document.getElementById("total-courses");
 let coursesCache = [];
@@ -444,48 +448,310 @@ async function loadScheduleAdmin() {
   }
 }
 
-async function loadGradesTable() {
-  if (!gradesTbody) return;
-  gradesTbody.innerHTML =
-    '<tr><td colspan="8" class="empty-msg">Loading…</td></tr>';
+let gradesRowsCache = [];
+let gradesCoursesCache = [];
+const gradesAssignmentsCache = new Map();
+let selectedGradesCourseId = null;
+let selectedEnrollmentId = null;
+let selectedCourseLabel = "";
+let selectedStudentLabel = "";
+
+async function loadGradesData() {
   try {
-    const rows = await fetchJSON(`${API_BASE}/grades`);
-    if (!rows.length) {
-      gradesTbody.innerHTML =
-        '<tr><td colspan="8" class="empty-msg">No enrollments found.</td></tr>';
+    gradesRowsCache = await fetchJSON(`${API_BASE}/grades`);
+  } catch (err) {
+    gradesRowsCache = [];
+    console.error("Failed to load grades data", err);
+  }
+}
+
+async function loadGradesCoursesTable() {
+  if (!gradesCoursesTbody) return;
+  gradesCoursesTbody.innerHTML =
+    '<tr><td colspan="3" class="empty-msg">Loading...</td></tr>';
+  try {
+    const courses = await fetchJSON(`${API_BASE}/courses`);
+    gradesCoursesCache = courses;
+    if (!courses.length) {
+      gradesCoursesTbody.innerHTML =
+        '<tr><td colspan="3" class="empty-msg">No courses found.</td></tr>';
       return;
     }
-    gradesTbody.innerHTML = "";
-    rows.forEach((row) => {
+    gradesCoursesTbody.innerHTML = "";
+    courses.forEach((course) => {
       const tr = document.createElement("tr");
+      tr.classList.add("clickable-row");
+      if (String(course.id) === String(selectedGradesCourseId)) {
+        tr.classList.add("active");
+      }
       tr.innerHTML = `
-        <td>${row.student_number || ""}</td>
-        <td>${row.student_name || ""}</td>
-        <td>${row.course_code || ""}</td>
-        <td>${row.course_name || ""}</td>
-        <td>${row.assignment_name || ""}</td>
-        <td>${row.semester || ""} ${row.year || ""}</td>
-        <td>${row.grade_value != null ? row.grade_value : "—"}</td>
-        <td>
-          <button
-            class="action-btn edit-btn btn-open-grade"
-            data-enrollment-id="${row.enrollment_id}"
-            data-course-id="${row.course_id}"
-            data-student-name="${row.student_name || ""}"
-            data-course-name="${row.course_name || ""}"
-          >
-            Assign grade
-          </button>
-        </td>
+        <td>${course.code}</td>
+        <td>${course.name}</td>
+        <td>${course.instructor || "-"}</td>
       `;
-      gradesTbody.appendChild(tr);
+      tr.addEventListener("click", () => {
+        selectedGradesCourseId = course.id;
+        selectedEnrollmentId = null;
+        selectedCourseLabel = `${course.code} - ${course.name}`;
+        selectedStudentLabel = "";
+        gradesCoursesTbody
+          .querySelectorAll("tr")
+          .forEach((row) => row.classList.remove("active"));
+        tr.classList.add("active");
+        renderStudentsForCourse(course.id);
+        renderAssignmentsEmpty();
+      });
+      gradesCoursesTbody.appendChild(tr);
     });
   } catch (err) {
-    gradesTbody.innerHTML =
-      '<tr><td colspan="8" class="empty-msg">Failed to load grades.</td></tr>';
+    gradesCoursesTbody.innerHTML =
+      '<tr><td colspan="3" class="empty-msg">Failed to load courses.</td></tr>';
     console.error(err);
   }
 }
+
+function renderStudentsEmpty(message) {
+  if (!gradesStudentsTbody) return;
+  gradesStudentsTbody.innerHTML = `
+    <tr><td colspan="3" class="empty-msg">${message}</td></tr>
+  `;
+}
+
+function renderAssignmentsEmpty(message = "Select a student to edit grades.") {
+  if (!gradesAssignmentsTbody) return;
+  gradesAssignmentsTbody.innerHTML = `
+    <tr><td colspan="4" class="empty-msg">${message}</td></tr>
+  `;
+  if (gradesAssignmentsTitle) {
+    gradesAssignmentsTitle.textContent = "Assignments";
+  }
+}
+
+async function ensureAssignmentsForCourse(courseId) {
+  const key = String(courseId);
+  if (gradesAssignmentsCache.has(key)) {
+    return gradesAssignmentsCache.get(key);
+  }
+  try {
+    const assignments = await fetchJSON(
+      `${API_BASE}/courses/${courseId}/assignments`,
+    );
+    gradesAssignmentsCache.set(key, assignments);
+    return assignments;
+  } catch (err) {
+    console.error("Failed to load assignments for course", err);
+    gradesAssignmentsCache.set(key, []);
+    return [];
+  }
+}
+
+function buildGradeValueMap(courseId) {
+  const map = new Map();
+  gradesRowsCache.forEach((row) => {
+    if (String(row.course_id) !== String(courseId)) return;
+    if (!row.assignment_id) return;
+    const key = `${row.enrollment_id}-${row.assignment_id}`;
+    if (row.grade_value != null) {
+      map.set(key, Number(row.grade_value));
+    }
+  });
+  return map;
+}
+
+function computeOverallPercent(enrollmentId, assignments, gradeMap) {
+  let total = 0;
+  let weightSum = 0;
+  assignments.forEach((assignment) => {
+    const weight = Number(assignment.weight) || 0;
+    const key = `${enrollmentId}-${assignment.id}`;
+    const grade = gradeMap.get(key);
+    if (grade == null || Number.isNaN(grade)) return;
+    total += grade * weight;
+    weightSum += weight;
+  });
+  if (!weightSum) return null;
+  return total / weightSum;
+}
+
+async function renderStudentsForCourse(courseId, autoEnrollAttempted = false) {
+  if (!gradesStudentsTbody) return;
+  renderStudentsEmpty("Loading...");
+  const assignments = await ensureAssignmentsForCourse(courseId);
+  const gradeMap = buildGradeValueMap(courseId);
+  const enrollments = new Map();
+
+  gradesRowsCache.forEach((row) => {
+    if (String(row.course_id) !== String(courseId)) return;
+    if (!enrollments.has(row.enrollment_id)) {
+      enrollments.set(row.enrollment_id, {
+        enrollmentId: row.enrollment_id,
+        studentNumber: row.student_number || "-",
+        studentName: row.student_name || "-",
+      });
+    }
+  });
+
+  if (gradesStudentsTitle) {
+    gradesStudentsTitle.textContent = selectedCourseLabel
+      ? `Students in ${selectedCourseLabel}`
+      : "Enrolled Students";
+  }
+
+  if (!enrollments.size) {
+    if (!autoEnrollAttempted) {
+      const course = gradesCoursesCache.find(
+        (c) => String(c.id) === String(courseId),
+      );
+      const majors = parseMajors(course?.majors);
+      if (majors.length) {
+        renderStudentsEmpty("Auto-enrolling students by major...");
+        try {
+          await fetchJSON(`${API_BASE}/courses/${courseId}/auto-enroll`, {
+            method: "POST",
+          });
+          await loadGradesData();
+          await renderStudentsForCourse(courseId, true);
+          return;
+        } catch (err) {
+          console.error("Auto-enroll failed", err);
+        }
+      }
+    }
+    renderStudentsEmpty("No enrollments found for this course.");
+    return;
+  }
+
+  gradesStudentsTbody.innerHTML = "";
+  Array.from(enrollments.values()).forEach((student) => {
+    const overall = computeOverallPercent(
+      student.enrollmentId,
+      assignments,
+      gradeMap,
+    );
+    const overallLabel =
+      overall == null ? "-" : `${overall.toFixed(1)}%`;
+    const tr = document.createElement("tr");
+    tr.classList.add("clickable-row");
+    if (String(student.enrollmentId) === String(selectedEnrollmentId)) {
+      tr.classList.add("active");
+    }
+    tr.innerHTML = `
+      <td>${student.studentNumber}</td>
+      <td>${student.studentName}</td>
+      <td>${overallLabel}</td>
+    `;
+    tr.addEventListener("click", () => {
+      selectedEnrollmentId = student.enrollmentId;
+      selectedStudentLabel = student.studentName;
+      gradesStudentsTbody
+        .querySelectorAll("tr")
+        .forEach((row) => row.classList.remove("active"));
+      tr.classList.add("active");
+      renderAssignmentsForEnrollment(courseId, student.enrollmentId);
+    });
+    gradesStudentsTbody.appendChild(tr);
+  });
+}
+
+async function renderAssignmentsForEnrollment(courseId, enrollmentId) {
+  if (!gradesAssignmentsTbody) return;
+  const assignments = await ensureAssignmentsForCourse(courseId);
+  const gradeMap = buildGradeValueMap(courseId);
+
+  if (gradesAssignmentsTitle) {
+    const title = selectedCourseLabel
+      ? `Assignments for ${selectedStudentLabel} (${selectedCourseLabel})`
+      : `Assignments for ${selectedStudentLabel}`;
+    gradesAssignmentsTitle.textContent = selectedStudentLabel
+      ? title
+      : "Assignments";
+  }
+
+  if (!assignments.length) {
+    renderAssignmentsEmpty("No assignments found for this course.");
+    return;
+  }
+
+  gradesAssignmentsTbody.innerHTML = "";
+  assignments.forEach((assignment) => {
+    const key = `${enrollmentId}-${assignment.id}`;
+    const gradeValue = gradeMap.get(key);
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${assignment.name}</td>
+      <td>${assignment.weight}%</td>
+      <td>
+        <input
+          class="grade-input"
+          type="number"
+          min="0"
+          max="100"
+          step="0.1"
+          value="${gradeValue != null ? gradeValue : ""}"
+          placeholder="-"
+        />
+      </td>
+      <td>
+        <button
+          class="action-btn edit-btn btn-save-grade"
+          data-enrollment-id="${enrollmentId}"
+          data-assignment-id="${assignment.id}"
+        >
+          Save
+        </button>
+      </td>
+    `;
+    gradesAssignmentsTbody.appendChild(tr);
+  });
+}
+
+async function refreshGradesForCourse(courseId) {
+  if (!courseId) return;
+  gradesAssignmentsCache.delete(String(courseId));
+  await loadGradesData();
+  await renderStudentsForCourse(courseId);
+  if (selectedEnrollmentId) {
+    await renderAssignmentsForEnrollment(courseId, selectedEnrollmentId);
+  } else {
+    renderAssignmentsEmpty();
+  }
+}
+
+async function initGradesManagement() {
+  await Promise.all([loadGradesData(), loadGradesCoursesTable()]);
+  renderStudentsEmpty("Select a course to view students.");
+  renderAssignmentsEmpty();
+}
+
+gradesAssignmentsTbody?.addEventListener("click", async (e) => {
+  const btn = e.target.closest(".btn-save-grade");
+  if (!btn) return;
+  const enrollmentId = Number(btn.dataset.enrollmentId);
+  const assignmentId = Number(btn.dataset.assignmentId);
+  const input = btn.closest("tr")?.querySelector("input");
+  const raw = input?.value?.trim() ?? "";
+
+  if (!enrollmentId || !assignmentId) return;
+  if (!raw) {
+    alert("Enter a grade to save.");
+    return;
+  }
+  const grade = Number(raw);
+  if (Number.isNaN(grade) || grade < 0 || grade > 100) {
+    alert("Grade must be a number between 0 and 100.");
+    return;
+  }
+
+  try {
+    await fetchJSON(`${API_BASE}/grades`, {
+      method: "POST",
+      body: JSON.stringify({ enrollmentId, assignmentId, grade }),
+    });
+    await refreshGradesForCourse(selectedGradesCourseId);
+  } catch (err) {
+    alert(err.message || "Failed to save grade");
+  }
+});
 
 // ── Assignment modal ──
 const assignmentModal = document.getElementById("modal-assignment");
@@ -557,7 +823,7 @@ assignmentForm?.addEventListener("submit", async (e) => {
     if (currentAssignmentsCourseId === courseId) {
       await loadAssignmentsTable(courseId);
     }
-    await loadGradesTable();
+    await refreshGradesForCourse(courseId);
   } catch (err) {
     console.error("Failed to save assignment", err);
   }
@@ -626,6 +892,7 @@ document.addEventListener("click", async (e) => {
         method: "DELETE",
       });
       await loadAssignmentsTable(courseId);
+      await refreshGradesForCourse(courseId);
     } catch (err) {
       alert(err.message || "Failed to delete assignment");
     }
@@ -648,76 +915,9 @@ editAssignmentForm?.addEventListener("submit", async (e) => {
     });
     closeModal(editAssignmentModal);
     if (courseId) await loadAssignmentsTable(courseId);
+    await refreshGradesForCourse(courseId);
   } catch (err) {
     alert(err.message || "Failed to update assignment");
-  }
-});
-
-// ── Grade modal ──
-const gradeModal = document.getElementById("modal-grade");
-const gradeForm = document.getElementById("grade-form");
-const gEnrollmentId = document.getElementById("g-enrollment-id");
-const gCourseId = document.getElementById("g-course-id");
-const gStudentName = document.getElementById("g-student-name");
-const gCourseName = document.getElementById("g-course-name");
-const gAssignmentSelect = document.getElementById("g-assignment");
-
-async function openGradeModalFromButton(btn) {
-  const enrollmentId = btn.dataset.enrollmentId;
-  const courseId = btn.dataset.courseId;
-  const studentName = btn.dataset.studentName || "";
-  const courseName = btn.dataset.courseName || "";
-  if (!enrollmentId || !courseId) return;
-
-  gEnrollmentId.value = enrollmentId;
-  gCourseId.value = courseId;
-  gStudentName.textContent = studentName;
-  gCourseName.textContent = courseName;
-
-  // Load assignments for this course
-  gAssignmentSelect.innerHTML = '<option value="">Select assignment…</option>';
-  try {
-    const assignments = await fetchJSON(
-      `${API_BASE}/courses/${courseId}/assignments`,
-    );
-    assignments.forEach((a) => {
-      const opt = document.createElement("option");
-      opt.value = a.id;
-      opt.textContent = `${a.name} (${a.weight}%)`;
-      gAssignmentSelect.appendChild(opt);
-    });
-  } catch (err) {
-    console.error("Failed to load assignments for course", err);
-  }
-
-  openModal(gradeModal);
-}
-
-gradesTbody?.addEventListener("click", (e) => {
-  const target = e.target;
-  if (
-    target instanceof HTMLElement &&
-    target.classList.contains("btn-open-grade")
-  ) {
-    openGradeModalFromButton(target);
-  }
-});
-
-gradeForm?.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const enrollmentId = Number(gEnrollmentId.value);
-  const assignmentId = Number(gAssignmentSelect.value);
-  const grade = Number(document.getElementById("g-grade").value);
-  if (!enrollmentId || !assignmentId) return;
-  try {
-    await fetchJSON(`${API_BASE}/grades`, {
-      method: "POST",
-      body: JSON.stringify({ enrollmentId, assignmentId, grade }),
-    });
-    closeModal(gradeModal);
-    await loadGradesTable();
-  } catch (err) {
-    console.error("Failed to save grade", err);
   }
 });
 
@@ -823,7 +1023,7 @@ studentsTbody?.addEventListener("click", async (e) => {
         method: "DELETE",
       });
       await loadStudents();
-      await loadGradesTable();
+      await refreshGradesForCourse(selectedGradesCourseId);
     } catch (err) {
       alert(err.message || "Failed to delete student");
     }
@@ -885,6 +1085,7 @@ addCourseForm?.addEventListener("submit", async (e) => {
     });
     closeModal(addCourseModal);
     await loadCoursesForTables();
+    await loadGradesCoursesTable();
   } catch (err) {
     alert(err.message || "Failed to add course");
   }
@@ -945,6 +1146,15 @@ coursesTbody?.addEventListener("click", async (e) => {
     try {
       await fetchJSON(`${API_BASE}/courses/${courseId}`, { method: "DELETE" });
       await loadCoursesForTables();
+      await loadGradesCoursesTable();
+      if (String(selectedGradesCourseId) === String(courseId)) {
+        selectedGradesCourseId = null;
+        selectedEnrollmentId = null;
+        selectedCourseLabel = "";
+        selectedStudentLabel = "";
+        renderStudentsEmpty("Select a course to view students.");
+        renderAssignmentsEmpty();
+      }
     } catch (err) {
       alert(err.message || "Failed to delete course");
     }
@@ -967,6 +1177,11 @@ editCourseForm?.addEventListener("submit", async (e) => {
     });
     closeModal(editCourseModal);
     await loadCoursesForTables();
+    await loadGradesCoursesTable();
+    if (String(selectedGradesCourseId) === String(id)) {
+      selectedCourseLabel = `${code} - ${name}`;
+      await refreshGradesForCourse(selectedGradesCourseId);
+    }
   } catch (err) {
     alert(err.message || "Failed to update course");
   }
@@ -1006,7 +1221,8 @@ editScheduleBtn?.addEventListener("click", async () => {
     scheduleModalTitle.textContent = "Add Class Schedule Slot";
   await populateScheduleCourseOptions();
   openModal(addScheduleModal);
-});
+});
+
 
 addScheduleForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -1031,7 +1247,8 @@ addScheduleForm?.addEventListener("submit", async (e) => {
   } catch (err) {
     alert(err.message || "Failed to save schedule slot");
   }
-});
+});
+
 
 scheduleListTbody?.addEventListener("click", async (e) => {
   const btn = e.target.closest("button");
@@ -1067,7 +1284,7 @@ scheduleListTbody?.addEventListener("click", async (e) => {
 // Initial loads
 loadStudents();
 loadCoursesForTables();
-loadGradesTable();
+initGradesManagement();
 loadAdminAnnouncements();
 loadScheduleAdmin();
 

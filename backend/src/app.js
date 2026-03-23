@@ -16,6 +16,32 @@ app.get("/api/health", (req, res) => {
 
 app.use("/api/auth", authRoutes);
 
+// -- Commons --
+function getCurrentTermUTC() {
+  const now = new Date();
+  const year = now.getUTCFullYear();
+  const month = now.getUTCMonth(); // 0-11
+  let semester = 'Fall';
+  if (month <= 3) {
+    semester = 'Winter';
+  } else if (month <= 5) {
+    semester = 'Spring';
+  } else if (month <= 7) {
+    semester = 'Summer';
+  }
+  return { semester, year };
+}
+
+function parseMajorsJson(value) {
+  if (!value) return [];
+  if (Array.isArray(value)) return value;
+  try {
+    return JSON.parse(value);
+  } catch {
+    return [];
+  }
+}
+
 // ── Commons ──
 
 // ── Students Management (Admin) ──
@@ -72,6 +98,29 @@ app.post("/api/students", async (req, res) => {
         year || null,
       ],
     );
+
+    if (major) {
+      const { semester: currentSemester, year: currentYear } = getCurrentTermUTC();
+      const [courses] = await pool.query(
+        "SELECT id, majors FROM courses",
+      );
+      const matchingCourses = courses
+        .filter((c) => parseMajorsJson(c.majors).includes(major))
+        .map((c) => c.id);
+
+      if (matchingCourses.length) {
+        const values = matchingCourses.map((courseId) => [
+          result.insertId,
+          courseId,
+          currentSemester,
+          currentYear,
+        ]);
+        await pool.query(
+          "INSERT IGNORE INTO enrollments (student_id, course_id, semester, year) VALUES ?",
+          [values],
+        );
+      }
+    }
 
     res.status(201).json({
       id: result.insertId,
@@ -212,6 +261,27 @@ app.post("/api/courses", async (req, res) => {
       "INSERT INTO courses (code, name, credits, instructor, majors) VALUES (?, ?, ?, ?, ?)",
       [code, name, parseInt(credits, 10), instructor || null, majorsJson],
     );
+
+    if (Array.isArray(majors) && majors.length) {
+      const { semester: currentSemester, year: currentYear } = getCurrentTermUTC();
+      const [students] = await pool.query(
+        "SELECT id FROM users WHERE role = 'student' AND major IN (?)",
+        [majors],
+      );
+      if (students.length) {
+        const values = students.map((s) => [
+          s.id,
+          result.insertId,
+          currentSemester,
+          currentYear,
+        ]);
+        await pool.query(
+          "INSERT IGNORE INTO enrollments (student_id, course_id, semester, year) VALUES ?",
+          [values],
+        );
+      }
+    }
+
     res
       .status(201)
       .json({ id: result.insertId, message: "Course added successfully" });
@@ -221,6 +291,48 @@ app.post("/api/courses", async (req, res) => {
       return res.status(400).json({ error: "Course code already exists" });
     }
     res.status(500).json({ error: "Failed to create course" });
+  }
+});
+
+app.post("/api/courses/:courseId/auto-enroll", async (req, res) => {
+  const { courseId } = req.params;
+  try {
+    const [courseRows] = await pool.query(
+      "SELECT majors FROM courses WHERE id = ?",
+      [courseId],
+    );
+    if (!courseRows.length) {
+      return res.status(404).json({ error: "Course not found" });
+    }
+
+    const majors = parseMajorsJson(courseRows[0].majors);
+    if (!majors.length) {
+      return res.json({ enrolled: 0 });
+    }
+
+    const { semester: currentSemester, year: currentYear } = getCurrentTermUTC();
+    const [students] = await pool.query(
+      "SELECT id FROM users WHERE role = 'student' AND major IN (?)",
+      [majors],
+    );
+    if (!students.length) {
+      return res.json({ enrolled: 0 });
+    }
+
+    const values = students.map((s) => [
+      s.id,
+      courseId,
+      currentSemester,
+      currentYear,
+    ]);
+    const [result] = await pool.query(
+      "INSERT IGNORE INTO enrollments (student_id, course_id, semester, year) VALUES ?",
+      [values],
+    );
+    res.json({ enrolled: result.affectedRows || 0 });
+  } catch (err) {
+    console.error("POST /api/courses/:courseId/auto-enroll error:", err);
+    res.status(500).json({ error: "Failed to auto-enroll students" });
   }
 });
 
@@ -240,6 +352,44 @@ app.put("/api/courses/:courseId", async (req, res) => {
        WHERE id = ?`,
       [code, name, parseInt(credits, 10), instructor || null, majorsJson, courseId],
     );
+
+    if (Array.isArray(majors)) {
+      const { semester: currentSemester, year: currentYear } = getCurrentTermUTC();
+      if (majors.length) {
+        const [students] = await pool.query(
+          "SELECT id FROM users WHERE role = 'student' AND major IN (?)",
+          [majors],
+        );
+        if (students.length) {
+          const values = students.map((s) => [
+            s.id,
+            courseId,
+            currentSemester,
+            currentYear,
+          ]);
+          await pool.query(
+            "INSERT IGNORE INTO enrollments (student_id, course_id, semester, year) VALUES ?",
+            [values],
+          );
+        }
+        await pool.query(
+          `DELETE e FROM enrollments e
+           JOIN users u ON e.student_id = u.id
+           WHERE e.course_id = ?
+             AND e.semester = ?
+             AND e.year = ?
+             AND u.role = 'student'
+             AND u.major NOT IN (?)`,
+          [courseId, currentSemester, currentYear, majors],
+        );
+      } else {
+        await pool.query(
+          "DELETE FROM enrollments WHERE course_id = ? AND semester = ? AND year = ?",
+          [courseId, currentSemester, currentYear],
+        );
+      }
+    }
+
     const [rows] = await pool.query(
       `SELECT id, code, name, credits, instructor, majors
        FROM courses
@@ -381,6 +531,7 @@ app.get("/api/grades", async (req, res) => {
          c.name AS course_name,
          e.semester,
          e.year,
+         a.id AS assignment_id,
          a.name AS assignment_name,
          a.weight,
          g.id AS grade_id,

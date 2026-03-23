@@ -125,26 +125,69 @@
           <div class="panel-header">
             <h2>Grades Management</h2>
           </div>
-          <div class="table-wrapper">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Student #</th>
-                  <th>Student</th>
-                  <th>Code</th>
-                  <th>Course</th>
-                  <th>Assignment</th>
-                  <th>Term</th>
-                  <th>Grade</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="grades-tbody">
-                <tr>
-                  <td colspan="7" class="empty-msg">Loading…</td>
-                </tr>
-              </tbody>
-            </table>
+          <div class="grades-layout">
+            <div class="grades-panel">
+              <h3>Courses</h3>
+              <div class="table-wrapper">
+                <table class="data-table compact">
+                  <thead>
+                    <tr>
+                      <th>Code</th>
+                      <th>Course</th>
+                      <th>Instructor</th>
+                    </tr>
+                  </thead>
+                  <tbody id="grades-courses-tbody">
+                    <tr>
+                      <td colspan="3" class="empty-msg">Loading...</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="grades-panel">
+              <h3 id="grades-students-title">Enrolled Students</h3>
+              <div class="table-wrapper">
+                <table class="data-table compact">
+                  <thead>
+                    <tr>
+                      <th>Student #</th>
+                      <th>Name</th>
+                      <th>Overall %</th>
+                    </tr>
+                  </thead>
+                  <tbody id="grades-students-tbody">
+                    <tr>
+                      <td colspan="3" class="empty-msg">
+                        Select a course to view students.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="grades-panel grades-panel-full">
+            <h3 id="grades-assignments-title">Assignments</h3>
+            <div class="table-wrapper">
+              <table class="data-table compact">
+                <thead>
+                  <tr>
+                    <th>Assignment</th>
+                    <th>Weight</th>
+                    <th>Grade (%)</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="grades-assignments-tbody">
+                  <tr>
+                    <td colspan="4" class="empty-msg">
+                      Select a student to edit grades.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
