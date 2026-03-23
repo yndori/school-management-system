@@ -408,6 +408,10 @@ body {
   vertical-align: middle;
 }
 
+#courses-table td {
+  vertical-align: top;
+}
+
 .data-table tbody tr:nth-child(even) td,
 .transcript-table tbody tr:nth-child(even) td {
   background: #161616;
@@ -416,6 +420,47 @@ body {
 .data-table tr:hover td,
 .transcript-table tr:hover td {
   background: #202020;
+}
+
+.assignments-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.72rem;
+  background: #141414;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.assignments-table th {
+  text-align: left;
+  padding: 8px 10px;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--text-muted);
+  background: #181818;
+  border-bottom: 1px solid var(--border);
+}
+
+.assignments-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #202020;
+  color: var(--text);
+  vertical-align: top;
+}
+
+.assignments-table tr:last-child td {
+  border-bottom: none;
+}
+
+.assignments-empty {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.grade-pill.grade-pending-pill {
+  font-weight: 600;
 }
 
 .empty-msg {

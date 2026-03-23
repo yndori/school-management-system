@@ -113,26 +113,6 @@ async function loadStudentOverview() {
       avatarEl.textContent = user.name.split(" ").map(n => n[0]).join("").substring(0, 2).toUpperCase();
     }
 
-    const coursesGrid = document.getElementById("courses-grid");
-    if (coursesGrid) {
-      if (!data.courses.length) {
-        coursesGrid.innerHTML = '<p class="empty-msg">No courses found.</p>';
-      } else {
-        coursesGrid.innerHTML = "";
-        data.courses.forEach(c => {
-          const div = document.createElement("div");
-          div.className = "card";
-          div.innerHTML = `
-            <h3>${c.code}</h3>
-            <p>${c.name}</p>
-            <p><strong>Credits:</strong> ${c.credits}</p>
-            <p><strong>Term:</strong> ${c.semester} ${c.year}</p>
-          `;
-          coursesGrid.appendChild(div);
-        });
-      }
-    }
-
     const notificationIcon = document.querySelector(".notification");
     if (notificationIcon) {
       const gradedCourses = (data.courses || []).filter(c => c.numericGrade != null);
@@ -212,6 +192,95 @@ async function loadStudentOverview() {
     }
   } catch (err) {
     console.error("Failed to load transcript", err);
+  }
+}
+
+// ── Courses + assignments table ──
+async function loadStudentCoursework() {
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const studentId = user.id;
+  if (!studentId) return;
+
+  const tbody = document.getElementById("courses-tbody");
+  if (!tbody) return;
+
+  tbody.innerHTML =
+    '<tr><td colspan="7" class="empty-msg">Loading courses…</td></tr>';
+
+  try {
+    const data = await fetchJSON(`${API_BASE}/students/${studentId}/courses`);
+    const courses = Array.isArray(data.courses) ? data.courses : [];
+
+    if (!courses.length) {
+      tbody.innerHTML =
+        '<tr><td colspan="7" class="empty-msg">No courses found.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = "";
+    courses.forEach((c) => {
+      const tr = document.createElement("tr");
+
+      const finalGrade =
+        c.numericGrade != null
+          ? `<span class="grade-pill grade-${c.letterGrade}">${c.numericGrade.toFixed(2)}% (${c.letterGrade})</span>`
+          : '<span class="grade-pill grade-pending-pill">—</span>';
+
+      let assignmentsHtml = "";
+      if (Array.isArray(c.assignments) && c.assignments.length) {
+        const rows = c.assignments
+          .map((a) => {
+            const gradeClass = a.letterGrade
+              ? `grade-${a.letterGrade}`
+              : "grade-pending-pill";
+            const gradePill =
+              a.gradeValue != null
+                ? `<span class="grade-pill ${gradeClass}">${Number(a.gradeValue).toFixed(1)}%${a.letterGrade ? ` (${a.letterGrade})` : ""}</span>`
+                : '<span class="grade-pill grade-pending-pill">—</span>';
+
+            return `
+              <tr>
+                <td>${a.name}</td>
+                <td>${a.weight}%</td>
+                <td>${a.maxPoints ?? 100}</td>
+                <td>${gradePill}</td>
+              </tr>
+            `;
+          })
+          .join("");
+
+        assignmentsHtml = `
+          <table class="assignments-table">
+            <thead>
+              <tr>
+                <th>Assignment</th>
+                <th>Weight</th>
+                <th>Max</th>
+                <th>Grade</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        `;
+      } else {
+        assignmentsHtml = '<div class="assignments-empty">No assignments.</div>';
+      }
+
+      tr.innerHTML = `
+        <td>${c.code}</td>
+        <td>${c.name}</td>
+        <td>${c.semester} ${c.year}</td>
+        <td>${c.credits}</td>
+        <td>${c.instructor || "-"}</td>
+        <td>${finalGrade}</td>
+        <td>${assignmentsHtml}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  } catch (err) {
+    console.error("Failed to load courses", err);
+    tbody.innerHTML =
+      '<tr><td colspan="7" class="empty-msg">Failed to load courses.</td></tr>';
   }
 }
 
@@ -435,5 +504,6 @@ async function loadStudentSchedule() {
 
 // Initial data load
 loadStudentOverview();
+loadStudentCoursework();
 loadAnnouncements();
 loadStudentSchedule();

@@ -88,8 +88,25 @@
               <p>Current Enrolled Courses &amp; Grades</p>
             </div>
           </header>
-          <div id="courses-grid" class="courses-grid">
-            <p class="empty-msg">Loading courses…</p>
+          <div class="table-wrapper">
+            <table class="data-table" id="courses-table">
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Course</th>
+                  <th>Term</th>
+                  <th>Credits</th>
+                  <th>Instructor</th>
+                  <th>Final</th>
+                  <th>Assignments</th>
+                </tr>
+              </thead>
+              <tbody id="courses-tbody">
+                <tr>
+                  <td colspan="7" class="empty-msg">Loading courses…</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
@@ -111,12 +128,9 @@
               <div class="wg-day-header wed">Wed</div>
               <div class="wg-day-header thu">Thu</div>
               <div class="wg-day-header fri">Fri</div>
-              <!-- Time rows injected by JS -->
             </div>
           </div>
 
-          <!-- Hidden data source: student.js still populates this tbody,
-               and the grid builder below reads from it -->
           <table style="display: none">
             <tbody id="schedule-body"></tbody>
           </table>
@@ -172,24 +186,6 @@
         </div>
       </main>
     </div>
-
-    <!--
-      Your existing student.js module can be imported below.
-      It should populate:
-        #student-name, #avatar-initials, #gpa, #total-credits, #course-count,
-        #announcements-list, #courses-grid, #transcript-body,
-        #transcript-gpa, #transcript-credits, #print-student-name
-
-      For the weekly schedule grid, student.js can either:
-        A) Insert <tr> rows into the hidden #schedule-body with columns:
-           Day | Course Name | HH:MM – HH:MM | Room | Instructor
-           (optionally add data-code="CS101" on the <tr>)
-        B) Set: document.getElementById('schedule-body').dataset.scheduleJson = JSON.stringify([
-             { day:'Monday', code:'CS101', name:'Intro to CS',
-               time:'09:00 – 10:30', room:'A101', instructor:'Dr. Smith' }, …
-           ])
-      The grid rebuilds automatically via MutationObserver when #schedule-body changes.
-    -->
 
     <script type="module" src="../js/student.js"></script>
   </body>

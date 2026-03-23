@@ -727,6 +727,103 @@ app.get("/api/students/:studentId/schedule", async (req, res) => {
   }
 });
 
+// ── Student: courses + assignments + grades ──
+
+app.get("/api/students/:studentId/courses", async (req, res) => {
+  const { studentId } = req.params;
+  try {
+    const [rows] = await pool.query(
+      `SELECT
+         e.id AS enrollment_id,
+         e.semester,
+         e.year,
+         c.id AS course_id,
+         c.code AS course_code,
+         c.name AS course_name,
+         c.credits,
+         c.instructor,
+         a.id AS assignment_id,
+         a.name AS assignment_name,
+         a.description AS assignment_description,
+         a.weight AS assignment_weight,
+         a.max_points AS assignment_max_points,
+         g.grade AS grade_value,
+         g.letter_grade AS grade_letter
+       FROM enrollments e
+       JOIN courses c ON e.course_id = c.id
+       LEFT JOIN assignments a ON a.course_id = c.id
+       LEFT JOIN grades g ON g.enrollment_id = e.id AND g.assignment_id = a.id
+       WHERE e.student_id = ?
+       ORDER BY e.year, e.semester, c.code, a.id`,
+      [studentId],
+    );
+
+    const courseMap = new Map();
+
+    rows.forEach((row) => {
+      const key = String(row.enrollment_id);
+      if (!courseMap.has(key)) {
+        courseMap.set(key, {
+          enrollmentId: row.enrollment_id,
+          courseId: row.course_id,
+          code: row.course_code,
+          name: row.course_name,
+          credits: row.credits,
+          semester: row.semester,
+          year: row.year,
+          instructor: row.instructor,
+          assignments: [],
+          numericGrade: null,
+          letterGrade: null,
+        });
+      }
+
+      if (row.assignment_id) {
+        courseMap.get(key).assignments.push({
+          id: row.assignment_id,
+          name: row.assignment_name,
+          description: row.assignment_description,
+          weight: Number(row.assignment_weight ?? 0),
+          maxPoints: row.assignment_max_points ?? 100,
+          gradeValue:
+            row.grade_value != null ? Number(row.grade_value) : null,
+          letterGrade: row.grade_letter || null,
+        });
+      }
+    });
+
+    const toLetter = (numeric) => {
+      if (numeric >= 90) return "A";
+      if (numeric >= 80) return "B";
+      if (numeric >= 70) return "C";
+      if (numeric >= 60) return "D";
+      return "F";
+    };
+
+    const courses = Array.from(courseMap.values()).map((course) => {
+      let hasGrade = false;
+      let total = 0;
+      course.assignments.forEach((a) => {
+        if (a.gradeValue == null) return;
+        const w = Number(a.weight || 0);
+        total += a.gradeValue * (w / 100);
+        hasGrade = true;
+      });
+
+      if (hasGrade) {
+        course.numericGrade = Number(total.toFixed(2));
+        course.letterGrade = toLetter(course.numericGrade);
+      }
+      return course;
+    });
+
+    res.json({ courses });
+  } catch (err) {
+    console.error("GET /api/students/:studentId/courses error:", err);
+    res.status(500).json({ error: "Failed to load student courses" });
+  }
+});
+
 // ── Student: transcript with weighted course grades ──
 
 app.get("/api/students/:studentId/transcript", async (req, res) => {
@@ -754,10 +851,11 @@ app.get("/api/students/:studentId/transcript", async (req, res) => {
     let totalCredits = 0;
     let totalPoints = 0;
     const courses = rows.map((row) => {
-      const numeric = row.final_numeric;
+      const numeric =
+        row.final_numeric != null ? Number(row.final_numeric) : null;
       let letter = null;
       let points = 0;
-      if (numeric != null) {
+      if (numeric != null && Number.isFinite(numeric)) {
         if (numeric >= 90) {
           letter = "A";
           points = 4;
@@ -783,7 +881,10 @@ app.get("/api/students/:studentId/transcript", async (req, res) => {
         credits: row.credits,
         semester: row.semester,
         year: row.year,
-        numericGrade: numeric != null ? Number(numeric.toFixed(2)) : null,
+        numericGrade:
+          numeric != null && Number.isFinite(numeric)
+            ? Number(numeric.toFixed(2))
+            : null,
         letterGrade: letter,
       };
     });
